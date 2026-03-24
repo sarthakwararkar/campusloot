@@ -10,4 +10,5 @@ if (!window.supabase) {
 
 const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 window.supabase = supabaseClient;
-console.log('Supabase client initialized and assigned to window.supabase');
+window.supabaseClient = supabaseClient;
+console.log('Supabase client initialized and assigned to window.supabase and window.supabaseClient');
