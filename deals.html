@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Deals — CampusLoot</title>
+  <meta name="description" content="Browse all student deals, discounts, and freebies. Filter by category, search, and sort to find the best offers for college students.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <div class="container">
+    <div class="deals-page">
+      <!-- Sidebar -->
+      <aside class="deals-sidebar" id="deals-sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-title">Categories</div>
+          <div class="sidebar-links" id="sidebar-categories"></div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-title">Sort By</div>
+          <div class="sidebar-links" id="sidebar-sort"></div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="deals-main">
+        <div class="search-bar">
+          <div class="search-input-wrap">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" id="search-input" placeholder="Search deals by title, brand, or description..." aria-label="Search deals">
+          </div>
+          <select class="sort-select" id="sort-select" aria-label="Sort deals">
+            <option value="newest">Newest First</option>
+            <option value="most-saved">Most Saved</option>
+            <option value="expiring">Expiring Soon</option>
+          </select>
+        </div>
+
+        <!-- Mobile Category Filters -->
+        <div class="category-filters" id="mobile-category-filters" style="display:none;"></div>
+
+        <div class="deal-grid" id="deals-grid"></div>
+
+        <div class="pagination" id="pagination"></div>
+      </main>
+    </div>
+  </div>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/deals.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+    (async function initDealsPage() {
+      renderHeader('deals');
+      renderFooter();
+
+      const dealsGrid = document.getElementById('deals-grid');
+      const searchInput = document.getElementById('search-input');
+      const sortSelect = document.getElementById('sort-select');
+      const sidebarCategories = document.getElementById('sidebar-categories');
+      const mobileCategoryFilters = document.getElementById('mobile-category-filters');
+      const paginationEl = document.getElementById('pagination');
+
+      let currentCategory = 'all';
+      let currentSearch = '';
+      let currentSort = 'newest';
+      let currentPage = 1;
+      let totalDeals = 0;
+      let savedDeals = new Set();
+
+      // Read URL params
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('category')) currentCategory = urlParams.get('category');
+      if (urlParams.get('search')) {
+        currentSearch = urlParams.get('search');
+        searchInput.value = currentSearch;
+      }
+
+      // Get saved deals if logged in
+      const user = await getCurrentUser();
+      if (user) {
+        savedDeals = await getSavedDealIds(user.id);
+      }
+
+      // Build sidebar categories
+      const categories = ['all', 'software', 'food', 'courses', 'ott', 'local', 'other'];
+      categories.forEach(cat => {
+        const link = document.createElement('a');
+        link.href = '#';
+        link.className = `sidebar-link ${cat === currentCategory ? 'active' : ''}`;
+        link.textContent = getCategoryLabel(cat);
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          currentCategory = cat;
+          currentPage = 1;
+          sidebarCategories.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+          loadDeals();
+        });
+        sidebarCategories.appendChild(link);
+
+        // Mobile pill
+        const pill = renderCategoryPill(cat, cat === currentCategory, (selected) => {
+          currentCategory = selected;
+          currentPage = 1;
+          mobileCategoryFilters.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+          mobileCategoryFilters.querySelector(`.category-pill:nth-child(${categories.indexOf(selected) + 1})`)?.classList.add('active');
+          loadDeals();
+        });
+        mobileCategoryFilters.appendChild(pill);
+      });
+
+      // Show mobile filters on small screens
+      if (window.innerWidth < 1024) {
+        mobileCategoryFilters.style.display = '';
+      }
+
+      // Sort sidebar
+      const sortOptions = [
+        { value: 'newest', label: '🕐 Newest First' },
+        { value: 'most-saved', label: '❤️ Most Saved' },
+        { value: 'expiring', label: '⏰ Expiring Soon' }
+      ];
+      const sidebarSort = document.getElementById('sidebar-sort');
+      sortOptions.forEach(opt => {
+        const link = document.createElement('a');
+        link.href = '#';
+        link.className = `sidebar-link ${opt.value === currentSort ? 'active' : ''}`;
+        link.textContent = opt.label;
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          currentSort = opt.value;
+          sortSelect.value = opt.value;
+          currentPage = 1;
+          sidebarSort.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+          loadDeals();
+        });
+        sidebarSort.appendChild(link);
+      });
+
+      // Search input
+      searchInput.addEventListener('input', debounce((e) => {
+        currentSearch = e.target.value.trim();
+        currentPage = 1;
+        loadDeals();
+      }, 400));
+
+      // Sort select (mobile)
+      sortSelect.addEventListener('change', (e) => {
+        currentSort = e.target.value;
+        currentPage = 1;
+        loadDeals();
+      });
+
+      // Load initial deals
+      loadDeals();
+
+      async function loadDeals() {
+        dealsGrid.innerHTML = '';
+        dealsGrid.appendChild(renderSkeletonCards(6));
+
+        const result = await fetchDeals({
+          category: currentCategory,
+          search: currentSearch,
+          sort: currentSort,
+          page: currentPage
+        });
+
+        dealsGrid.innerHTML = '';
+        totalDeals = result.total;
+
+        if (result.deals.length === 0) {
+          dealsGrid.appendChild(renderEmptyState(
+            '🔍',
+            'No deals found',
+            currentSearch ? `No results for "${currentSearch}". Try a different search.` : 'No deals in this category yet. Check back soon!',
+            { text: 'View All Deals', href: 'deals.html' }
+          ));
+          paginationEl.innerHTML = '';
+          return;
+        }
+
+        result.deals.forEach(deal => {
+          dealsGrid.appendChild(renderDealCard(deal, { savedDeals }));
+        });
+
+        renderPagination();
+      }
+
+      function renderPagination() {
+        paginationEl.innerHTML = '';
+        const totalPages = Math.ceil(totalDeals / DEALS_PER_PAGE);
+        if (totalPages <= 1) return;
+
+        for (let i = 1; i <= totalPages; i++) {
+          const btn = document.createElement('button');
+          btn.className = `btn ${i === currentPage ? 'btn-primary' : 'btn-ghost'} btn-sm`;
+          btn.textContent = i;
+          btn.addEventListener('click', () => {
+            currentPage = i;
+            loadDeals();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+          paginationEl.appendChild(btn);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

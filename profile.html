@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile — CampusLoot</title>
+  <meta name="description" content="View your saved deals, edit your profile, and manage your deal submissions on CampusLoot.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <div class="container profile-page" id="profile-container">
+    <div class="loader-container" id="profile-loader">
+      <div class="loader"></div>
+    </div>
+  </div>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/deals.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+    (async function initProfilePage() {
+      renderHeader('profile');
+      renderFooter();
+
+      const user = await requireAuth();
+      if (!user) return;
+
+      const profile = await getCurrentProfile();
+      const container = document.getElementById('profile-container');
+      container.innerHTML = '';
+
+      // Profile header
+      const header = document.createElement('div');
+      header.className = 'profile-header';
+
+      const avatar = document.createElement('div');
+      avatar.className = 'profile-avatar';
+      avatar.textContent = (profile?.full_name || user.email)[0].toUpperCase();
+      header.appendChild(avatar);
+
+      const info = document.createElement('div');
+      info.className = 'profile-info';
+      const nameEl = document.createElement('h2');
+      nameEl.textContent = profile?.full_name || 'Student';
+      info.appendChild(nameEl);
+      const detailsEl = document.createElement('p');
+      detailsEl.textContent = [profile?.college_name, profile?.city].filter(Boolean).join(' • ') || user.email;
+      info.appendChild(detailsEl);
+      header.appendChild(info);
+      container.appendChild(header);
+
+      // Tabs
+      const tabs = document.createElement('div');
+      tabs.className = 'profile-tabs';
+      const tabData = [
+        { id: 'saved', label: '❤️ Saved Deals' },
+        { id: 'submissions', label: '📝 My Submissions' },
+        { id: 'settings', label: '⚙️ Settings' }
+      ];
+      tabData.forEach(t => {
+        const btn = document.createElement('button');
+        btn.className = `profile-tab ${t.id === 'saved' ? 'active' : ''}`;
+        btn.textContent = t.label;
+        btn.dataset.tab = t.id;
+        btn.addEventListener('click', () => {
+          tabs.querySelectorAll('.profile-tab').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          container.querySelectorAll('.profile-section').forEach(s => s.classList.remove('active'));
+          document.getElementById(`section-${t.id}`).classList.add('active');
+        });
+        tabs.appendChild(btn);
+      });
+      container.appendChild(tabs);
+
+      // ---- Saved Deals Section ----
+      const savedSection = document.createElement('div');
+      savedSection.className = 'profile-section active';
+      savedSection.id = 'section-saved';
+      const savedGrid = document.createElement('div');
+      savedGrid.className = 'deal-grid';
+      savedGrid.appendChild(renderLoader());
+      savedSection.appendChild(savedGrid);
+      container.appendChild(savedSection);
+
+      const savedDeals = await getSavedDeals(user.id);
+      savedGrid.innerHTML = '';
+      if (savedDeals.length === 0) {
+        savedGrid.appendChild(renderEmptyState('❤️', 'No saved deals yet', 'Save deals to access them quickly later!', { text: 'Browse Deals', href: 'deals.html' }));
+      } else {
+        const savedIds = new Set(savedDeals.map(d => d.id));
+        savedDeals.forEach(deal => {
+          savedGrid.appendChild(renderDealCard(deal, { savedDeals: savedIds }));
+        });
+      }
+
+      // ---- Submissions Section ----
+      const subSection = document.createElement('div');
+      subSection.className = 'profile-section';
+      subSection.id = 'section-submissions';
+
+      const { data: submissions } = await supabase
+        .from('deal_submissions')
+        .select('*')
+        .eq('submitted_by', user.id)
+        .order('created_at', { ascending: false });
+
+      if (!submissions || submissions.length === 0) {
+        subSection.appendChild(renderEmptyState('📝', 'No submissions yet', 'Know a great student deal? Submit it and help fellow students!', { text: 'Submit a Deal', href: 'submit.html' }));
+      } else {
+        const table = document.createElement('div');
+        table.style.cssText = 'background:var(--surface);border-radius:var(--radius-lg);overflow:auto;';
+        let tableHTML = '<table class="admin-table"><thead><tr><th>Title</th><th>Brand</th><th>Category</th><th>Status</th><th>Submitted</th></tr></thead><tbody>';
+        submissions.forEach(sub => {
+          const statusClass = sub.status === 'approved' ? 'status-approved' : sub.status === 'rejected' ? 'status-rejected' : 'status-pending';
+          tableHTML += `<tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="status-badge ${statusClass}"></span></td>
+            <td></td>
+          </tr>`;
+        });
+        tableHTML += '</tbody></table>';
+        table.innerHTML = tableHTML;
+        // Fill with textContent for XSS safety
+        const rows = table.querySelectorAll('tbody tr');
+        submissions.forEach((sub, i) => {
+          const cells = rows[i].querySelectorAll('td');
+          cells[0].textContent = sub.title;
+          cells[1].textContent = sub.brand_name || '—';
+          cells[2].textContent = sub.category || '—';
+          cells[3].querySelector('.status-badge').textContent = sub.status;
+          cells[4].textContent = formatDate(sub.created_at);
+        });
+        subSection.appendChild(table);
+      }
+      container.appendChild(subSection);
+
+      // ---- Settings Section ----
+      const settingsSection = document.createElement('div');
+      settingsSection.className = 'profile-section';
+      settingsSection.id = 'section-settings';
+      settingsSection.innerHTML = `
+        <div style="background:var(--surface);border-radius:var(--radius-lg);padding:var(--space-xl);box-shadow:var(--shadow-sm);">
+          <h3 style="margin-bottom:var(--space-lg);">Edit Profile</h3>
+          <form id="profile-form">
+            <div class="form-group">
+              <label class="form-label" for="edit-name">Full Name</label>
+              <input type="text" id="edit-name" class="form-input" value="">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="edit-college">College Name</label>
+              <input type="text" id="edit-college" class="form-input" value="">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="edit-city">City</label>
+              <input type="text" id="edit-city" class="form-input" value="">
+            </div>
+            <button type="submit" class="btn btn-primary" id="save-profile-btn">Save Changes</button>
+          </form>
+
+          <hr style="margin:var(--space-2xl) 0;border:none;border-top:1px solid var(--border-light);">
+
+          <h3 style="margin-bottom:var(--space-lg);">Change Password</h3>
+          <form id="password-form">
+            <div class="form-group">
+              <label class="form-label" for="new-password">New Password</label>
+              <input type="password" id="new-password" class="form-input" placeholder="Min 8 chars, letter + number">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="confirm-password">Confirm Password</label>
+              <input type="password" id="confirm-password" class="form-input" placeholder="Repeat password">
+            </div>
+            <div id="password-error" class="form-error" style="display:none;margin-bottom:var(--space-md);"></div>
+            <button type="submit" class="btn btn-outline" id="change-password-btn">Change Password</button>
+          </form>
+        </div>
+      `;
+      container.appendChild(settingsSection);
+
+      // Populate settings form
+      document.getElementById('edit-name').value = profile?.full_name || '';
+      document.getElementById('edit-college').value = profile?.college_name || '';
+      document.getElementById('edit-city').value = profile?.city || '';
+
+      // Save profile
+      document.getElementById('profile-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('save-profile-btn');
+        setButtonLoading(btn, true);
+        const { error } = await updateProfile(user.id, {
+          full_name: sanitizeInput(document.getElementById('edit-name').value),
+          college_name: sanitizeInput(document.getElementById('edit-college').value),
+          city: sanitizeInput(document.getElementById('edit-city').value)
+        });
+        setButtonLoading(btn, false);
+        if (error) {
+          showToast('Failed to update profile', 'error');
+        } else {
+          showToast('Profile updated!', 'success');
+        }
+      });
+
+      // Change password
+      document.getElementById('password-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newPw = document.getElementById('new-password').value;
+        const confirmPw = document.getElementById('confirm-password').value;
+        const errorEl = document.getElementById('password-error');
+        errorEl.style.display = 'none';
+
+        if (newPw !== confirmPw) {
+          errorEl.textContent = 'Passwords do not match';
+          errorEl.style.display = '';
+          return;
+        }
+
+        const pwCheck = validatePassword(newPw);
+        if (!pwCheck.valid) {
+          errorEl.textContent = pwCheck.message;
+          errorEl.style.display = '';
+          return;
+        }
+
+        const btn = document.getElementById('change-password-btn');
+        setButtonLoading(btn, true);
+        const { error } = await updatePassword(newPw);
+        setButtonLoading(btn, false);
+
+        if (error) {
+          errorEl.textContent = error;
+          errorEl.style.display = '';
+        } else {
+          showToast('Password changed successfully!', 'success');
+          document.getElementById('new-password').value = '';
+          document.getElementById('confirm-password').value = '';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

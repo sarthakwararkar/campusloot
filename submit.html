@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit a Deal — CampusLoot</title>
+  <meta name="description" content="Know a great student deal? Submit it to CampusLoot and help fellow students save money.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <div class="submit-page">
+    <div class="submit-card">
+      <h1>📝 Submit a Deal</h1>
+      <p class="subtitle">Know a student discount or freebie? Share it with the community! We'll verify and publish within 24 hours.</p>
+
+      <form id="submit-form">
+        <div class="form-group">
+          <label class="form-label" for="deal-title">Deal Title *</label>
+          <input type="text" id="deal-title" class="form-input" placeholder="e.g. GitHub Student Pack — Free for students" required maxlength="200">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="deal-brand">Brand Name *</label>
+          <input type="text" id="deal-brand" class="form-input" placeholder="e.g. GitHub" required maxlength="100">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="deal-category">Category *</label>
+          <select id="deal-category" class="form-input" required>
+            <option value="">Select a category</option>
+            <option value="software">💻 Software</option>
+            <option value="food">🍕 Food</option>
+            <option value="courses">📚 Courses</option>
+            <option value="ott">🎬 OTT</option>
+            <option value="local">📍 Local</option>
+            <option value="other">🎁 Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="deal-description">Description *</label>
+          <textarea id="deal-description" class="form-input" placeholder="Describe the deal — what do students get, how to claim it, any conditions?" required maxlength="1000" rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="deal-url">Deal URL *</label>
+          <input type="url" id="deal-url" class="form-input" placeholder="https://example.com/student-deal" required maxlength="2000">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="deal-original-price">Original Price (optional)</label>
+          <input type="text" id="deal-original-price" class="form-input" placeholder="e.g. ₹999/year" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="deal-price">Discounted Price (optional)</label>
+          <input type="text" id="deal-price" class="form-input" placeholder="e.g. ₹0 (Free)" maxlength="50">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="deal-reason">Why is this a student deal?</label>
+          <textarea id="deal-reason" class="form-input" placeholder="How did you find this deal? Does it require a .edu email?" maxlength="500" rows="2"></textarea>
+        </div>
+
+        <div id="submit-error" class="form-error" style="display:none;margin-bottom:var(--space-md);"></div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="submit-btn">Submit Deal for Review</button>
+
+        <p style="text-align:center;font-size:var(--fs-xs);color:var(--text-tertiary);margin-top:var(--space-md);">
+          You can submit up to 3 deals per day. All submissions are reviewed before publishing.
+        </p>
+      </form>
+
+      <!-- Success State (hidden by default) -->
+      <div id="submit-success" style="display:none;text-align:center;padding:var(--space-2xl) 0;">
+        <div style="font-size:48px;margin-bottom:var(--space-md);">🎉</div>
+        <h2 style="margin-bottom:var(--space-sm);">Thanks for submitting!</h2>
+        <p style="color:var(--text-secondary);margin-bottom:var(--space-xl);">We'll verify and publish your deal within 24 hours. You can track the status on your profile page.</p>
+        <div style="display:flex;gap:var(--space-md);justify-content:center;">
+          <a href="profile.html" class="btn btn-primary">View My Submissions</a>
+          <button class="btn btn-outline" id="submit-another-btn">Submit Another</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/deals.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+    (async function initSubmitPage() {
+      renderHeader('submit');
+      renderFooter();
+
+      const user = await requireAuth();
+      if (!user) return;
+
+      const form = document.getElementById('submit-form');
+      const successDiv = document.getElementById('submit-success');
+      const errorEl = document.getElementById('submit-error');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorEl.style.display = 'none';
+
+        const title = document.getElementById('deal-title').value.trim();
+        const brand = document.getElementById('deal-brand').value.trim();
+        const category = document.getElementById('deal-category').value;
+        const description = document.getElementById('deal-description').value.trim();
+        const url = document.getElementById('deal-url').value.trim();
+
+        // Validation
+        if (!title || !brand || !category || !description || !url) {
+          errorEl.textContent = 'Please fill in all required fields';
+          errorEl.style.display = '';
+          return;
+        }
+
+        const btn = document.getElementById('submit-btn');
+        setButtonLoading(btn, true);
+
+        const result = await submitDeal({
+          title,
+          brand_name: brand,
+          category,
+          description,
+          deal_url: url
+        });
+
+        setButtonLoading(btn, false);
+
+        if (!result.success) {
+          errorEl.textContent = result.error;
+          errorEl.style.display = '';
+          return;
+        }
+
+        // Show success
+        form.style.display = 'none';
+        successDiv.style.display = '';
+        showToast('Deal submitted successfully!', 'success');
+      });
+
+      // Submit another
+      document.getElementById('submit-another-btn').addEventListener('click', () => {
+        form.reset();
+        form.style.display = '';
+        successDiv.style.display = 'none';
+      });
+    })();
+  </script>
+</body>
+</html>

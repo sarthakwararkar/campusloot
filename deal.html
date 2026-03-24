@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deal Details — CampusLoot</title>
+  <meta name="description" content="View deal details, claim the offer, and save for later. Exclusive student deals on CampusLoot.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+  <header id="site-header"></header>
+
+  <div class="deal-detail" id="deal-detail">
+    <div class="loader-container" id="deal-loader">
+      <div class="loader"></div>
+    </div>
+  </div>
+
+  <!-- Related Deals -->
+  <section class="section" id="related-section" style="display:none;">
+    <div class="container">
+      <h2 class="section-title" style="margin-bottom:var(--space-lg);">🔗 Related Deals</h2>
+      <div class="deal-grid" id="related-deals-grid"></div>
+    </div>
+  </section>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/deals.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+    (async function initDealPage() {
+      renderHeader('');
+      renderFooter();
+
+      const dealId = getQueryParam('id');
+      if (!dealId) {
+        window.location.href = '404.html';
+        return;
+      }
+
+      // Increment view count
+      incrementView(dealId);
+
+      // Fetch deal
+      const deal = await fetchDealById(dealId);
+      if (!deal) {
+        window.location.href = '404.html';
+        return;
+      }
+
+      // Update page title
+      document.title = `${deal.title} — CampusLoot`;
+
+      const user = await getCurrentUser();
+      let savedDeals = new Set();
+      if (user) {
+        savedDeals = await getSavedDealIds(user.id);
+      }
+
+      const isSaved = savedDeals.has(deal.id);
+      const container = document.getElementById('deal-detail');
+      container.innerHTML = '';
+
+      // Breadcrumb-style back link
+      const backLink = document.createElement('a');
+      backLink.href = 'deals.html';
+      backLink.className = 'btn btn-ghost btn-sm';
+      backLink.textContent = '← Back to Deals';
+      backLink.style.marginBottom = 'var(--space-lg)';
+      backLink.style.display = 'inline-block';
+      container.appendChild(backLink);
+
+      // Deal card
+      const card = document.createElement('div');
+      card.className = 'deal-detail-card';
+
+      // Image
+      const imageDiv = document.createElement('div');
+      imageDiv.className = 'deal-detail-image';
+      mountDealImage(imageDiv, deal, {
+        placeholderClass: 'deal-detail-image-placeholder',
+        lazy: false
+      });
+      card.appendChild(imageDiv);
+
+      // Body
+      const body = document.createElement('div');
+      body.className = 'deal-detail-body';
+
+      const h1 = document.createElement('h1');
+      h1.textContent = deal.title;
+      body.appendChild(h1);
+
+      // Meta info
+      const meta = document.createElement('div');
+      meta.className = 'deal-detail-meta';
+
+      const brandBadge = document.createElement('span');
+      brandBadge.className = 'badge badge-primary';
+      brandBadge.textContent = deal.brand_name;
+      meta.appendChild(brandBadge);
+
+      const catBadge = document.createElement('span');
+      catBadge.className = 'badge badge-primary';
+      catBadge.textContent = getCategoryLabel(deal.category);
+      meta.appendChild(catBadge);
+
+      const discountBadge = document.createElement('span');
+      discountBadge.className = 'badge badge-discount';
+      discountBadge.textContent = deal.discount_text;
+      meta.appendChild(discountBadge);
+
+      if (deal.views_count) {
+        const views = document.createElement('span');
+        views.className = 'badge badge-primary';
+        views.textContent = `👁 ${deal.views_count} views`;
+        meta.appendChild(views);
+      }
+
+      const date = document.createElement('span');
+      date.style.color = 'var(--text-tertiary)';
+      date.style.fontSize = 'var(--fs-sm)';
+      date.textContent = formatDate(deal.created_at);
+      meta.appendChild(date);
+
+      body.appendChild(meta);
+
+      // Price section
+      if (deal.original_price || deal.deal_price) {
+        const priceSection = document.createElement('div');
+        priceSection.style.cssText = 'display:flex;gap:var(--space-md);align-items:center;margin-bottom:var(--space-xl);padding:var(--space-lg);background:var(--success-light);border-radius:var(--radius-md);';
+        if (deal.original_price) {
+          const orig = document.createElement('span');
+          orig.style.cssText = 'text-decoration:line-through;color:var(--text-tertiary);font-size:var(--fs-lg);';
+          orig.textContent = deal.original_price;
+          priceSection.appendChild(orig);
+        }
+        const current = document.createElement('span');
+        current.style.cssText = 'font-size:var(--fs-2xl);font-weight:800;color:var(--success);';
+        current.textContent = deal.deal_price || 'Free';
+        priceSection.appendChild(current);
+        body.appendChild(priceSection);
+      }
+
+      // Description
+      const desc = document.createElement('div');
+      desc.className = 'deal-detail-description';
+      desc.textContent = deal.description;
+      body.appendChild(desc);
+
+      // Action buttons
+      const actions = document.createElement('div');
+      actions.className = 'deal-detail-actions';
+
+      const claimBtn = document.createElement('a');
+      claimBtn.href = deal.affiliate_url || deal.deal_url;
+      claimBtn.target = '_blank';
+      claimBtn.rel = 'noopener noreferrer';
+      claimBtn.className = 'btn btn-accent btn-lg';
+      claimBtn.textContent = 'Claim This Deal →';
+      actions.appendChild(claimBtn);
+
+      const saveBtn = document.createElement('button');
+      saveBtn.className = `btn ${isSaved ? 'btn-danger' : 'btn-outline'} btn-lg`;
+      saveBtn.textContent = isSaved ? '❤️ Saved' : '🤍 Save Deal';
+      saveBtn.addEventListener('click', () => handleSaveClick(deal.id, saveBtn));
+      // Reuse the same logic but with different styling
+      saveBtn.addEventListener('click', async () => {
+        if (!user) { showLoginModal(); return; }
+        const wasSaved = saveBtn.classList.contains('btn-danger');
+        try {
+          if (wasSaved) {
+            await unsaveDeal(deal.id);
+            saveBtn.className = 'btn btn-outline btn-lg';
+            saveBtn.textContent = '🤍 Save Deal';
+            showToast('Deal removed from saves', 'info');
+          } else {
+            await saveDeal(deal.id);
+            saveBtn.className = 'btn btn-danger btn-lg';
+            saveBtn.textContent = '❤️ Saved';
+            showToast('Deal saved!', 'success');
+          }
+        } catch { showToast('Something went wrong', 'error'); }
+      });
+      actions.appendChild(saveBtn);
+
+      body.appendChild(actions);
+
+      // Share section
+      const share = document.createElement('div');
+      share.className = 'deal-detail-share';
+
+      const shareLabel = document.createElement('span');
+      shareLabel.style.cssText = 'font-size:var(--fs-sm);color:var(--text-secondary);font-weight:500;';
+      shareLabel.textContent = 'Share:';
+      share.appendChild(shareLabel);
+
+      const whatsappBtn = document.createElement('a');
+      whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(deal.title + ' — ' + window.location.href)}`;
+      whatsappBtn.target = '_blank';
+      whatsappBtn.className = 'btn btn-success btn-sm';
+      whatsappBtn.textContent = '💬 WhatsApp';
+      share.appendChild(whatsappBtn);
+
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'btn btn-ghost btn-sm';
+      copyBtn.textContent = '🔗 Copy Link';
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(window.location.href);
+        showToast('Link copied!', 'success');
+      });
+      share.appendChild(copyBtn);
+
+      body.appendChild(share);
+      card.appendChild(body);
+      container.appendChild(card);
+
+      // Load related deals (same category)
+      const { deals: related } = await fetchDeals({ category: deal.category, page: 1 });
+      const filteredRelated = related.filter(d => d.id !== deal.id).slice(0, 3);
+      if (filteredRelated.length > 0) {
+        document.getElementById('related-section').style.display = '';
+        const relatedGrid = document.getElementById('related-deals-grid');
+        filteredRelated.forEach(d => {
+          relatedGrid.appendChild(renderDealCard(d, { savedDeals }));
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

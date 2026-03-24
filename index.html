@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusLoot — Student Deals & Freebies for Indian Students</title>
+  <meta name="description" content="Discover exclusive student discounts, free software, and deals from top brands. India's #1 student deals platform for college students.">
+  <meta name="keywords" content="student deals, student discounts, free software students, college deals India, student offers">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header id="site-header"></header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-content">
+      <h1>Find Every <span class="highlight">Student Deal</span> in India</h1>
+      <p>Exclusive discounts, free tools, and offers curated just for college students. Stop paying full price — you deserve better.</p>
+      <div class="hero-search">
+        <input type="text" id="hero-search-input" placeholder="Search deals... (e.g. GitHub, Spotify, Figma)" aria-label="Search deals">
+        <button id="hero-search-btn">Search Deals</button>
+      </div>
+      <div class="stats-bar" id="stats-bar">
+        <div class="stat-item">
+          <div class="stat-number" id="stat-deals">—</div>
+          <div class="stat-label">Deals Listed</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="stat-users">—</div>
+          <div class="stat-label">Students Saving</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Free to Use</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Deals -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">⭐ Featured Deals</h2>
+        <a href="deals.html" class="section-link">View all →</a>
+      </div>
+      <div class="deal-grid" id="featured-deals-grid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- All Deals with Category Filters -->
+  <section class="section" style="background: var(--bg-alt);">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">🔥 All Deals</h2>
+      </div>
+
+      <!-- Category Filters -->
+      <div class="category-filters" id="category-filters"></div>
+
+      <!-- Deals Grid -->
+      <div class="deal-grid" id="deals-grid">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="load-more-wrap" id="load-more-wrap" style="display:none;">
+        <button class="btn btn-outline" id="load-more-btn">Load More Deals</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="site-footer"></footer>
+
+  <!-- Scripts (order matters) -->
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/deals.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+    /**
+     * Home Page — initialization
+     */
+    (async function initHomePage() {
+      console.log('initHomePage starting...');
+      renderHeader('home');
+      renderFooter();
+      console.log('Header/Footer rendered.');
+
+      const featuredGrid = document.getElementById('featured-deals-grid');
+      const dealsGrid = document.getElementById('deals-grid');
+      const categoryFilters = document.getElementById('category-filters');
+      const loadMoreWrap = document.getElementById('load-more-wrap');
+      const loadMoreBtn = document.getElementById('load-more-btn');
+
+      let currentCategory = 'all';
+      let currentPage = 1;
+      let totalDeals = 0;
+      let savedDeals = new Set();
+
+      // Get saved deals if logged in
+      const user = await getCurrentUser();
+      if (user) {
+        savedDeals = await getSavedDealIds(user.id);
+      }
+
+      // Load stats
+      loadStats();
+
+      // Load featured deals
+      loadFeaturedDeals();
+
+      // Render category pills
+      const categories = ['all', 'software', 'food', 'courses', 'ott', 'local', 'other'];
+      categories.forEach(cat => {
+        const pill = renderCategoryPill(cat, cat === currentCategory, (selected) => {
+          currentCategory = selected;
+          currentPage = 1;
+          // Update pill active states
+          categoryFilters.querySelectorAll('.category-pill').forEach(p => {
+            p.classList.toggle('active', p.textContent === getCategoryLabel(selected));
+          });
+          loadDeals(true);
+        });
+        categoryFilters.appendChild(pill);
+      });
+
+      // Load initial deals
+      console.log('Calling loadDeals(true)...');
+      loadDeals(true);
+
+      // Hero search
+      const heroSearchInput = document.getElementById('hero-search-input');
+      const heroSearchBtn = document.getElementById('hero-search-btn');
+      heroSearchBtn.addEventListener('click', () => {
+        const query = heroSearchInput.value.trim();
+        if (query) {
+          window.location.href = `deals.html?search=${encodeURIComponent(query)}`;
+        }
+      });
+      heroSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          heroSearchBtn.click();
+        }
+      });
+
+      // Load more
+      loadMoreBtn.addEventListener('click', () => {
+        currentPage++;
+        loadDeals(false);
+      });
+
+      async function loadStats() {
+        const stats = await fetchStats();
+        document.getElementById('stat-deals').textContent = stats.dealsCount;
+        document.getElementById('stat-users').textContent = stats.usersCount || '1,000+';
+      }
+
+      async function loadFeaturedDeals() {
+        featuredGrid.innerHTML = '';
+        featuredGrid.appendChild(renderSkeletonCards(3));
+        const deals = await fetchFeaturedDeals();
+        featuredGrid.innerHTML = '';
+        if (deals.length === 0) {
+          featuredGrid.appendChild(renderEmptyState('⭐', 'No featured deals', 'Check back soon for featured offers!'));
+          return;
+        }
+        deals.forEach(deal => {
+          featuredGrid.appendChild(renderDealCard(deal, { savedDeals }));
+        });
+      }
+
+      async function loadDeals(reset) {
+        if (reset) {
+          console.log('loadDeals reset: true');
+          dealsGrid.innerHTML = '';
+          dealsGrid.appendChild(renderSkeletonCards(6));
+        }
+
+        console.log('Fetching deals from Supabase...');
+        const result = await fetchDeals({
+          category: currentCategory,
+          page: currentPage
+        });
+        console.log('Deals fetched:', result.deals.length);
+
+        if (reset) dealsGrid.innerHTML = '';
+        totalDeals = result.total;
+
+        if (result.deals.length === 0 && currentPage === 1) {
+          dealsGrid.appendChild(renderEmptyState('🔍', 'No deals found', 'Try a different category or check back later.'));
+          loadMoreWrap.style.display = 'none';
+          return;
+        }
+
+        result.deals.forEach(deal => {
+          dealsGrid.appendChild(renderDealCard(deal, { savedDeals }));
+        });
+
+        // Show/hide load more
+        const loadedCount = dealsGrid.querySelectorAll('.deal-card').length;
+        loadMoreWrap.style.display = loadedCount < totalDeals ? '' : 'none';
+      }
+    })();
+  </script>
+</body>
+</html>
