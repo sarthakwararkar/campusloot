@@ -107,11 +107,7 @@
       subSection.className = 'profile-section';
       subSection.id = 'section-submissions';
 
-      const { data: submissions } = await supabase
-        .from('deal_submissions')
-        .select('*')
-        .eq('submitted_by', user.id)
-        .order('created_at', { ascending: false });
+      const submissions = await getUserSubmissions(user.id);
 
       if (!submissions || submissions.length === 0) {
         subSection.appendChild(renderEmptyState('📝', 'No submissions yet', 'Know a great student deal? Submit it and help fellow students!', { text: 'Submit a Deal', href: 'submit.html' }));

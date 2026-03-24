@@ -170,8 +170,7 @@
       const saveBtn = document.createElement('button');
       saveBtn.className = `btn ${isSaved ? 'btn-danger' : 'btn-outline'} btn-lg`;
       saveBtn.textContent = isSaved ? '❤️ Saved' : '🤍 Save Deal';
-      saveBtn.addEventListener('click', () => handleSaveClick(deal.id, saveBtn));
-      // Reuse the same logic but with different styling
+      // Custom save logic for the deal page (different styling than cards)
       saveBtn.addEventListener('click', async () => {
         if (!user) { showLoginModal(); return; }
         const wasSaved = saveBtn.classList.contains('btn-danger');

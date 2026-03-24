@@ -74,12 +74,26 @@ function renderDealCard(deal, options = {}) {
   imageDiv.className = 'deal-card-image';
   mountDealImage(imageDiv, deal, { placeholderClass: 'deal-card-image-placeholder' });
 
-  // Featured badge
   if (deal.is_featured) {
     const featuredBadge = document.createElement('span');
     featuredBadge.className = 'badge badge-featured deal-card-featured';
     featuredBadge.textContent = '⭐ Featured';
     imageDiv.appendChild(featuredBadge);
+  }
+
+  if (deal.expires_at) {
+    const expiryDate = new Date(deal.expires_at);
+    const now = new Date();
+    const diffDays = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
+    if (diffDays >= 0 && diffDays <= 7) {
+      const expiringBadge = document.createElement('span');
+      expiringBadge.className = 'badge badge-discount deal-card-expiring';
+      expiringBadge.style.position = 'absolute';
+      expiringBadge.style.top = deal.is_featured ? '40px' : '10px';
+      expiringBadge.style.left = '10px';
+      expiringBadge.textContent = `⏰ Expiring in ${diffDays} day${diffDays !== 1 ? 's' : ''}`;
+      imageDiv.appendChild(expiringBadge);
+    }
   }
 
   // Save button
@@ -295,6 +309,7 @@ function showLoginModal() {
 function renderCategoryPill(category, isActive, onClick) {
   const pill = document.createElement('button');
   pill.className = `category-pill ${isActive ? 'active' : ''}`;
+  pill.dataset.category = category;
   pill.textContent = category === 'all' ? '🔥 All' : getCategoryLabel(category);
   pill.addEventListener('click', () => onClick(category));
   return pill;

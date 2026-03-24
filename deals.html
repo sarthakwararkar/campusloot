@@ -113,7 +113,8 @@
           currentCategory = selected;
           currentPage = 1;
           mobileCategoryFilters.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
-          mobileCategoryFilters.querySelector(`.category-pill:nth-child(${categories.indexOf(selected) + 1})`)?.classList.add('active');
+          const selectedPill = mobileCategoryFilters.querySelector(`.category-pill[data-category="${selected}"]`);
+          if (selectedPill) selectedPill.classList.add('active');
           loadDeals();
         });
         mobileCategoryFilters.appendChild(pill);

@@ -117,11 +117,9 @@ async function saveDeal(dealId) {
 
   if (error) throw error;
 
-  // Increment saves_count
-  await supabaseClient.rpc('increment_saves', { deal_id_input: dealId }).catch(() => {
-    // RPC may not exist; use manual update
-    supabaseClient.from('deals').update({ saves_count: supabaseClient.sql`saves_count + 1` }).eq('id', dealId);
-  });
+  // Increment saves_count via RPC
+  const { error: rpcError } = await supabase.rpc('increment_saves', { deal_id_input: dealId });
+  if (rpcError) console.error('Error incrementing saves_count:', rpcError);
 }
 
 /**
@@ -139,6 +137,9 @@ async function unsaveDeal(dealId) {
     .eq('deal_id', dealId);
 
   if (error) throw error;
+
+  // Decrement saves_count via RPC
+  await supabase.rpc('decrement_saves', { deal_id_input: dealId });
 }
 
 /**
@@ -214,26 +215,9 @@ async function submitDeal(formData) {
  * @param {string} dealId
  */
 async function incrementView(dealId) {
-  // Use raw SQL to atomically increment
-  await supabase
-    .from('deals')
-    .update({ views_count: undefined })
-    .eq('id', dealId);
-
-  // Since we can't do atomic increment easily with the JS client,
-  // we'll fetch current count and update
-  const { data } = await supabase
-    .from('deals')
-    .select('views_count')
-    .eq('id', dealId)
-    .single();
-
-  if (data) {
-    await supabase
-      .from('deals')
-      .update({ views_count: (data.views_count || 0) + 1 })
-      .eq('id', dealId);
-  }
+  // Use RPC for atomic increment
+  const { error } = await supabase.rpc('increment_view', { deal_id_input: dealId });
+  if (error) console.error('Error incrementing view count:', error);
 }
 
 /**
@@ -252,4 +236,23 @@ async function fetchStats() {
     .select('*', { count: 'exact', head: true });
 
   return { dealsCount: dealsCount || 0, usersCount: usersCount || 0 };
+}
+
+/**
+ * Fetch a user's deal submissions
+ * @param {string} userId 
+ * @returns {Promise<Array>}
+ */
+async function getUserSubmissions(userId) {
+  const { data, error } = await supabase
+    .from('deal_submissions')
+    .select('*')
+    .eq('submitted_by', userId)
+    .order('created_at', { ascending: false });
+    
+  if (error) {
+    console.error('Error fetching user submissions:', error);
+    return [];
+  }
+  return data || [];
 }
