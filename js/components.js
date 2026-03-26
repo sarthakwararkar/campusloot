@@ -124,7 +124,7 @@ function renderDealCard(deal, options = {}) {
   const title = document.createElement('h3');
   title.className = 'deal-card-title';
   const titleLink = document.createElement('a');
-  titleLink.href = `deal?id=${deal.id}`;
+  titleLink.href = `deal.html?id=${deal.id}`;
   titleLink.textContent = deal.title;
   title.appendChild(titleLink);
   body.appendChild(title);
@@ -171,7 +171,7 @@ function renderDealCard(deal, options = {}) {
   footer.appendChild(priceDiv);
 
   const claimBtn = document.createElement('a');
-  claimBtn.href = `deal?id=${deal.id}`;
+  claimBtn.href = `deal.html?id=${deal.id}`;
   claimBtn.className = 'btn btn-primary btn-sm';
   claimBtn.textContent = 'View Deal';
   footer.appendChild(claimBtn);
@@ -388,9 +388,9 @@ function renderHeader(activePage = '') {
     <div class="header-inner">
       <a href="index.html" class="logo">🎓 Campus<span>Loot</span></a>
       <nav class="nav-links" id="nav-links">
-        <a href="index" class="${activePage === 'home' ? 'active' : ''}">Home</a>
-        <a href="deals" class="${activePage === 'deals' ? 'active' : ''}">All Deals</a>
-        <a href="submit" class="${activePage === 'submit' ? 'active' : ''}">Submit Deal</a>
+        <a href="index.html" class="${activePage === 'home' ? 'active' : ''}">Home</a>
+        <a href="deals.html" class="${activePage === 'deals' ? 'active' : ''}">All Deals</a>
+        <a href="submit.html" class="${activePage === 'submit' ? 'active' : ''}">Submit Deal</a>
       </nav>
       <div class="nav-auth" id="nav-auth"></div>
       <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu">
@@ -398,9 +398,9 @@ function renderHeader(activePage = '') {
       </button>
     </div>
     <div class="mobile-nav" id="mobile-nav">
-      <a href="index">Home</a>
-      <a href="deals">All Deals</a>
-      <a href="submit">Submit a Deal</a>
+      <a href="index.html">Home</a>
+      <a href="deals.html">All Deals</a>
+      <a href="submit.html">Submit a Deal</a>
       <div id="mobile-auth"></div>
     </div>
   `;
@@ -526,25 +526,25 @@ function renderFooter() {
         <div>
           <h4>Quick Links</h4>
           <div class="footer-links">
-            <a href="index">Home</a>
-            <a href="deals">All Deals</a>
-            <a href="submit">Submit a Deal</a>
+            <a href="index.html">Home</a>
+            <a href="deals.html">All Deals</a>
+            <a href="submit.html">Submit a Deal</a>
           </div>
         </div>
         <div>
           <h4>Categories</h4>
           <div class="footer-links">
-            <a href="deals?category=software">Software</a>
-            <a href="deals?category=courses">Courses</a>
-            <a href="deals?category=ott">OTT</a>
-            <a href="deals?category=food">Food</a>
+            <a href="deals.html?category=software">Software</a>
+            <a href="deals.html?category=courses">Courses</a>
+            <a href="deals.html?category=ott">OTT</a>
+            <a href="deals.html?category=food">Food</a>
           </div>
         </div>
         <div>
           <h4>Account</h4>
           <div class="footer-links">
-            <a href="login">Login</a>
-            <a href="profile">Profile</a>
+            <a href="login.html">Login</a>
+            <a href="profile.html">Profile</a>
           </div>
         </div>
       </div>
