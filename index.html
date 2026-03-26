@@ -17,36 +17,55 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <div class="container hero-content">
-      <h1>Find Every <span class="highlight">Student Deal</span> in India</h1>
-      <p>Exclusive discounts, free tools, and offers curated just for college students. Stop paying full price — you deserve better.</p>
-      <div class="hero-search">
-        <input type="text" id="hero-search-input" placeholder="Search deals... (e.g. GitHub, Spotify, Figma)" aria-label="Search deals">
-        <button id="hero-search-btn">Search Deals</button>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <h1>Student Deals <br> So Good <br><span class="highlight">It's Criminal.</span></h1>
+        <p>Exclusive discounts, free tools, and insane offers curated for college students. Stop paying full price.</p>
+        
+        <div class="hero-search">
+          <input type="text" id="hero-search-input" placeholder="Search brands (e.g. Apple, Spotify)" aria-label="Search deals">
+          <button id="hero-search-btn">Search</button>
+        </div>
+        
+        <div class="stats-bar" id="stats-bar">
+          <div class="stat-item">
+            <div class="stat-number" id="stat-deals">—</div>
+            <div class="stat-label">Deals Listed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="stat-users">—</div>
+            <div class="stat-label">Students Saving</div>
+          </div>
+        </div>
       </div>
-      <div class="stats-bar" id="stats-bar">
-        <div class="stat-item">
-          <div class="stat-number" id="stat-deals">—</div>
-          <div class="stat-label">Deals Listed</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number" id="stat-users">—</div>
-          <div class="stat-label">Students Saving</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">100%</div>
-          <div class="stat-label">Free to Use</div>
+      
+      <div class="hero-visual">
+        <div class="hero-visual-badge">100% FREE FOREVER</div>
+        <div class="hero-visual-grid">
+          <div class="hero-grid-cell hero-grid-cell--light"><span>🍏</span></div>
+          <div class="hero-grid-cell hero-grid-cell--primary"><span>-50%</span></div>
+          <div class="hero-grid-cell hero-grid-cell--accent"><span>6 MONTHS FREE</span></div>
+          <div class="hero-grid-cell hero-grid-cell--dark"><span>🎵</span></div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Marquee Trust Strip -->
+  <div class="marquee-strip">
+    <div class="marquee-inner">
+      <span>Apple</span><span>Spotify</span><span>Amazon</span><span>Notion</span><span>GitHub</span><span>Figma</span><span>Canva</span><span>Adobe</span><span>Microsoft</span><span>HP</span>
+      <span>Apple</span><span>Spotify</span><span>Amazon</span><span>Notion</span><span>GitHub</span><span>Figma</span><span>Canva</span><span>Adobe</span><span>Microsoft</span><span>HP</span>
+    </div>
+  </div>
+
+
   <!-- Featured Deals -->
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">⭐ Featured Deals</h2>
-        <a href="deals.html" class="section-link">View all →</a>
+        <h2 class="section-title">Featured Deals</h2>
+        <a href="deals" class="section-link">View all →</a>
       </div>
       <div class="deal-grid" id="featured-deals-grid">
         <!-- Populated by JS -->
@@ -55,10 +74,10 @@
   </section>
 
   <!-- All Deals with Category Filters -->
-  <section class="section" style="background: var(--bg-alt);">
+  <section class="section section-alt">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">🔥 All Deals</h2>
+        <h2 class="section-title">All Deals</h2>
       </div>
 
       <!-- Category Filters -->
@@ -142,7 +161,7 @@
       heroSearchBtn.addEventListener('click', () => {
         const query = heroSearchInput.value.trim();
         if (query) {
-          window.location.href = `deals.html?search=${encodeURIComponent(query)}`;
+          window.location.href = `deals?search=${encodeURIComponent(query)}`;
         }
       });
       heroSearchInput.addEventListener('keypress', (e) => {

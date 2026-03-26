@@ -158,17 +158,77 @@ function formatDate(timestamp) {
 }
 
 /**
- * Format price with ₹ symbol
+ * Detect user currency based on IP or fallback to INR
+ * @returns {Promise<string>} 'INR' or 'USD'
+ */
+async function getUserCurrency() {
+  const cached = localStorage.getItem('cl_currency');
+  if (cached) return cached;
+
+  try {
+    // Using ipapi.co (free tier, no API key needed for basic usage)
+    const res = await fetch('https://ipapi.co/json/');
+    const data = await res.json();
+    const currency = data.country_code === 'IN' ? 'INR' : 'USD';
+    localStorage.setItem('cl_currency', currency);
+    return currency;
+  } catch (err) {
+    console.error('Currency detection failed, falling back to INR:', err);
+    return 'INR';
+  }
+}
+
+/**
+ * Global currency state (initialized on page load)
+ */
+let USER_CURRENCY = localStorage.getItem('cl_currency') || 'INR';
+getUserCurrency().then(c => { 
+  if (c !== USER_CURRENCY) {
+    USER_CURRENCY = c;
+    // Trigger a re-render if needed, or just let natural navigation handle it
+  }
+});
+
+const EXCHANGE_RATE = 83.0; // 1 USD = 83 INR
+
+/**
+ * Format and convert price based on user location
  * @param {string|number} price
  * @returns {string}
  */
 function formatPrice(price) {
   if (!price && price !== 0) return '';
-  const str = String(price);
-  if (str.includes('₹') || str.includes('$') || str.includes('%') || str.toLowerCase() === 'free' || str.toLowerCase() === 'varies') {
+  let str = String(price).trim();
+  
+  // Handle non-numeric price strings
+  const lowerStr = str.toLowerCase();
+  if (lowerStr === 'free' || lowerStr === 'varies' || str.startsWith('%') || str.includes('% OFF') || lowerStr.includes('pricing')) {
     return str;
   }
-  return `₹${str}`;
+
+  const isUSD = str.includes('$');
+  const isINR = str.includes('₹');
+  
+  // Extract numeric value
+  let numericValue = parseFloat(str.replace(/[^0-9.]/g, ''));
+  if (isNaN(numericValue)) return str;
+
+  // Conversion and Formatting logic
+  if (USER_CURRENCY === 'INR') {
+    if (isUSD) {
+      numericValue = Math.round(numericValue * EXCHANGE_RATE);
+    }
+    // Format as Indian Currency (e.g. ₹1,500)
+    return `₹${numericValue.toLocaleString('en-IN')}`;
+  } else {
+    // For International Students (USD)
+    if (isINR || (!isUSD && !isINR)) {
+      // Convert INR to USD
+      numericValue = (numericValue / EXCHANGE_RATE).toFixed(2);
+    }
+    // Format as USD (e.g. $19.99)
+    return `$${numericValue}`;
+  }
 }
 
 /**

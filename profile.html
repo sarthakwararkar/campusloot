@@ -94,7 +94,7 @@
       const savedDeals = await getSavedDeals(user.id);
       savedGrid.innerHTML = '';
       if (savedDeals.length === 0) {
-        savedGrid.appendChild(renderEmptyState('❤️', 'No saved deals yet', 'Save deals to access them quickly later!', { text: 'Browse Deals', href: 'deals.html' }));
+        savedGrid.appendChild(renderEmptyState('❤️', 'No saved deals yet', 'Save deals to access them quickly later!', { text: 'Browse Deals', href: 'deals' }));
       } else {
         const savedIds = new Set(savedDeals.map(d => d.id));
         savedDeals.forEach(deal => {

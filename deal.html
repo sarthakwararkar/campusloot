@@ -70,7 +70,7 @@
 
       // Breadcrumb-style back link
       const backLink = document.createElement('a');
-      backLink.href = 'deals.html';
+      backLink.href = 'deals';
       backLink.className = 'btn btn-ghost btn-sm';
       backLink.textContent = '← Back to Deals';
       backLink.style.marginBottom = 'var(--space-lg)';
@@ -104,7 +104,27 @@
 
       const brandBadge = document.createElement('span');
       brandBadge.className = 'badge badge-primary';
-      brandBadge.textContent = deal.brand_name;
+      brandBadge.style.display = 'inline-flex';
+      brandBadge.style.alignItems = 'center';
+      brandBadge.style.gap = '6px';
+      
+      const faviconUrl = dealFaviconUrl(deal);
+      if (faviconUrl) {
+        const brandLogo = document.createElement('img');
+        brandLogo.src = faviconUrl;
+        brandLogo.alt = deal.brand_name || '';
+        brandLogo.className = 'brand-logo';
+        brandLogo.style.width = '14px';
+        brandLogo.style.height = '14px';
+        brandLogo.loading = 'lazy';
+        brandLogo.onerror = () => brandLogo.remove();
+        brandBadge.appendChild(brandLogo);
+      }
+
+      const brandText = document.createElement('span');
+      brandText.textContent = deal.brand_name;
+      brandBadge.appendChild(brandText);
+      
       meta.appendChild(brandBadge);
 
       const catBadge = document.createElement('span');
@@ -139,12 +159,12 @@
         if (deal.original_price) {
           const orig = document.createElement('span');
           orig.style.cssText = 'text-decoration:line-through;color:var(--text-tertiary);font-size:var(--fs-lg);';
-          orig.textContent = deal.original_price;
+          orig.textContent = formatPrice(deal.original_price);
           priceSection.appendChild(orig);
         }
         const current = document.createElement('span');
         current.style.cssText = 'font-size:var(--fs-2xl);font-weight:800;color:var(--success);';
-        current.textContent = deal.deal_price || 'Free';
+        current.textContent = formatPrice(deal.deal_price || 'Free');
         priceSection.appendChild(current);
         body.appendChild(priceSection);
       }

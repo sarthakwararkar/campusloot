@@ -16,7 +16,7 @@
   <div class="auth-page">
     <div class="auth-card">
       <div style="text-align:center;margin-bottom:var(--space-xl);">
-        <a href="index.html" class="logo" style="justify-content:center;font-size:var(--fs-2xl);">🎓 Campus<span>Loot</span></a>
+        <a href="index" class="logo" style="justify-content:center;font-size:var(--fs-2xl);">🎓 Campus<span>Loot</span></a>
         <p style="color:var(--text-secondary);margin-top:var(--space-sm);font-size:var(--fs-sm);">Student Deals & Freebies</p>
       </div>
 
@@ -103,7 +103,7 @@
       // If already logged in, redirect
       const user = await getCurrentUser();
       if (user) {
-        window.location.href = 'profile.html';
+        window.location.href = 'profile';
         return;
       }
 
@@ -158,7 +158,7 @@
         }
 
         showToast('Welcome back!', 'success');
-        setTimeout(() => { window.location.href = 'index.html'; }, 500);
+        setTimeout(() => { window.location.href = 'index'; }, 500);
       });
 
       // Signup
@@ -204,7 +204,7 @@
         }
 
         showToast('Account created! Please check your email to verify.', 'success');
-        setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+        setTimeout(() => { window.location.href = 'index'; }, 1500);
       });
 
       // Google OAuth

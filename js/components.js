@@ -124,14 +124,29 @@ function renderDealCard(deal, options = {}) {
   const title = document.createElement('h3');
   title.className = 'deal-card-title';
   const titleLink = document.createElement('a');
-  titleLink.href = `deal.html?id=${deal.id}`;
+  titleLink.href = `deal?id=${deal.id}`;
   titleLink.textContent = deal.title;
   title.appendChild(titleLink);
   body.appendChild(title);
 
   const brand = document.createElement('div');
   brand.className = 'deal-card-brand';
-  brand.textContent = deal.brand_name;
+  
+  const faviconUrl = dealFaviconUrl(deal);
+  if (faviconUrl) {
+    const brandLogo = document.createElement('img');
+    brandLogo.src = faviconUrl;
+    brandLogo.alt = deal.brand_name || '';
+    brandLogo.className = 'brand-logo';
+    brandLogo.loading = 'lazy';
+    brandLogo.onerror = () => brandLogo.remove();
+    brand.appendChild(brandLogo);
+  }
+
+  const brandText = document.createElement('span');
+  brandText.textContent = deal.brand_name;
+  brand.appendChild(brandText);
+
   body.appendChild(brand);
 
   // Footer with price and claim button
@@ -144,19 +159,19 @@ function renderDealCard(deal, options = {}) {
   if (deal.original_price) {
     const originalPrice = document.createElement('span');
     originalPrice.className = 'original';
-    originalPrice.textContent = deal.original_price;
+    originalPrice.textContent = formatPrice(deal.original_price);
     priceDiv.appendChild(originalPrice);
   }
 
   const currentPrice = document.createElement('span');
   currentPrice.className = 'current';
-  currentPrice.textContent = deal.deal_price || deal.discount_text || 'Free';
+  currentPrice.textContent = formatPrice(deal.deal_price || deal.discount_text || 'Free');
   priceDiv.appendChild(currentPrice);
 
   footer.appendChild(priceDiv);
 
   const claimBtn = document.createElement('a');
-  claimBtn.href = `deal.html?id=${deal.id}`;
+  claimBtn.href = `deal?id=${deal.id}`;
   claimBtn.className = 'btn btn-primary btn-sm';
   claimBtn.textContent = 'View Deal';
   footer.appendChild(claimBtn);
@@ -344,14 +359,14 @@ function renderSkeletonCards(count = 6) {
     const card = document.createElement('div');
     card.className = 'deal-card';
     card.innerHTML = `
-      <div class="deal-card-image skeleton" style="height:160px"></div>
+      <div class="deal-card-image skeleton" style="height:180px"></div>
       <div class="deal-card-body">
-        <div class="skeleton" style="height:14px;width:60px;margin-bottom:8px"></div>
-        <div class="skeleton" style="height:20px;width:100%;margin-bottom:8px"></div>
-        <div class="skeleton" style="height:14px;width:80px;margin-bottom:16px"></div>
-        <div style="display:flex;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border-light)">
-          <div class="skeleton" style="height:20px;width:60px"></div>
-          <div class="skeleton" style="height:32px;width:80px;border-radius:8px"></div>
+        <div class="skeleton" style="height:14px;width:60px;margin-bottom:12px"></div>
+        <div class="skeleton" style="height:22px;width:100%;margin-bottom:12px"></div>
+        <div class="skeleton" style="height:16px;width:100px;margin-bottom:20px"></div>
+        <div style="display:flex;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border-light)">
+          <div class="skeleton" style="height:24px;width:70px"></div>
+          <div class="skeleton" style="height:36px;width:90px;border-radius:10px"></div>
         </div>
       </div>
     `;
@@ -373,9 +388,9 @@ function renderHeader(activePage = '') {
     <div class="header-inner">
       <a href="index.html" class="logo">🎓 Campus<span>Loot</span></a>
       <nav class="nav-links" id="nav-links">
-        <a href="index.html" class="${activePage === 'home' ? 'active' : ''}">Home</a>
-        <a href="deals.html" class="${activePage === 'deals' ? 'active' : ''}">All Deals</a>
-        <a href="submit.html" class="${activePage === 'submit' ? 'active' : ''}">Submit Deal</a>
+        <a href="index" class="${activePage === 'home' ? 'active' : ''}">Home</a>
+        <a href="deals" class="${activePage === 'deals' ? 'active' : ''}">All Deals</a>
+        <a href="submit" class="${activePage === 'submit' ? 'active' : ''}">Submit Deal</a>
       </nav>
       <div class="nav-auth" id="nav-auth"></div>
       <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu">
@@ -383,9 +398,9 @@ function renderHeader(activePage = '') {
       </button>
     </div>
     <div class="mobile-nav" id="mobile-nav">
-      <a href="index.html">Home</a>
-      <a href="deals.html">All Deals</a>
-      <a href="submit.html">Submit a Deal</a>
+      <a href="index">Home</a>
+      <a href="deals">All Deals</a>
+      <a href="submit">Submit a Deal</a>
       <div id="mobile-auth"></div>
     </div>
   `;
@@ -511,25 +526,25 @@ function renderFooter() {
         <div>
           <h4>Quick Links</h4>
           <div class="footer-links">
-            <a href="index.html">Home</a>
-            <a href="deals.html">All Deals</a>
-            <a href="submit.html">Submit a Deal</a>
+            <a href="index">Home</a>
+            <a href="deals">All Deals</a>
+            <a href="submit">Submit a Deal</a>
           </div>
         </div>
         <div>
           <h4>Categories</h4>
           <div class="footer-links">
-            <a href="deals.html?category=software">Software</a>
-            <a href="deals.html?category=courses">Courses</a>
-            <a href="deals.html?category=ott">OTT</a>
-            <a href="deals.html?category=food">Food</a>
+            <a href="deals?category=software">Software</a>
+            <a href="deals?category=courses">Courses</a>
+            <a href="deals?category=ott">OTT</a>
+            <a href="deals?category=food">Food</a>
           </div>
         </div>
         <div>
           <h4>Account</h4>
           <div class="footer-links">
-            <a href="login.html">Login</a>
-            <a href="profile.html">Profile</a>
+            <a href="login">Login</a>
+            <a href="profile">Profile</a>
           </div>
         </div>
       </div>
