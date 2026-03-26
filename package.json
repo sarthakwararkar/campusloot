@@ -101,7 +101,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "sync": "node scripts/sync_deals.js"
+    "sync": "node scripts/sync_deals.js",
+    "dev": "npx -y serve ./"
   },
   "repository": {
     "type": "git",

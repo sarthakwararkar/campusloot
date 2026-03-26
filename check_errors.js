@@ -11,9 +11,17 @@ const puppeteer = require('puppeteer');
   });
 
   console.log('Navigating to http://localhost:3000...');
-  await page.goto('http://localhost:3000', { waitUntil: 'networkidle0' });
+  try {
+    await page.goto('http://localhost:3000', { waitUntil: 'networkidle0' });
+    console.log('Navigation successful!');
+  } catch (err) {
+    console.error('NAVIGATION ERROR:', err.message);
+    process.exit(1);
+  }
   
   await new Promise(r => setTimeout(r, 2000));
+  console.log('Wait finished, closing browser...');
   
   await browser.close();
+  console.log('Done.');
 })();
