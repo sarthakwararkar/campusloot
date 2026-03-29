@@ -353,8 +353,8 @@
         <!-- Pagination/Load More -->
         <div class="mt-20 flex flex-col items-center gap-6">
           <button
+            id="load-more-btn"
             class="px-12 py-5 bg-white text-on-surface font-bold rounded-2xl shadow-sm hover:shadow-md hover:scale-105 active:scale-95 transition-all duration-300 border border-outline-variant/10"
-            style=""
           >
             Load More Deals
           </button>
@@ -550,35 +550,81 @@
           });
         }
 
+        let loadedCount = 0;
+        const pageSize = 12;
+
         // Basic load function
-        async function loadDeals(filters = {}) {
-          grid.innerHTML = "";
-          loader.classList.remove("hidden");
-
-          const { deals } = await fetchDeals(filters);
-          loader.classList.add("hidden");
-
-          if (!deals) {
-            grid.innerHTML =
-              '<p class="text-error col-span-full text-center py-8">Failed to load deals.</p>';
-            return;
-          }
-
-          const countEl = document.getElementById("deals-count");
-          if (countEl) countEl.textContent = `Showing ${deals.length} deals`;
-
-          if (deals.length === 0) {
-            grid.innerHTML =
-              '<p class="col-span-full text-center py-8 text-on-surface-variant">No deals found matching your criteria.</p>';
-          } else {
-            let savedSet = new Set();
-            if (user) {
-              savedSet = await getSavedDealIds(user.id);
+        async function loadDeals(filters = {}, append = false) {
+          try {
+            if (!append) {
+              grid.innerHTML = "";
+              loadedCount = 0;
             }
-            deals.forEach((deal) => {
-              grid.appendChild(renderDealCard(deal, { savedDeals: savedSet }));
+            loader.classList.remove("hidden");
+
+            const { deals, error } = await fetchDeals({
+              ...filters,
+              from: loadedCount,
+              to: loadedCount + pageSize - 1
             });
+            
+            loader.classList.add("hidden");
+
+            if (error) throw new Error(error);
+            if (!deals) throw new Error("No data returned");
+
+            loadedCount += deals.length;
+
+            const countEl = document.getElementById("deals-count");
+            if (countEl) countEl.textContent = `Showing ${loadedCount} deals`;
+
+            if (deals.length === 0 && !append) {
+              grid.innerHTML =
+                '<p class="col-span-full text-center py-8 text-on-surface-variant">No deals found matching your criteria.</p>';
+            } else {
+              let savedSet = new Set();
+              if (user) {
+                try {
+                  savedSet = await getSavedDealIds(user.id);
+                } catch (sErr) {
+                  console.warn("Failed to fetch saved deals:", sErr);
+                }
+              }
+              deals.forEach((deal) => {
+                grid.appendChild(renderDealCard(deal, { savedDeals: savedSet }));
+              });
+            }
+
+            const loadMoreBtn = document.getElementById("load-more-btn");
+            if (loadMoreBtn) {
+              if (deals.length < pageSize) {
+                loadMoreBtn.classList.add("hidden");
+              } else {
+                loadMoreBtn.classList.remove("hidden");
+              }
+            }
+          } catch (err) {
+            console.error("loadDeals Error:", err);
+            loader.classList.add("hidden");
+            if (!append) {
+              grid.innerHTML = `<div class="col-span-full py-12 text-center text-error">
+                <p class="font-bold">Technical glitch in the matrix.</p>
+                <p class="text-sm opacity-70">We couldn't load the deals. Please try refreshing.</p>
+              </div>`;
+            }
+            showToast("Failed to load deals", "error");
           }
+        }
+
+        const loadMoreBtn = document.getElementById("load-more-btn");
+        if (loadMoreBtn) {
+          loadMoreBtn.addEventListener("click", () => {
+             loadDeals({
+              sort: currentSort,
+              category: currentCategory,
+              search: currentSearch,
+            }, true);
+          });
         }
 
         // Get URL parameters for filters

@@ -127,7 +127,7 @@ async function fetchAllDealsAdmin() {
 async function fetchAdminStats() {
   const [dealsResult, usersResult, savesResult, pendingResult] = await Promise.all([
     supabase.from('deals').select('*', { count: 'exact', head: true }),
-    supabase.from('users').select('*', { count: 'exact', head: true }),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }),
     supabase.from('saved_deals').select('*', { count: 'exact', head: true }),
     supabase.from('deal_submissions').select('*', { count: 'exact', head: true }).eq('status', 'pending')
   ]);

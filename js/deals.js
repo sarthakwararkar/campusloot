@@ -244,10 +244,41 @@ async function fetchStats() {
     .eq('is_verified', true);
 
   const { count: usersCount } = await supabase
-    .from('users')
+    .from('profiles')
     .select('*', { count: 'exact', head: true });
 
   return { dealsCount: dealsCount || 0, usersCount: usersCount || 0 };
+}
+
+/**
+ * Update a deal's fields
+ * @param {string} id 
+ * @param {Object} fields 
+ * @returns {Promise<{success: boolean, error: string|null}>}
+ */
+async function updateDeal(id, fields) {
+  try {
+    const { error } = await supabase.from('deals').update(fields).eq('id', id);
+    if (error) throw error;
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+}
+
+/**
+ * Delete a deal
+ * @param {string} id 
+ * @returns {Promise<{success: boolean, error: string|null}>}
+ */
+async function deleteDeal(id) {
+  try {
+    const { error } = await supabase.from('deals').delete().eq('id', id);
+    if (error) throw error;
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
 }
 
 /**

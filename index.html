@@ -219,6 +219,22 @@
               </button>
             </div>
           </div>
+
+          <!-- Stats Bar (FIX 5) -->
+          <div class="stats-bar max-w-2xl mx-auto flex justify-center gap-12 mt-12 pb-8">
+            <div class="stat-item">
+              <div class="stat-number" id="stat-deals">0</div>
+              <div class="stat-label">Active Deals</div>
+            </div>
+            <div class="stat-item border-l border-white/10 pl-12">
+              <div class="stat-number" id="stat-users">0</div>
+              <div class="stat-label">Happy Students</div>
+            </div>
+            <div class="stat-item border-l border-white/10 pl-12">
+              <div class="stat-number" id="stat-savings">₹1M+</div>
+              <div class="stat-label">Total Savings</div>
+            </div>
+          </div>
         </div>
       </section>
       <!-- Trending Brands -->
@@ -702,6 +718,21 @@
             featuredGrid.innerHTML = `<div class="col-span-full py-12 text-center text-error"><p>Unable to load masterpieces at this time.</p></div>`;
           }
         }
+
+        // Load Stats (FIX 5)
+        async function loadStats() {
+          try {
+            const stats = await fetchStats();
+            const dealsEl = document.getElementById('stat-deals');
+            const usersEl = document.getElementById('stat-users');
+            if (dealsEl) dealsEl.textContent = (stats.dealsCount || 0).toLocaleString();
+            if (usersEl) usersEl.textContent = (stats.usersCount || 0).toLocaleString();
+          } catch (err) {
+            console.error("Failed to load public stats:", err);
+            // Fallback to static numbers is already in HTML
+          }
+        }
+        await loadStats();
       })();
     </script>
   </body>

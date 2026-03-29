@@ -324,7 +324,10 @@ function getCategoryLabel(key) {
     'courses': '📚 Courses',
     'ott': '🎬 OTT',
     'local': '📍 Local',
-    'other': '🎁 Other'
+    'other': '🎁 Other',
+    'services': '🛠️ Services',
+    'electronics': '📱 Electronics',
+    'clothing': '👕 Clothing'
   };
   return labels[key] || key;
 }
@@ -415,7 +418,7 @@ async function updateAuthNav() {
   if (user) {
     // Fetch user profile for role check
     const { data: profile } = await supabaseClient
-      .from('users')
+      .from('profiles')
       .select('role, full_name')
       .eq('id', user.id)
       .single();

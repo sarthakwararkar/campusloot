@@ -168,17 +168,42 @@
             const rejectBtn = document.createElement("button");
             rejectBtn.className = "btn btn-danger btn-sm";
             rejectBtn.textContent = "✕ Reject";
-            rejectBtn.addEventListener("click", async () => {
-              const reason = prompt("Rejection reason (optional):");
-              setButtonLoading(rejectBtn, true);
-              const result = await rejectDeal(sub.id, reason || "");
-              if (result.success) {
-                showToast("Submission rejected", "info");
-                card.remove();
-              } else {
-                showToast(result.error, "error");
-                setButtonLoading(rejectBtn, false);
+            rejectBtn.addEventListener("click", () => {
+              // Toggle inline rejection form
+              const existingForm = card.querySelector(".reject-form");
+              if (existingForm) {
+                existingForm.remove();
+                return;
               }
+
+              const rejectForm = document.createElement("div");
+              rejectForm.className = "reject-form";
+              rejectForm.style.cssText = "margin-top: var(--space-md); padding: var(--space-md); background: var(--color-background-secondary); border-radius: var(--radius-md); border: 1px solid var(--border-light);";
+              
+              rejectForm.innerHTML = `
+                <label class="form-label" style="display:block; margin-bottom:var(--space-xs); font-weight:bold; font-size:var(--fs-sm);">Rejection reason (optional)</label>
+                <textarea class="form-input" rows="2" placeholder="e.g. Deal is expired, duplicate, incorrect info..." style="width:100%; margin-bottom:var(--space-sm);"></textarea>
+                <div style="display:flex; gap: var(--space-sm);">
+                  <button class="btn btn-danger btn-sm" id="confirm-reject-btn">Confirm Reject</button>
+                  <button class="btn btn-ghost btn-sm" id="cancel-reject-btn">Cancel</button>
+                </div>
+              `;
+
+              rejectForm.querySelector("#cancel-reject-btn").onclick = () => rejectForm.remove();
+              rejectForm.querySelector("#confirm-reject-btn").onclick = async () => {
+                const reason = rejectForm.querySelector("textarea").value;
+                setButtonLoading(rejectForm.querySelector("#confirm-reject-btn"), true);
+                const result = await rejectDeal(sub.id, reason || "");
+                if (result.success) {
+                  showToast("Submission rejected", "info");
+                  card.remove();
+                } else {
+                  showToast(result.error, "error");
+                  setButtonLoading(rejectForm.querySelector("#confirm-reject-btn"), false);
+                }
+              };
+
+              card.appendChild(rejectForm);
             });
             actions.appendChild(rejectBtn);
 
@@ -225,6 +250,7 @@
             <th>Active</th>
             <th>Featured</th>
             <th>Verified</th>
+            <th>Actions</th>
           </tr></thead>
           <tbody id="admin-deals-tbody"></tbody>
         `;
@@ -291,6 +317,97 @@
               td.appendChild(toggle);
               tr.appendChild(td);
             });
+
+            // Actions Column (Edit/Delete)
+            const tdActions = document.createElement('td');
+            tdActions.style.whiteSpace = 'nowrap';
+
+            // Edit button
+            const editBtn = document.createElement('button');
+            editBtn.className = 'btn btn-ghost btn-sm';
+            editBtn.textContent = '✏️ Edit';
+            editBtn.addEventListener('click', () => {
+              // Toggle inline edit form
+              const existingForm = tr.nextElementSibling?.classList.contains('edit-row') ? tr.nextElementSibling : null;
+              if (existingForm) {
+                existingForm.remove();
+                return;
+              }
+
+              const editRow = document.createElement('tr');
+              editRow.className = 'edit-row';
+              const editTd = document.createElement('td');
+              editTd.colSpan = 9;
+              editTd.style.padding = 'var(--space-md)';
+              editTd.style.background = 'var(--color-background-secondary)';
+
+              editTd.innerHTML = `
+                <div style="display:flex; flex-direction:column; gap:var(--space-sm);">
+                  <label class="form-label" style="font-weight:bold; font-size:var(--fs-sm);">Edit Title</label>
+                  <input type="text" class="form-input" value="${deal.title}" style="width:100%;">
+                  <div style="display:flex; gap:var(--space-sm);">
+                    <button class="btn btn-primary btn-sm" id="confirm-edit-btn">Save Changes</button>
+                    <button class="btn btn-ghost btn-sm" id="cancel-edit-btn">Cancel</button>
+                  </div>
+                </div>
+              `;
+
+              editTd.querySelector('#cancel-edit-btn').onclick = () => editRow.remove();
+              editTd.querySelector('#confirm-edit-btn').onclick = async () => {
+                const newTitle = editTd.querySelector('input').value;
+                if (!newTitle || newTitle === deal.title) {
+                  editRow.remove();
+                  return;
+                }
+                setButtonLoading(editTd.querySelector('#confirm-edit-btn'), true);
+                const result = await updateDeal(deal.id, { title: newTitle });
+                if (result.success) {
+                  showToast('Deal title updated', 'success');
+                  tdTitle.textContent = newTitle;
+                  deal.title = newTitle;
+                  editRow.remove();
+                } else {
+                  showToast('Failed to update', 'error');
+                  setButtonLoading(editTd.querySelector('#confirm-edit-btn'), false);
+                }
+              };
+
+              editRow.appendChild(editTd);
+              tr.after(editRow);
+            });
+            tdActions.appendChild(editBtn);
+
+            // Delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn btn-danger btn-sm';
+            deleteBtn.textContent = '🗑 Delete';
+            deleteBtn.style.marginLeft = 'var(--space-xs)';
+            deleteBtn.addEventListener('click', async () => {
+               // Inline confirmation
+               if (deleteBtn.textContent === '🗑 Confirm?') {
+                  setButtonLoading(deleteBtn, true);
+                  const result = await deleteDeal(deal.id);
+                  if (result.success) {
+                    showToast('Deal deleted', 'success');
+                    tr.remove();
+                    // Also remove edit row if present
+                    if (tr.nextElementSibling?.classList.contains('edit-row')) tr.nextElementSibling.remove();
+                  } else {
+                    showToast('Failed to delete', 'error');
+                    deleteBtn.textContent = '🗑 Delete';
+                    setButtonLoading(deleteBtn, false);
+                  }
+                  return;
+               }
+
+               deleteBtn.textContent = '🗑 Confirm?';
+               setTimeout(() => {
+                 if (deleteBtn.textContent === '🗑 Confirm?') deleteBtn.textContent = '🗑 Delete';
+               }, 3000);
+            });
+            tdActions.appendChild(deleteBtn);
+
+            tr.appendChild(tdActions);
 
             tbody.appendChild(tr);
           });

@@ -31,10 +31,10 @@ async function signUp(email, password, name, college, city) {
       return { user: null, error: error.message };
     }
 
-    // Create user profile in users table
+    // Create user profile in profiles table
     if (data.user) {
       const { error: profileError } = await supabase
-        .from('users')
+        .from('profiles')
         .insert({
           id: data.user.id,
           email: email,
@@ -129,7 +129,7 @@ async function getCurrentProfile() {
   if (!user) return null;
 
   const { data, error } = await supabase
-    .from('users')
+    .from('profiles')
     .select('*')
     .eq('id', user.id)
     .single();
@@ -157,7 +157,7 @@ async function requireAdmin() {
   if (!user) return null;
 
   const { data: profile } = await supabase
-    .from('users')
+    .from('profiles')
     .select('role')
     .eq('id', user.id)
     .single();
@@ -179,6 +179,16 @@ function onAuthChange(callback) {
     callback(event, session);
   });
 }
+
+// Listen for auth state changes (handles OAuth redirect callbacks)
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' && session) {
+    // If on login page, redirect to index
+    if (window.location.pathname.includes('login.html')) {
+        window.location.href = 'index.html';
+    }
+  }
+});
 
 /**
  * Send password reset email
@@ -231,7 +241,7 @@ async function updatePassword(newPassword) {
 async function updateProfile(userId, updates) {
   try {
     const { error } = await supabase
-      .from('users')
+      .from('profiles')
       .update(updates)
       .eq('id', userId);
 
