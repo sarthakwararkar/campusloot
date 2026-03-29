@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Deal Details | CampusLoot</title>
+    <title>Deal Details | Campus Loot</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
@@ -53,7 +53,7 @@
     <nav class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl shadow-sm h-20">
       <div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-full">
         <div class="flex items-center gap-8">
-          <span onclick="window.location.href='index.html'" class="text-2xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent font-headline tracking-tight cursor-pointer"><a href="index.html" class="hover:opacity-80 transition-opacity">CampusLoot</a></span>
+          <span onclick="window.location.href='index.html'" class="text-2xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent font-headline tracking-tight cursor-pointer"><a href="index.html" class="hover:opacity-80 transition-opacity">Campus Loot</a></span>
           <div class="hidden md:flex gap-8">
             <a class="text-slate-600 hover:text-primary transition-colors font-headline font-bold" href="deals.html">Explore</a>
             <a class="text-slate-600 hover:text-primary transition-colors font-headline font-bold" href="categories.html">Categories</a>
@@ -133,7 +133,7 @@
 
     <footer class="w-full border-t border-slate-100 bg-white py-12 mt-24">
       <div class="max-w-7xl mx-auto px-6 text-center">
-        <span class="text-xl font-black text-slate-900 font-headline"><a href="index.html" class="hover:opacity-80 transition-opacity">CampusLoot</a></span>
+        <span class="text-xl font-black text-slate-900 font-headline"><a href="index.html" class="hover:opacity-80 transition-opacity">Campus Loot</a></span>
         <p class="text-sm text-slate-500 mt-4">© 2024 Campus Loot. Student Deals Platform.</p>
       </div>
     </footer>
@@ -174,7 +174,7 @@
             return;
           }
 
-          document.title = `${deal.brand_name || 'Deal'} | CampusLoot`;
+          document.title = `${deal.brand_name || 'Deal'} | Campus Loot`;
           document.getElementById('breadcrumb-title').textContent = deal.brand_name || 'Deal Details';
           document.getElementById('deal-title').textContent = deal.title || 'Special Offer';
           document.getElementById('deal-brand').textContent = deal.brand_name || '';
