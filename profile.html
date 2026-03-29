@@ -1,247 +1,802 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Profile — CampusLoot</title>
-  <meta name="description" content="View your saved deals, edit your profile, and manage your deal submissions on CampusLoot.">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/components.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-</head>
-<body>
-
-  <header id="site-header"></header>
-
-  <div class="container profile-page" id="profile-container">
-    <div class="loader-container" id="profile-loader">
-      <div class="loader"></div>
-    </div>
-  </div>
-
-  <footer id="site-footer"></footer>
-
-  <script src="js/supabase.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/deals.js"></script>
-  <script src="js/components.js"></script>
-  <script>
-    (async function initProfilePage() {
-      renderHeader('profile');
-      renderFooter();
-
-      const user = await requireAuth();
-      if (!user) return;
-
-      const profile = await getCurrentProfile();
-      const container = document.getElementById('profile-container');
-      container.innerHTML = '';
-
-      // Profile header
-      const header = document.createElement('div');
-      header.className = 'profile-header';
-
-      const avatar = document.createElement('div');
-      avatar.className = 'profile-avatar';
-      avatar.textContent = (profile?.full_name || user.email)[0].toUpperCase();
-      header.appendChild(avatar);
-
-      const info = document.createElement('div');
-      info.className = 'profile-info';
-      const nameEl = document.createElement('h2');
-      nameEl.textContent = profile?.full_name || 'Student';
-      info.appendChild(nameEl);
-      const detailsEl = document.createElement('p');
-      detailsEl.textContent = [profile?.college_name, profile?.city].filter(Boolean).join(' • ') || user.email;
-      info.appendChild(detailsEl);
-      header.appendChild(info);
-      container.appendChild(header);
-
-      // Tabs
-      const tabs = document.createElement('div');
-      tabs.className = 'profile-tabs';
-      const tabData = [
-        { id: 'saved', label: '❤️ Saved Deals' },
-        { id: 'submissions', label: '📝 My Submissions' },
-        { id: 'settings', label: '⚙️ Settings' }
-      ];
-      tabData.forEach(t => {
-        const btn = document.createElement('button');
-        btn.className = `profile-tab ${t.id === 'saved' ? 'active' : ''}`;
-        btn.textContent = t.label;
-        btn.dataset.tab = t.id;
-        btn.addEventListener('click', () => {
-          tabs.querySelectorAll('.profile-tab').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          container.querySelectorAll('.profile-section').forEach(s => s.classList.remove('active'));
-          document.getElementById(`section-${t.id}`).classList.add('active');
-        });
-        tabs.appendChild(btn);
-      });
-      container.appendChild(tabs);
-
-      // ---- Saved Deals Section ----
-      const savedSection = document.createElement('div');
-      savedSection.className = 'profile-section active';
-      savedSection.id = 'section-saved';
-      const savedGrid = document.createElement('div');
-      savedGrid.className = 'deal-grid';
-      savedGrid.appendChild(renderLoader());
-      savedSection.appendChild(savedGrid);
-      container.appendChild(savedSection);
-
-      const savedDeals = await getSavedDeals(user.id);
-      savedGrid.innerHTML = '';
-      if (savedDeals.length === 0) {
-        savedGrid.appendChild(renderEmptyState('❤️', 'No saved deals yet', 'Save deals to access them quickly later!', { text: 'Browse Deals', href: 'deals' }));
-      } else {
-        const savedIds = new Set(savedDeals.map(d => d.id));
-        savedDeals.forEach(deal => {
-          savedGrid.appendChild(renderDealCard(deal, { savedDeals: savedIds }));
-        });
+<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Dashboard | UniDeals India</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-container": "#dcc9ff",
+              outline: "#757778",
+              "on-primary-fixed": "#000000",
+              "tertiary-fixed": "#00cffc",
+              tertiary: "#00647b",
+              "on-tertiary": "#e2f6ff",
+              "primary-fixed-dim": "#8885ff",
+              "primary-dim": "#3d30d4",
+              "inverse-primary": "#8582ff",
+              primary: "#4a40e0",
+              "on-secondary-fixed-variant": "#6514d6",
+              "on-tertiary-container": "#004050",
+              "surface-variant": "#dadddf",
+              "primary-fixed": "#9795ff",
+              "primary-container": "#9795ff",
+              "on-secondary-fixed": "#430097",
+              error: "#b41340",
+              "surface-container-high": "#e0e3e4",
+              "error-dim": "#a70138",
+              "surface-container-lowest": "#ffffff",
+              surface: "#f5f6f7",
+              "error-container": "#f74b6d",
+              "secondary-fixed-dim": "#d0b8ff",
+              "on-surface": "#2c2f30",
+              "inverse-on-surface": "#9b9d9e",
+              "surface-container-low": "#eff1f2",
+              background: "#f5f6f7",
+              "surface-bright": "#f5f6f7",
+              "inverse-surface": "#0c0f10",
+              "on-primary": "#f4f1ff",
+              "surface-tint": "#4a40e0",
+              "surface-dim": "#d1d5d7",
+              "outline-variant": "#abadae",
+              "on-error": "#ffefef",
+              "secondary-fixed": "#dcc9ff",
+              "on-tertiary-fixed-variant": "#004a5c",
+              "on-primary-fixed-variant": "#1a0099",
+              "on-background": "#2c2f30",
+              "on-error-container": "#510017",
+              "on-tertiary-fixed": "#002a35",
+              "on-secondary": "#f8f0ff",
+              "secondary-dim": "#6411d5",
+              "tertiary-dim": "#00576c",
+              "on-primary-container": "#14007e",
+              "surface-container-highest": "#dadddf",
+              "on-surface-variant": "#595c5d",
+              secondary: "#702ae1",
+              "tertiary-fixed-dim": "#00c0ea",
+              "surface-container": "#e6e8ea",
+              "on-secondary-container": "#5b00c7",
+              "tertiary-container": "#00cffc",
+            },
+            fontFamily: {
+              headline: ["Plus Jakarta Sans"],
+              body: ["Inter"],
+              label: ["Inter"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
       }
-
-      // ---- Submissions Section ----
-      const subSection = document.createElement('div');
-      subSection.className = 'profile-section';
-      subSection.id = 'section-submissions';
-
-      const submissions = await getUserSubmissions(user.id);
-
-      if (!submissions || submissions.length === 0) {
-        subSection.appendChild(renderEmptyState('📝', 'No submissions yet', 'Know a great student deal? Submit it and help fellow students!', { text: 'Submit a Deal', href: 'submit.html' }));
-      } else {
-        const table = document.createElement('div');
-        table.style.cssText = 'background:var(--surface);border-radius:var(--radius-lg);overflow:auto;';
-        let tableHTML = '<table class="admin-table"><thead><tr><th>Title</th><th>Brand</th><th>Category</th><th>Status</th><th>Submitted</th></tr></thead><tbody>';
-        submissions.forEach(sub => {
-          const statusClass = sub.status === 'approved' ? 'status-approved' : sub.status === 'rejected' ? 'status-rejected' : 'status-pending';
-          tableHTML += `<tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><span class="status-badge ${statusClass}"></span></td>
-            <td></td>
-          </tr>`;
-        });
-        tableHTML += '</tbody></table>';
-        table.innerHTML = tableHTML;
-        // Fill with textContent for XSS safety
-        const rows = table.querySelectorAll('tbody tr');
-        submissions.forEach((sub, i) => {
-          const cells = rows[i].querySelectorAll('td');
-          cells[0].textContent = sub.title;
-          cells[1].textContent = sub.brand_name || '—';
-          cells[2].textContent = sub.category || '—';
-          cells[3].querySelector('.status-badge').textContent = sub.status;
-          cells[4].textContent = formatDate(sub.created_at);
-        });
-        subSection.appendChild(table);
+      .editorial-shadow {
+        box-shadow: 0 8px 30px rgba(74, 64, 224, 0.04);
       }
-      container.appendChild(subSection);
-
-      // ---- Settings Section ----
-      const settingsSection = document.createElement('div');
-      settingsSection.className = 'profile-section';
-      settingsSection.id = 'section-settings';
-      settingsSection.innerHTML = `
-        <div style="background:var(--surface);border-radius:var(--radius-lg);padding:var(--space-xl);box-shadow:var(--shadow-sm);">
-          <h3 style="margin-bottom:var(--space-lg);">Edit Profile</h3>
-          <form id="profile-form">
-            <div class="form-group">
-              <label class="form-label" for="edit-name">Full Name</label>
-              <input type="text" id="edit-name" class="form-input" value="">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="edit-college">College Name</label>
-              <input type="text" id="edit-college" class="form-input" value="">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="edit-city">City</label>
-              <input type="text" id="edit-city" class="form-input" value="">
-            </div>
-            <button type="submit" class="btn btn-primary" id="save-profile-btn">Save Changes</button>
-          </form>
-
-          <hr style="margin:var(--space-2xl) 0;border:none;border-top:1px solid var(--border-light);">
-
-          <h3 style="margin-bottom:var(--space-lg);">Change Password</h3>
-          <form id="password-form">
-            <div class="form-group">
-              <label class="form-label" for="new-password">New Password</label>
-              <input type="password" id="new-password" class="form-input" placeholder="Min 8 chars, letter + number">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="confirm-password">Confirm Password</label>
-              <input type="password" id="confirm-password" class="form-input" placeholder="Repeat password">
-            </div>
-            <div id="password-error" class="form-error" style="display:none;margin-bottom:var(--space-md);"></div>
-            <button type="submit" class="btn btn-outline" id="change-password-btn">Change Password</button>
-          </form>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container"
+  >
+    <!-- TopNavBar -->
+    <nav
+      class="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm shadow-indigo-500/5"
+    >
+      <div
+        class="flex justify-between items-center max-w-7xl mx-auto px-6 h-20"
+      >
+        <div class="flex items-center gap-8">
+          <span
+            class="text-2xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent font-['Plus_Jakarta_Sans'] tracking-tight"
+            style=""
+            >CampusLoot</span
+          >
+          <div class="hidden md:flex gap-6">
+            <a
+              class="text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition-colors font-bold"
+              href="deals.html"
+              style=""
+              >Explore</a
+            >
+            <a
+              class="text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition-colors font-bold"
+              href="submit.html"
+              style=""
+              >Submit</a
+            >
+          </div>
         </div>
-      `;
-      container.appendChild(settingsSection);
+        <div class="flex items-center gap-4">
+          <button
+            id="nav-logout-btn"
+            onclick="signOut()"
+            class="bg-surface-container-high text-on-surface-variant px-6 py-2.5 rounded-full font-bold scale-95 active:scale-90 duration-200 transition-all hover:bg-surface-container-highest"
+            style=""
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+    <main class="max-w-7xl mx-auto px-6 py-8 flex gap-8">
+      <!-- SideNavBar -->
+      <aside
+        class="hidden lg:flex flex-col gap-2 p-4 w-64 bg-slate-50/50 dark:bg-slate-950/50 backdrop-blur-md rounded-2xl h-[calc(100vh-120px)] sticky top-24 font-['Inter'] text-sm font-medium no-border bg-slate-100/50 dark:bg-slate-800/50 flat no shadows"
+      >
+        <div class="mb-6 px-2">
+          <h2
+            class="text-lg font-bold text-slate-900 dark:text-slate-100"
+            style=""
+          >
+            Student Hub
+          </h2>
+          <p class="text-xs text-slate-500" style="">Premium Membership</p>
+        </div>
+        <nav class="flex flex-col gap-1">
+          <button
+            data-tab="dashboard"
+            class="profile-tab flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-300 shadow-sm rounded-xl transition-transform tap-highlight-none"
+          >
+            <span class="material-symbols-outlined" data-icon="dashboard"
+              >dashboard</span
+            ><span>Dashboard</span>
+          </button>
+          <button
+            data-tab="saved"
+            class="profile-tab flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/30 rounded-xl transition-transform tap-highlight-none"
+          >
+            <span class="material-symbols-outlined" data-icon="bookmark"
+              >bookmark</span
+            ><span>Saved Deals</span>
+          </button>
+          <button
+            data-tab="submissions"
+            class="profile-tab flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/30 rounded-xl transition-transform tap-highlight-none"
+          >
+            <span class="material-symbols-outlined" data-icon="add_circle"
+              >add_circle</span
+            ><span>My Submissions</span>
+          </button>
+          <button
+            data-tab="settings"
+            class="profile-tab flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/30 rounded-xl transition-transform tap-highlight-none"
+          >
+            <span class="material-symbols-outlined" data-icon="settings"
+              >settings</span
+            ><span>Settings</span>
+          </button>
+        </nav>
+        <div class="mt-auto p-4 bg-primary/5 rounded-2xl">
+          <p
+            class="text-[10px] uppercase tracking-wider text-primary font-bold mb-2"
+            style=""
+          >
+            Exclusive Offer
+          </p>
+          <p class="text-xs text-on-surface-variant mb-3" style="">
+            Unlock 15% extra off on Apple with your ID.
+          </p>
+          <button
+            class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg scale-95 active:scale-90 transition-all"
+            style=""
+          >
+            Verify Now
+          </button>
+        </div>
+      </aside>
+      <!-- Main Canvas -->
+      <div class="flex-1 flex flex-col gap-12">
+        <!-- Profile Section (The Anchor) -->
+        <section
+          class="relative overflow-hidden rounded-[2rem] bg-surface-container-lowest p-8 md:p-12 editorial-shadow"
+        >
+          <div
+            class="absolute top-0 right-0 w-64 h-64 bg-tertiary-fixed opacity-10 rounded-full -mr-20 -mt-20 blur-3xl"
+          ></div>
+          <div
+            class="flex flex-col md:flex-row items-center md:items-start gap-8 relative z-10"
+          >
+            <div class="relative">
+              <div
+                class="h-32 w-32 rounded-[2rem] overflow-hidden shadow-2xl rotate-3"
+              >
+                <img
+                  alt="Profile"
+                  class="h-full w-full object-cover scale-110"
+                  data-alt="close up headshot of a stylish young male student with trendy hair looking confidently at camera soft studio lighting"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFpGtKrUrBbqwf3NxZt9FBonezVZLjalUGI-6dRh-uSwINGBK_LLrjPAZ1Q-0bwsgdb8bsSQimyrU1aRdkOHFtAz1myHAu0Hkjy_I0S_48hp3DkJxXpGQ7gJH14cf4wMXF03vNep6GEdusrdEtUn63ehXSQQv4li2AY-_RqMVt56l8gG5fXAcPQhU6mcxd5htW6x4TkPH_2oMAeQOwPDMpsNb_yP0N3dpO-m-HaOTuhvYK1YRTDnhnK4c2fCMPFLJog5cOraPN3L7s"
+                  style=""
+                />
+              </div>
+              <div
+                class="absolute -bottom-2 -right-2 bg-tertiary text-on-tertiary px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase"
+                style=""
+              >
+                Verified
+              </div>
+            </div>
+            <div class="text-center md:text-left flex-1">
+              <div class="flex flex-col md:flex-row items-center gap-4 mb-2">
+                <h1
+                  id="profile-name"
+                  class="text-4xl font-black font-headline tracking-tighter text-on-surface"
+                  style=""
+                >
+                  Loading...
+                </h1>
+                <span
+                  class="px-4 py-1.5 bg-secondary-container text-on-secondary-container text-xs font-bold rounded-full border border-secondary/10"
+                  style=""
+                  >PREMIUM</span
+                >
+              </div>
+              <p
+                id="profile-college-city"
+                class="text-lg text-on-surface-variant font-medium mb-6"
+                style=""
+              ></p>
+              <div
+                class="flex flex-wrap justify-center md:justify-start gap-6 text-sm text-on-surface-variant"
+              >
+                <div class="flex flex-col">
+                  <span
+                    id="profile-stats-saved"
+                    class="font-headline font-bold text-primary text-xl"
+                    style=""
+                    >0</span
+                  >
+                  <span
+                    class="text-[10px] uppercase tracking-widest opacity-60"
+                    style=""
+                    >Deals Saved</span
+                  >
+                </div>
+                <div
+                  class="h-10 w-[1px] bg-outline-variant/20 hidden md:block"
+                ></div>
+                <div class="flex flex-col">
+                  <span
+                    class="font-headline font-bold text-primary text-xl"
+                    style=""
+                    >--</span
+                  >
+                  <span
+                    class="text-[10px] uppercase tracking-widest opacity-60"
+                    style=""
+                    >Total Savings</span
+                  >
+                </div>
+                <div
+                  class="h-10 w-[1px] bg-outline-variant/20 hidden md:block"
+                ></div>
+                <div class="flex flex-col">
+                  <span
+                    id="profile-stats-subs"
+                    class="font-headline font-bold text-primary text-xl"
+                    style=""
+                    >0</span
+                  >
+                  <span
+                    class="text-[10px] uppercase tracking-widest opacity-60"
+                    style=""
+                    >Submissions</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="hidden xl:block">
+              <button
+                onclick="document.querySelector('[data-tab=settings]').click()"
+                class="flex items-center gap-2 px-6 py-3 bg-primary text-white font-headline font-bold rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all scale-100 hover:scale-105 active:scale-95"
+                style=""
+              >
+                <span
+                  class="material-symbols-outlined text-sm"
+                  data-icon="edit"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >edit</span
+                >
+                Edit Profile
+              </button>
+            </div>
+          </div>
+        </section>
 
-      // Populate settings form
-      document.getElementById('edit-name').value = profile?.full_name || '';
-      document.getElementById('edit-college').value = profile?.college_name || '';
-      document.getElementById('edit-city').value = profile?.city || '';
+        <div id="tab-dashboard" class="tab-content block">
+          <section class="flex flex-col gap-8">
+            <div class="flex justify-between items-end">
+              <div class="flex flex-col gap-1">
+                <h2
+                  class="text-3xl font-black font-headline tracking-tighter text-on-surface"
+                >
+                  Your Collections
+                </h2>
+                <p class="text-on-surface-variant font-medium">
+                  Curated deals ready for your next checkout.
+                </p>
+              </div>
+            </div>
+            <div
+              id="saved-deals-grid"
+              class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+            ></div>
+          </section>
+        </div>
+        <div id="tab-submissions" class="tab-content hidden">
+          <section class="flex flex-col gap-8">
+            <div class="flex justify-between items-end">
+              <div class="flex flex-col gap-1">
+                <h2
+                  class="text-3xl font-black font-headline tracking-tighter text-on-surface"
+                >
+                  My Submissions
+                </h2>
+                <p class="text-on-surface-variant font-medium">
+                  Deals you've contributed to CampusLoot.
+                </p>
+              </div>
+            </div>
+            <div
+              id="submissions-container"
+              class="bg-surface-container-lowest rounded-[2rem] p-8 editorial-shadow"
+            ></div>
+          </section>
+        </div>
+        <div id="tab-settings" class="tab-content hidden">
+          <section class="flex flex-col gap-8">
+            <div class="flex justify-between items-end">
+              <div class="flex flex-col gap-1">
+                <h2
+                  class="text-3xl font-black font-headline tracking-tighter text-on-surface"
+                >
+                  Settings
+                </h2>
+                <p class="text-on-surface-variant font-medium">
+                  Manage your personal details and preferences.
+                </p>
+              </div>
+            </div>
+            <div
+              class="bg-surface-container-lowest rounded-[2rem] p-8 md:p-12 editorial-shadow border border-white/50 space-y-12"
+            >
+              <form id="profile-form" class="space-y-6">
+                <h3 class="text-xl font-bold">Edit Profile</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="space-y-2">
+                    <label
+                      class="block text-sm font-semibold tracking-wide text-on-surface-variant uppercase"
+                      >Full Name</label
+                    >
+                    <input
+                      type="text"
+                      id="edit-name"
+                      class="w-full h-14 bg-surface-container-highest px-6 rounded-xl border-none focus:ring-2 focus:ring-primary/20 text-on-surface font-medium"
+                    />
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="space-y-2">
+                    <label
+                      class="block text-sm font-semibold tracking-wide text-on-surface-variant uppercase"
+                      >College Name</label
+                    >
+                    <input
+                      type="text"
+                      id="edit-college"
+                      class="w-full h-14 bg-surface-container-highest px-6 rounded-xl border-none focus:ring-2 focus:ring-primary/20 text-on-surface font-medium"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label
+                      class="block text-sm font-semibold tracking-wide text-on-surface-variant uppercase"
+                      >City</label
+                    >
+                    <input
+                      type="text"
+                      id="edit-city"
+                      class="w-full h-14 bg-surface-container-highest px-6 rounded-xl border-none focus:ring-2 focus:ring-primary/20 text-on-surface font-medium"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  id="save-profile-btn"
+                  class="px-8 h-14 rounded-full bg-primary text-white font-bold hover:translate-y-[-2px] hover:shadow-lg transition-all"
+                >
+                  Save Changes
+                </button>
+              </form>
 
-      // Save profile
-      document.getElementById('profile-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('save-profile-btn');
-        setButtonLoading(btn, true);
-        const { error } = await updateProfile(user.id, {
-          full_name: sanitizeInput(document.getElementById('edit-name').value),
-          college_name: sanitizeInput(document.getElementById('edit-college').value),
-          city: sanitizeInput(document.getElementById('edit-city').value)
+              <hr class="border-outline-variant/20" />
+
+              <form id="password-form" class="space-y-6">
+                <h3 class="text-xl font-bold">Change Password</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="space-y-2">
+                    <label
+                      class="block text-sm font-semibold tracking-wide text-on-surface-variant uppercase"
+                      >New Password</label
+                    >
+                    <input
+                      type="password"
+                      id="new-password"
+                      class="w-full h-14 bg-surface-container-highest px-6 rounded-xl border-none focus:ring-2 focus:ring-primary/20 text-on-surface font-medium"
+                    />
+                  </div>
+                  <div class="space-y-2">
+                    <label
+                      class="block text-sm font-semibold tracking-wide text-on-surface-variant uppercase"
+                      >Confirm Password</label
+                    >
+                    <input
+                      type="password"
+                      id="confirm-password"
+                      class="w-full h-14 bg-surface-container-highest px-6 rounded-xl border-none focus:ring-2 focus:ring-primary/20 text-on-surface font-medium"
+                    />
+                  </div>
+                </div>
+                <div
+                  id="password-error"
+                  class="text-error font-medium text-sm hidden"
+                ></div>
+                <button
+                  type="submit"
+                  id="change-password-btn"
+                  class="px-8 h-14 rounded-full bg-surface-container-high text-on-surface-variant font-bold hover:bg-surface-container-highest transition-all"
+                >
+                  Change Password
+                </button>
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer
+      class="mt-24 w-full border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 py-12"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12"
+      >
+        <div class="col-span-1 md:col-span-1">
+          <div
+            class="text-xl font-black text-slate-900 dark:text-slate-100 font-headline mb-4"
+            style=""
+          >
+            UniDeals
+          </div>
+          <p
+            class="font-['Inter'] text-sm text-slate-500 leading-relaxed"
+            style=""
+          >
+            The Ethereal Curator for the next generation of Indian students.
+          </p>
+        </div>
+        <div class="flex flex-col gap-4">
+          <h4
+            class="text-xs font-bold uppercase tracking-widest text-on-surface-variant"
+            style=""
+          >
+            Resources
+          </h4>
+          <div
+            class="flex flex-col gap-2 font-['Inter'] text-sm text-slate-500"
+          >
+            <a
+              class="text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors underline decoration-indigo-500/30 underline-offset-4"
+              href="#"
+              style=""
+              >Privacy Policy</a
+            >
+            <a
+              class="text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors underline decoration-indigo-500/30 underline-offset-4"
+              href="#"
+              style=""
+              >Terms of Service</a
+            >
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <h4
+            class="text-xs font-bold uppercase tracking-widest text-on-surface-variant"
+            style=""
+          >
+            Partners
+          </h4>
+          <div
+            class="flex flex-col gap-2 font-['Inter'] text-sm text-slate-500"
+          >
+            <a
+              class="text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors underline decoration-indigo-500/30 underline-offset-4"
+              href="#"
+              style=""
+              >Partner with Us</a
+            >
+            <a
+              class="text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors underline decoration-indigo-500/30 underline-offset-4"
+              href="#"
+              style=""
+              >Careers</a
+            >
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <h4
+            class="text-xs font-bold uppercase tracking-widest text-on-surface-variant"
+            style=""
+          >
+            Connect
+          </h4>
+          <div
+            class="flex flex-col gap-2 font-['Inter'] text-sm text-slate-500"
+          >
+            <a
+              class="text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors underline decoration-indigo-500/30 underline-offset-4"
+              href="#"
+              style=""
+              >Contact</a
+            >
+            <p class="mt-4 text-[10px] text-slate-400" style="">
+              © 2024 UniDeals India. The Ethereal Curator.
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/deals.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+      (async function initProfilePage() {
+        const user = await requireAuth();
+        if (!user) return;
+
+        const profile = await getCurrentProfile();
+
+        document.getElementById("profile-name").textContent =
+          profile?.full_name || user.email;
+        document.getElementById("profile-college-city").textContent =
+          [profile?.college_name, profile?.city].filter(Boolean).join(" • ") ||
+          "Update your profile to see info here.";
+
+        // Tab switching logic
+        const tabs = document.querySelectorAll(".profile-tab");
+        const contents = document.querySelectorAll(".tab-content");
+
+        tabs.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const target = btn.dataset.tab;
+
+            // Active styling
+            tabs.forEach((b) => {
+              b.classList.remove(
+                "bg-white",
+                "dark:bg-slate-800",
+                "text-indigo-600",
+                "dark:text-indigo-300",
+                "shadow-sm",
+              );
+              b.classList.add("text-slate-500", "dark:text-slate-400");
+            });
+            btn.classList.add(
+              "bg-white",
+              "dark:bg-slate-800",
+              "text-indigo-600",
+              "dark:text-indigo-300",
+              "shadow-sm",
+            );
+            btn.classList.remove(
+              "text-slate-500",
+              "dark:text-slate-400",
+              "hover:bg-slate-200/50",
+            );
+
+            // For 'saved' vs 'dashboard', both map to tab-dashboard
+            let targetId = target === "saved" ? "dashboard" : target;
+
+            contents.forEach((c) => c.classList.add("hidden"));
+            const targetContent = document.getElementById("tab-" + targetId);
+            if (targetContent) {
+              targetContent.classList.remove("hidden");
+              targetContent.classList.add("block");
+            }
+          });
         });
-        setButtonLoading(btn, false);
-        if (error) {
-          showToast('Failed to update profile', 'error');
+
+        // Load Saved Deals
+        const savedGrid = document.getElementById("saved-deals-grid");
+        savedGrid.innerHTML =
+          '<div class="col-span-1 md:col-span-2 xl:col-span-3 text-center py-12"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div></div>';
+
+        const savedDeals = await getSavedDeals(user.id);
+        savedGrid.innerHTML = "";
+        if (savedDeals.length === 0) {
+          savedGrid.innerHTML = `<div class="col-span-1 md:col-span-3 mt-8 flex flex-col items-center justify-center py-20 px-6 bg-surface-container-lowest rounded-[3rem] editorial-shadow text-center">
+                <div class="w-24 h-24 mb-6 bg-gradient-to-tr from-primary/10 to-secondary/10 rounded-full flex items-center justify-center">
+                    <span class="material-symbols-outlined text-5xl text-primary/40">folder_open</span>
+                </div>
+                <h3 class="text-2xl font-black font-headline text-on-surface mb-3 tracking-tight">No saved deals yet</h3>
+                <p class="text-on-surface-variant max-w-sm mb-8">Start exploring thousands of student-only discounts across your favorite brands.</p>
+                <button onclick="window.location.href='deals.html'" class="px-8 py-4 bg-primary text-white font-headline font-bold rounded-full shadow-xl shadow-primary/20 transition-all hover:scale-105">Explore Trending Deals</button>
+            </div>`;
+          document.getElementById("profile-stats-saved").textContent = "0";
         } else {
-          showToast('Profile updated!', 'success');
-        }
-      });
-
-      // Change password
-      document.getElementById('password-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const newPw = document.getElementById('new-password').value;
-        const confirmPw = document.getElementById('confirm-password').value;
-        const errorEl = document.getElementById('password-error');
-        errorEl.style.display = 'none';
-
-        if (newPw !== confirmPw) {
-          errorEl.textContent = 'Passwords do not match';
-          errorEl.style.display = '';
-          return;
+          const savedIds = new Set(savedDeals.map((d) => d.id));
+          savedDeals.forEach((deal) => {
+            savedGrid.appendChild(
+              renderDealCard(deal, { savedDeals: savedIds }),
+            );
+          });
+          document.getElementById("profile-stats-saved").textContent =
+            savedDeals.length;
         }
 
-        const pwCheck = validatePassword(newPw);
-        if (!pwCheck.valid) {
-          errorEl.textContent = pwCheck.message;
-          errorEl.style.display = '';
-          return;
-        }
+        // Load Submissions
+        const subContainer = document.getElementById("submissions-container");
+        subContainer.innerHTML =
+          '<div class="text-center py-12"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div></div>';
 
-        const btn = document.getElementById('change-password-btn');
-        setButtonLoading(btn, true);
-        const { error } = await updatePassword(newPw);
-        setButtonLoading(btn, false);
-
-        if (error) {
-          errorEl.textContent = error;
-          errorEl.style.display = '';
+        const submissions = await getUserSubmissions(user.id);
+        if (!submissions || submissions.length === 0) {
+          subContainer.innerHTML = `<div class="text-center py-12">
+                <p class="text-on-surface-variant mb-4 font-medium">You haven't submitted any deals yet.</p>
+                <button onclick="window.location.href='submit.html'" class="px-8 h-12 bg-primary/10 text-primary font-bold rounded-full hover:bg-primary/20 transition-colors">Submit a Deal</button>
+            </div>`;
+          document.getElementById("profile-stats-subs").textContent = "0";
         } else {
-          showToast('Password changed successfully!', 'success');
-          document.getElementById('new-password').value = '';
-          document.getElementById('confirm-password').value = '';
+          document.getElementById("profile-stats-subs").textContent =
+            submissions.length;
+          let tableHTML = `<div class="overflow-x-auto"><table class="w-full text-left border-collapse min-w-[600px]">
+                <thead><tr class="border-b border-outline-variant/20 text-on-surface-variant font-bold text-sm uppercase tracking-wider">
+                    <th class="py-4 px-4">Title</th>
+                    <th class="py-4 px-4">Brand</th>
+                    <th class="py-4 px-4">Status</th>
+                    <th class="py-4 px-4">Date</th>
+                </tr></thead><tbody>`;
+
+          submissions.forEach((sub) => {
+            let statusColor =
+              sub.status === "approved"
+                ? "text-green-600 bg-green-100 dark:bg-green-900/40"
+                : sub.status === "rejected"
+                  ? "text-error bg-error-container dark:bg-error-container/40"
+                  : "text-yellow-600 bg-yellow-100 dark:bg-yellow-900/40";
+
+            tableHTML += `<tr class="border-b border-outline-variant/10 hover:bg-surface-container-low transition-colors font-medium">
+                    <td class="py-4 px-4">${escapeHTML(sub.title || "")}</td>
+                    <td class="py-4 px-4">${escapeHTML(sub.brand_name || "—")}</td>
+                    <td class="py-4 px-4"><span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest ${statusColor}">${escapeHTML(sub.status || "")}</span></td>
+                    <td class="py-4 px-4 text-on-surface-variant text-sm">${formatDate(sub.created_at)}</td>
+                </tr>`;
+          });
+          tableHTML += `</tbody></table></div>`;
+          subContainer.innerHTML = tableHTML;
         }
-      });
-    })();
-  </script>
-</body>
+
+        // Settings Forms
+        document.getElementById("edit-name").value = profile?.full_name || "";
+        document.getElementById("edit-college").value =
+          profile?.college_name || "";
+        document.getElementById("edit-city").value = profile?.city || "";
+
+        // Save Profile
+        document
+          .getElementById("profile-form")
+          .addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById("save-profile-btn");
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Saving...";
+            btn.disabled = true;
+
+            const { error } = await updateProfile(user.id, {
+              full_name: sanitizeInput(
+                document.getElementById("edit-name").value,
+              ),
+              college_name: sanitizeInput(
+                document.getElementById("edit-college").value,
+              ),
+              city: sanitizeInput(document.getElementById("edit-city").value),
+            });
+
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+
+            if (error) {
+              alert("Failed to update profile.");
+            } else {
+              alert("Profile updated successfully!");
+              document.getElementById("profile-name").textContent =
+                document.getElementById("edit-name").value;
+              document.getElementById("profile-college-city").textContent = [
+                document.getElementById("edit-college").value,
+                document.getElementById("edit-city").value,
+              ]
+                .filter(Boolean)
+                .join(" • ");
+            }
+          });
+
+        // Change Password
+        document
+          .getElementById("password-form")
+          .addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const newPw = document.getElementById("new-password").value;
+            const confirmPw = document.getElementById("confirm-password").value;
+            const errorEl = document.getElementById("password-error");
+            errorEl.classList.add("hidden");
+
+            if (newPw !== confirmPw) {
+              errorEl.textContent = "Passwords do not match";
+              errorEl.classList.remove("hidden");
+              return;
+            }
+
+            const pwCheck = validatePassword(newPw);
+            if (!pwCheck.valid) {
+              errorEl.textContent = pwCheck.message;
+              errorEl.classList.remove("hidden");
+              return;
+            }
+
+            const btn = document.getElementById("change-password-btn");
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Changing...";
+            btn.disabled = true;
+
+            const { error } = await updatePassword(newPw);
+
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+
+            if (error) {
+              errorEl.textContent = error;
+              errorEl.classList.remove("hidden");
+            } else {
+              alert("Password changed successfully!");
+              document.getElementById("password-form").reset();
+            }
+          });
+      })();
+    </script>
+  </body>
 </html>

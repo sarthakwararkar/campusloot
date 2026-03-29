@@ -1,0 +1,25 @@
+﻿
+--- Checking / ---
+PAGE LOG [/]: Failed to load resource: the server responded with a status of 404 (Not Found)
+Navigation to / successful!
+
+--- Checking /deals.html ---
+Navigation to /deals.html successful!
+
+--- Checking /categories.html ---
+Navigation to /categories.html successful!
+
+--- Checking /trending.html ---
+Navigation to /trending.html successful!
+
+--- Checking /login.html ---
+Navigation to /login.html successful!
+
+--- Checking /submit.html ---
+PAGE LOG [/submit.html]: [Supabase] SDK not found. Make sure the CDN script is loaded before supabase.js
+Navigation to /submit.html successful!
+
+--- Checking /profile.html ---
+Navigation to /profile.html successful!
+
+All checks done.

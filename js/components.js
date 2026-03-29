@@ -10,6 +10,7 @@
  * @param {Object} deal
  * @param {Object} [options]
  * @param {string} [options.placeholderClass]
+ * @param {string} [options.imgClass]
  * @param {boolean} [options.lazy=true]
  */
 function mountDealImage(container, deal, options = {}) {
@@ -32,6 +33,7 @@ function mountDealImage(container, deal, options = {}) {
     const img = document.createElement('img');
     img.src = src;
     img.alt = alt;
+    if (options.imgClass) img.className = options.imgClass;
     if (lazy) img.loading = 'lazy';
     img.decoding = 'async';
     img.referrerPolicy = 'no-referrer';
@@ -65,120 +67,98 @@ function renderDealCard(deal, options = {}) {
   const { savedDeals = new Set(), showSave = true } = options;
   const isSaved = savedDeals.has(deal.id);
 
-  const card = document.createElement('div');
-  card.className = 'deal-card';
+  const card = document.createElement('article');
+  card.className = 'group relative bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-[0_20px_50px_rgba(74,64,224,0.08)] transition-all duration-300 transform hover:-translate-y-2 cursor-pointer';
   card.dataset.dealId = deal.id;
   card.dataset.category = deal.category;
-
-  // Image section (URL from DB, else favicon from deal link, else placeholder)
-  const imageDiv = document.createElement('div');
-  imageDiv.className = 'deal-card-image';
-  mountDealImage(imageDiv, deal, { placeholderClass: 'deal-card-image-placeholder' });
-
-  if (deal.is_featured) {
-    const featuredBadge = document.createElement('span');
-    featuredBadge.className = 'badge badge-featured deal-card-featured';
-    featuredBadge.textContent = '⭐ Featured';
-    imageDiv.appendChild(featuredBadge);
-  }
-
-  if (deal.expires_at) {
-    const expiryDate = new Date(deal.expires_at);
-    const now = new Date();
-    const diffDays = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
-    if (diffDays >= 0 && diffDays <= 7) {
-      const expiringBadge = document.createElement('span');
-      expiringBadge.className = 'badge badge-discount deal-card-expiring';
-      expiringBadge.style.position = 'absolute';
-      expiringBadge.style.top = deal.is_featured ? '40px' : '10px';
-      expiringBadge.style.left = '10px';
-      expiringBadge.textContent = `⏰ Expiring in ${diffDays} day${diffDays !== 1 ? 's' : ''}`;
-      imageDiv.appendChild(expiringBadge);
+  card.addEventListener('click', (e) => {
+    if (e.target.closest('.save-btn')) return;
+    if (deal.id) {
+      window.location.href = `deal.html?id=${encodeURIComponent(deal.id)}`;
+    } else {
+      console.error('renderDealCard: Deal ID missing on card click', deal);
     }
-  }
+  });
 
-  // Save button
   if (showSave) {
+    const saveContainer = document.createElement('div');
+    saveContainer.className = 'absolute top-6 right-6 z-10';
     const saveBtn = document.createElement('button');
-    saveBtn.className = `deal-card-save ${isSaved ? 'saved' : ''}`;
-    saveBtn.innerHTML = isSaved ? '❤️' : '🤍';
-    saveBtn.title = isSaved ? 'Unsave deal' : 'Save deal';
-    saveBtn.setAttribute('aria-label', isSaved ? 'Unsave deal' : 'Save deal');
-    saveBtn.addEventListener('click', (e) => {
+    saveBtn.className = `w-10 h-10 rounded-full bg-white/80 backdrop-blur shadow-sm flex items-center justify-center transition-colors save-btn ${isSaved ? 'text-error' : 'text-on-surface-variant hover:text-error'}`;
+    saveBtn.innerHTML = `<span class="material-symbols-outlined text-xl" style="${isSaved ? 'font-variation-settings: \\"FILL\\" 1;' : ''}">bookmark</span>`;
+    saveBtn.onclick = (e) => {
       e.stopPropagation();
       handleSaveClick(deal.id, saveBtn);
-    });
-    imageDiv.appendChild(saveBtn);
+      const icon = saveBtn.querySelector('span');
+      if (saveBtn.classList.contains('saved')) {
+          icon.style = 'font-variation-settings: "FILL" 1;';
+          saveBtn.classList.remove('text-on-surface-variant');
+          saveBtn.classList.add('text-error');
+      } else {
+          icon.style = '';
+          saveBtn.classList.remove('text-error');
+          saveBtn.classList.add('text-on-surface-variant');
+      }
+    };
+    saveContainer.appendChild(saveBtn);
+    card.appendChild(saveContainer);
   }
 
+  const imageDiv = document.createElement('div');
+  imageDiv.className = 'aspect-square rounded-2xl bg-surface-container-low mb-6 overflow-hidden flex items-center justify-center p-8 group-hover:scale-[1.02] transition-transform';
+  mountDealImage(imageDiv, deal, { 
+      placeholderClass: 'text-6xl text-on-surface-variant font-black opacity-30 select-none',
+      imgClass: 'w-24 h-24 object-contain mix-blend-multiply'
+  });
   card.appendChild(imageDiv);
 
-  // Body
-  const body = document.createElement('div');
-  body.className = 'deal-card-body';
+  const bodyDiv = document.createElement('div');
+  bodyDiv.className = 'space-y-1 mb-6';
 
-  const category = document.createElement('div');
-  category.className = 'deal-card-category';
-  category.textContent = deal.category;
-  body.appendChild(category);
-
-  const title = document.createElement('h3');
-  title.className = 'deal-card-title';
-  const titleLink = document.createElement('a');
-  titleLink.href = `deal.html?id=${deal.id}`;
-  titleLink.textContent = deal.title;
-  title.appendChild(titleLink);
-  body.appendChild(title);
-
-  const brand = document.createElement('div');
-  brand.className = 'deal-card-brand';
+  const titleRow = document.createElement('div');
+  titleRow.className = 'flex items-center gap-2';
+  const priceSpan = document.createElement('span');
+  priceSpan.className = 'text-primary font-bold text-2xl';
+  priceSpan.textContent = formatPrice(deal.deal_price || deal.discount_text || 'Free');
+  titleRow.appendChild(priceSpan);
   
-  const faviconUrl = dealFaviconUrl(deal);
-  if (faviconUrl) {
-    const brandLogo = document.createElement('img');
-    brandLogo.src = faviconUrl;
-    brandLogo.alt = deal.brand_name || '';
-    brandLogo.className = 'brand-logo';
-    brandLogo.loading = 'lazy';
-    brandLogo.onerror = () => brandLogo.remove();
-    brand.appendChild(brandLogo);
+  if (deal.is_featured) {
+    const verifiedBadge = document.createElement('span');
+    verifiedBadge.className = 'bg-tertiary-container/30 text-tertiary px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-tighter';
+    verifiedBadge.textContent = 'Featured';
+    titleRow.appendChild(verifiedBadge);
   }
+  bodyDiv.appendChild(titleRow);
 
-  const brandText = document.createElement('span');
-  brandText.textContent = deal.brand_name;
-  brand.appendChild(brandText);
+  const brandObj = document.createElement('h3');
+  brandObj.className = 'font-headline font-bold text-lg text-on-surface line-clamp-1';
+  brandObj.textContent = deal.brand_name || 'Brand';
+  bodyDiv.appendChild(brandObj);
 
-  body.appendChild(brand);
+  const descObj = document.createElement('p');
+  descObj.className = 'text-sm text-on-surface-variant line-clamp-1';
+  descObj.textContent = deal.title || deal.description || '';
+  bodyDiv.appendChild(descObj);
 
-  // Footer with price and claim button
-  const footer = document.createElement('div');
-  footer.className = 'deal-card-footer';
+  card.appendChild(bodyDiv);
 
-  const priceDiv = document.createElement('div');
-  priceDiv.className = 'deal-card-price';
-
-  if (deal.original_price) {
-    const originalPrice = document.createElement('span');
-    originalPrice.className = 'original';
-    originalPrice.textContent = formatPrice(deal.original_price);
-    priceDiv.appendChild(originalPrice);
-  }
-
-  const currentPrice = document.createElement('span');
-  currentPrice.className = 'current';
-  currentPrice.textContent = formatPrice(deal.deal_price || deal.discount_text || 'Free');
-  priceDiv.appendChild(currentPrice);
-
-  footer.appendChild(priceDiv);
-
-  const claimBtn = document.createElement('a');
-  claimBtn.href = `deal.html?id=${deal.id}`;
-  claimBtn.className = 'btn btn-primary btn-sm';
-  claimBtn.textContent = 'View Deal';
-  footer.appendChild(claimBtn);
-
-  body.appendChild(footer);
-  card.appendChild(body);
+  const claimBtn = document.createElement('button');
+  claimBtn.className = 'w-full py-4 bg-surface-container-low text-primary font-bold rounded-2xl group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2';
+  claimBtn.innerHTML = `View Deal <span class="material-symbols-outlined text-lg">arrow_forward</span>`;
+  claimBtn.onclick = (e) => { 
+    e.stopPropagation(); 
+    if (deal.id) {
+      window.location.href = `deal.html?id=${encodeURIComponent(deal.id)}`; 
+    } else {
+      console.error('renderDealCard: Deal ID missing on button click', deal);
+      // Fallback: try card dataset
+      const id = card.dataset.dealId;
+      if (id) {
+        window.location.href = `deal.html?id=${encodeURIComponent(id)}`;
+      }
+    }
+  };
+  card.appendChild(claimBtn);
 
   return card;
 }

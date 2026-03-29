@@ -89,18 +89,23 @@ async function fetchFeaturedDeals() {
  * @returns {Promise<Object|null>}
  */
 async function fetchDealById(id) {
-  const { data, error } = await supabase
-    .from('deals')
-    .select('*')
-    .eq('id', id)
-    .single();
+  try {
+    const { data, error } = await supabase
+      .from('deals')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle(); // Use maybeSingle to avoid 406 errors if not found
 
-  if (error) {
-    console.error('Error fetching deal:', error);
+    if (error) {
+      console.error('Error fetching deal:', error);
+      return null;
+    }
+
+    return data;
+  } catch (err) {
+    console.error('CRASH in fetchDealById:', err);
     return null;
   }
-
-  return data;
 }
 
 /**
@@ -215,9 +220,16 @@ async function submitDeal(formData) {
  * @param {string} dealId
  */
 async function incrementView(dealId) {
-  // Use RPC for atomic increment
-  const { error } = await supabase.rpc('increment_view', { deal_id_input: dealId });
-  if (error) console.error('Error incrementing view count:', error);
+  try {
+    // Use RPC for atomic increment
+    const { error } = await supabase.rpc('increment_view', { deal_id_input: dealId });
+    if (error) {
+      console.warn('Error incrementing view count (RPC may be missing):', error);
+      // Fallback: manual increment if RPC fails (optional, but let's just log for now)
+    }
+  } catch (err) {
+    console.error('CRASH in incrementView:', err);
+  }
 }
 
 /**

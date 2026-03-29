@@ -1,249 +1,611 @@
-<!DOCTYPE html>
+﻿<!doctype html>
+
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login — CampusLoot</title>
-  <meta name="description" content="Login or sign up to CampusLoot. Save deals, submit offers, and join India's student deals community.">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/components.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-</head>
-<body>
-
-  <header id="site-header"></header>
-
-  <div class="auth-page">
-    <div class="auth-card">
-      <div style="text-align:center;margin-bottom:var(--space-xl);">
-        <a href="index.html" class="logo" style="justify-content:center;font-size:var(--fs-2xl);">🎓 Campus<span>Loot</span></a>
-        <p style="color:var(--text-secondary);margin-top:var(--space-sm);font-size:var(--fs-sm);">Student Deals & Freebies</p>
-      </div>
-
-      <!-- Tabs -->
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tab-login" data-tab="login">Login</button>
-        <button class="auth-tab" id="tab-signup" data-tab="signup">Sign Up</button>
-      </div>
-
-      <!-- Login Form -->
-      <form id="login-form">
-        <div class="form-group">
-          <label class="form-label" for="login-email">Email</label>
-          <input type="email" id="login-email" class="form-input" placeholder="you@college.edu" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="login-password">Password</label>
-          <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required>
-        </div>
-        <div id="login-error" class="form-error" style="display:none;margin-bottom:var(--space-md);"></div>
-        <button type="submit" class="btn btn-primary btn-full btn-lg" id="login-btn">Login</button>
-        <div style="text-align:center;margin-top:var(--space-md);">
-          <a href="#" id="forgot-password-link" style="font-size:var(--fs-sm);color:var(--text-secondary);">Forgot password?</a>
-        </div>
-      </form>
-
-      <!-- Signup Form -->
-      <form id="signup-form" style="display:none;">
-        <div class="form-group">
-          <label class="form-label" for="signup-name">Full Name</label>
-          <input type="text" id="signup-name" class="form-input" placeholder="Your name" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="signup-email">Email</label>
-          <input type="email" id="signup-email" class="form-input" placeholder="you@college.edu" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="signup-password">Password</label>
-          <input type="password" id="signup-password" class="form-input" placeholder="Min 8 chars, letter + number" required>
-          <div class="form-hint">Minimum 8 characters with at least one letter and one number</div>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="signup-college">College Name</label>
-          <input type="text" id="signup-college" class="form-input" placeholder="Your college name">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="signup-city">City</label>
-          <input type="text" id="signup-city" class="form-input" placeholder="Your city">
-        </div>
-        <div id="signup-error" class="form-error" style="display:none;margin-bottom:var(--space-md);"></div>
-        <button type="submit" class="btn btn-primary btn-full btn-lg" id="signup-btn">Create Account</button>
-      </form>
-
-      <div class="form-divider">or</div>
-
-      <button class="btn btn-google btn-full btn-lg" id="google-btn">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-        Continue with Google
-      </button>
-
-      <!-- Forgot Password Form (hidden by default) -->
-      <div id="forgot-password-form" style="display:none;margin-top:var(--space-xl);">
-        <h3 style="font-size:var(--fs-lg);margin-bottom:var(--space-md);">Reset Password</h3>
-        <div class="form-group">
-          <label class="form-label" for="reset-email">Email</label>
-          <input type="email" id="reset-email" class="form-input" placeholder="Enter your email" required>
-        </div>
-        <div id="reset-error" class="form-error" style="display:none;margin-bottom:var(--space-md);"></div>
-        <button class="btn btn-primary btn-full" id="reset-btn">Send Reset Link</button>
-        <button class="btn btn-ghost btn-full" id="reset-cancel-btn" style="margin-top:var(--space-sm);">Back to Login</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="js/supabase.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/deals.js"></script>
-  <script src="js/components.js"></script>
-  <script>
-    (async function initLoginPage() {
-      renderHeader('');
-
-      // If already logged in, redirect
-      const user = await getCurrentUser();
-      if (user) {
-        window.location.href = 'profile';
-        return;
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Login | UniDeals India</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-container": "#dcc9ff",
+              outline: "#757778",
+              "on-primary-fixed": "#000000",
+              "tertiary-fixed": "#00cffc",
+              tertiary: "#00647b",
+              "on-tertiary": "#e2f6ff",
+              "primary-fixed-dim": "#8885ff",
+              "primary-dim": "#3d30d4",
+              "inverse-primary": "#8582ff",
+              primary: "#4a40e0",
+              "on-secondary-fixed-variant": "#6514d6",
+              "on-tertiary-container": "#004050",
+              "surface-variant": "#dadddf",
+              "primary-fixed": "#9795ff",
+              "primary-container": "#9795ff",
+              "on-secondary-fixed": "#430097",
+              error: "#b41340",
+              "surface-container-high": "#e0e3e4",
+              "error-dim": "#a70138",
+              "surface-container-lowest": "#ffffff",
+              surface: "#f5f6f7",
+              "error-container": "#f74b6d",
+              "secondary-fixed-dim": "#d0b8ff",
+              "on-surface": "#2c2f30",
+              "inverse-on-surface": "#9b9d9e",
+              "surface-container-low": "#eff1f2",
+              background: "#f5f6f7",
+              "surface-bright": "#f5f6f7",
+              "inverse-surface": "#0c0f10",
+              "on-primary": "#f4f1ff",
+              "surface-tint": "#4a40e0",
+              "surface-dim": "#d1d5d7",
+              "outline-variant": "#abadae",
+              "on-error": "#ffefef",
+              "secondary-fixed": "#dcc9ff",
+              "on-tertiary-fixed-variant": "#004a5c",
+              "on-primary-fixed-variant": "#1a0099",
+              "on-background": "#2c2f30",
+              "on-error-container": "#510017",
+              "on-tertiary-fixed": "#002a35",
+              "on-secondary": "#f8f0ff",
+              "secondary-dim": "#6411d5",
+              "tertiary-dim": "#00576c",
+              "on-primary-container": "#14007e",
+              "surface-container-highest": "#dadddf",
+              "on-surface-variant": "#595c5d",
+              secondary: "#702ae1",
+              "tertiary-fixed-dim": "#00c0ea",
+              "surface-container": "#e6e8ea",
+              "on-secondary-container": "#5b00c7",
+              "tertiary-container": "#00cffc",
+            },
+            fontFamily: {
+              headline: ["Plus Jakarta Sans"],
+              body: ["Inter"],
+              label: ["Inter"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+        vertical-align: middle;
       }
+      .mesh-gradient {
+        background:
+          radial-gradient(at 0% 0%, #4a40e0 0px, transparent 50%),
+          radial-gradient(at 100% 0%, #702ae1 0px, transparent 50%),
+          radial-gradient(at 100% 100%, #00cffc 0px, transparent 50%);
+        opacity: 0.15;
+      }
+    </style>
+  </head>
+  <body class="bg-surface font-body text-on-surface antialiased">
+    <main class="min-h-screen flex flex-col md:flex-row">
+      <!-- Left Side: Editorial Lifestyle Imagery -->
+      <section
+        class="hidden md:flex md:w-1/2 lg:w-[55%] relative overflow-hidden bg-primary items-center justify-center"
+      >
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+          <img
+            alt="Diverse group of Indian students laughing in a bright, modern campus lounge with soft sunlight"
+            class="w-full h-full object-cover opacity-60 mix-blend-luminosity"
+            data-alt="Group of diverse Indian university students laughing together in a sun-drenched, high-end modern campus lounge with architectural shadows"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSAI1F87vn4flZm-irI_H6SxjxPds5H9_NH8cik17LJpz8ngTx9OvSombBIk5KaKK6WkXofTmCVIrTgWNdpkJ7FnaCCT_oEdEwxxOl3NZ2vFHuO0wBfFqi3hZoU7UqXEYSC-xz5l8j1m9P_f2yOyZqoFSavj1m24iLEZKjGcPJBIZbxCpe-L6OLgEbs6xLnlP8q2064pcrb3b4sVh426z18fJfEUArlA91L7dmIeRIaVAKEF8YR8NTZJhgqvurcHMdIaK3BbM0gMad"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-primary/80 via-secondary/70 to-tertiary/40"
+          ></div>
+          <div class="absolute inset-0 mesh-gradient"></div>
+        </div>
+        <!-- Content Overlay -->
+        <div class="relative z-10 px-12 lg:px-24 max-w-2xl">
+          <div class="mb-8">
+            <span
+              class="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-white font-label text-xs tracking-widest uppercase mb-6"
+              >Exclusive Access</span
+            >
+            <h1
+              class="font-headline text-5xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight mb-8"
+            >
+              The Ethereal <br />
+              Curator.
+            </h1>
+            <p
+              class="text-white/80 text-lg lg:text-xl font-body leading-relaxed max-w-md"
+            >
+              Join the premium destination for university lifestyle. More than
+              deals—it's your student identity curated.
+            </p>
+          </div>
+          <!-- Featured Stats/Social Proof -->
+          <div class="flex gap-12 mt-16 pt-12 border-t border-white/10">
+            <div>
+              <div class="text-white font-headline text-3xl font-bold">
+                500+
+              </div>
+              <div
+                class="text-white/60 font-label text-sm uppercase tracking-wider"
+              >
+                Premium Brands
+              </div>
+            </div>
+            <div>
+              <div class="text-white font-headline text-3xl font-bold">1M+</div>
+              <div
+                class="text-white/60 font-label text-sm uppercase tracking-wider"
+              >
+                Verified Students
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Subtle Brand Anchor in Corner -->
+        <div class="absolute bottom-10 left-12 z-10">
+          <span
+            class="text-white/40 font-headline text-sm font-bold tracking-widest"
+            >UNIDEALS INDIA © 2024</span
+          >
+        </div>
+      </section>
+      <!-- Right Side: Authentication Form -->
+      <section
+        class="w-full md:w-1/2 lg:w-[45%] bg-surface flex flex-col justify-center px-6 py-12 lg:px-20 relative"
+      >
+        <!-- Mobile Brand Header -->
+        <div class="md:hidden absolute top-8 left-6">
+          <span
+            class="text-2xl font-headline font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+            >UniDeals</span
+          >
+        </div>
+        <div class="max-w-md w-full mx-auto space-y-10">
+          <!-- Form Header -->
+          <div>
+            <h2
+              id="form-header-title"
+              class="font-headline text-3xl font-bold text-on-surface tracking-tight mb-2"
+            >
+              Welcome Back
+            </h2>
+            <p id="form-header-desc" class="text-on-surface-variant font-body">
+              Sign in to access your exclusive student membership.
+            </p>
+          </div>
+          <!-- Google Sign In -->
+          <button
+            id="google-btn"
+            class="w-full flex items-center justify-center gap-3 bg-surface-container-lowest py-4 px-6 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant/10 hover:bg-surface-bright transition-all active:scale-[0.98] duration-200 group"
+          >
+            <svg class="w-5 h-5" viewbox="0 0 24 24">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                fill="#4285F4"
+              ></path>
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853"
+              ></path>
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                fill="#FBBC05"
+              ></path>
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335"
+              ></path>
+            </svg>
+            <span class="font-body font-semibold text-on-surface"
+              >Continue with Google</span
+            >
+          </button>
+          <!-- Divider -->
+          <div class="relative flex items-center">
+            <div class="flex-grow border-t border-outline-variant/20"></div>
+            <span
+              class="flex-shrink mx-4 text-outline font-label text-xs uppercase tracking-widest"
+              >or use email</span
+            >
+            <div class="flex-grow border-t border-outline-variant/20"></div>
+          </div>
+          <!-- Auth Form -->
+          <div
+            id="login-error"
+            class="hidden text-error bg-error/10 p-3 rounded-lg text-sm font-semibold mb-4 text-center"
+          ></div>
+          <form id="login-form" class="space-y-6">
+            <div class="space-y-2">
+              <label
+                class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1"
+                for="login-email"
+                >University Email</label
+              >
+              <input
+                class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                id="login-email"
+                placeholder="name@university.edu.in"
+                type="email"
+                required
+              />
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between items-center px-1">
+                <label
+                  class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant"
+                  for="login-password"
+                  >Password</label
+                >
+                <a
+                  id="forgot-password-link"
+                  class="text-xs font-semibold text-primary hover:text-secondary transition-colors"
+                  href="#"
+                  >Forgot?</a
+                >
+              </div>
+              <input
+                class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                id="login-password"
+                placeholder="••••••••"
+                type="password"
+                required
+              />
+            </div>
+            <button
+              id="login-btn"
+              class="w-full bg-gradient-to-r from-primary to-secondary text-white font-body font-bold py-4 rounded-full shadow-[0_10px_30px_rgba(74,64,224,0.2)] hover:shadow-[0_15px_35px_rgba(74,64,224,0.3)] hover:-translate-y-0.5 transition-all active:scale-95 duration-200"
+              type="submit"
+            >
+              Login to UniDeals
+            </button>
+          </form>
 
-      const loginForm = document.getElementById('login-form');
-      const signupForm = document.getElementById('signup-form');
-      const tabLogin = document.getElementById('tab-login');
-      const tabSignup = document.getElementById('tab-signup');
-      const forgotPasswordLink = document.getElementById('forgot-password-link');
-      const forgotPasswordForm = document.getElementById('forgot-password-form');
+          <div
+            id="signup-error"
+            class="hidden text-error bg-error/10 p-3 rounded-lg text-sm font-semibold mb-4 text-center"
+          ></div>
+          <form id="signup-form" class="space-y-6 hidden">
+            <div class="space-y-2">
+              <label
+                class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1"
+                for="signup-name"
+                >Full Name</label
+              >
+              <input
+                class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                id="signup-name"
+                placeholder="John Doe"
+                type="text"
+                required
+              />
+            </div>
+            <div class="space-y-2">
+              <label
+                class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1"
+                for="signup-email"
+                >University Email</label
+              >
+              <input
+                class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                id="signup-email"
+                placeholder="name@university.edu.in"
+                type="email"
+                required
+              />
+            </div>
+            <div class="space-y-2">
+              <div class="flex justify-between items-center px-1">
+                <label
+                  class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant"
+                  for="signup-password"
+                  >Password</label
+                >
+              </div>
+              <input
+                class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                id="signup-password"
+                placeholder="Min 8 chars, letter + number"
+                type="password"
+                required
+              />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label
+                  class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1"
+                  for="signup-college"
+                  >College</label
+                >
+                <input
+                  class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                  id="signup-college"
+                  placeholder="IIT Bombay"
+                  type="text"
+                />
+              </div>
+              <div class="space-y-2">
+                <label
+                  class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1"
+                  for="signup-city"
+                  >City</label
+                >
+                <input
+                  class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                  id="signup-city"
+                  placeholder="Mumbai"
+                  type="text"
+                />
+              </div>
+            </div>
+            <button
+              id="signup-btn"
+              class="w-full bg-gradient-to-r from-primary to-secondary text-white font-body font-bold py-4 rounded-full shadow-[0_10px_30px_rgba(74,64,224,0.2)] hover:shadow-[0_15px_35px_rgba(74,64,224,0.3)] hover:-translate-y-0.5 transition-all active:scale-95 duration-200"
+              type="submit"
+            >
+              Create Account
+            </button>
+          </form>
 
-      // Tab switching
-      tabLogin.addEventListener('click', () => {
-        tabLogin.classList.add('active');
-        tabSignup.classList.remove('active');
-        loginForm.style.display = '';
-        signupForm.style.display = 'none';
-        forgotPasswordForm.style.display = 'none';
-      });
-
-      tabSignup.addEventListener('click', () => {
-        tabSignup.classList.add('active');
-        tabLogin.classList.remove('active');
-        signupForm.style.display = '';
-        loginForm.style.display = 'none';
-        forgotPasswordForm.style.display = 'none';
-      });
-
-      // Login
-      loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-password').value;
-        const errorEl = document.getElementById('login-error');
-        const btn = document.getElementById('login-btn');
-
-        errorEl.style.display = 'none';
-
-        if (!isValidEmail(email)) {
-          errorEl.textContent = 'Please enter a valid email address';
-          errorEl.style.display = '';
+          <div id="forgot-password-form" class="space-y-6 hidden">
+            <div class="space-y-2">
+              <label
+                class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1"
+                for="reset-email"
+                >Email Address</label
+              >
+              <input
+                class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                id="reset-email"
+                placeholder="name@university.edu.in"
+                type="email"
+                required
+              />
+            </div>
+            <button
+              id="reset-btn"
+              class="w-full bg-primary text-white font-body font-bold py-4 rounded-full shadow-[0_10px_30px_rgba(74,64,224,0.2)] hover:shadow-[0_15px_35px_rgba(74,64,224,0.3)] hover:-translate-y-0.5 transition-all active:scale-95 duration-200"
+              type="button"
+            >
+              Send Reset Link
+            </button>
+            <button
+              id="reset-cancel-btn"
+              class="w-full bg-surface-container-highest text-on-surface-variant font-body font-bold py-4 rounded-full hover:-translate-y-0.5 transition-all active:scale-95 duration-200"
+              type="button"
+            >
+              Cancel
+            </button>
+          </div>
+          <!-- Verification Hint -->
+          <div
+            class="bg-tertiary/5 p-5 rounded-2xl flex gap-4 border border-tertiary/10"
+          >
+            <span
+              class="material-symbols-outlined text-tertiary shrink-0"
+              data-icon="verified_user"
+              >verified_user</span
+            >
+            <p
+              class="text-sm text-on-tertiary-container font-body leading-relaxed"
+            >
+              <span class="font-bold">Student Verification:</span> To unlock all
+              premium deals, please ensure you use your university issued email
+              address (.edu.in).
+            </p>
+          </div>
+          <!-- Footer Links -->
+          <div class="text-center pt-4">
+            <p class="text-on-surface-variant font-body">
+              <span id="toggle-text">Don't have an account?</span>
+              <a
+                id="toggle-link"
+                class="text-primary font-bold hover:underline decoration-primary/30 underline-offset-4 transition-all cursor-pointer"
+                href="#"
+                >Sign up for free</a
+              >
+            </p>
+          </div>
+        </div>
+        <!-- Absolute Bottom Links -->
+        <div
+          class="absolute bottom-8 left-0 right-0 px-6 lg:px-20 flex justify-between items-center opacity-60"
+        >
+          <div class="flex gap-6">
+            <a
+              class="text-[10px] font-label font-semibold uppercase tracking-widest hover:text-primary transition-colors"
+              href="#"
+              >Privacy</a
+            >
+            <a
+              class="text-[10px] font-label font-semibold uppercase tracking-widest hover:text-primary transition-colors"
+              href="#"
+              >Terms</a
+            >
+          </div>
+          <div class="flex gap-4">
+            <span class="material-symbols-outlined text-lg" data-icon="language"
+              >language</span
+            >
+            <span
+              class="text-[10px] font-label font-semibold uppercase tracking-widest"
+              >India (English)</span
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+      (async function initLoginPage() {
+        // If already logged in, redirect
+        const user = await getCurrentUser();
+        if (user) {
+          window.location.href = "profile.html";
           return;
         }
 
-        setButtonLoading(btn, true);
-        const { user, error } = await signIn(email, password);
-        setButtonLoading(btn, false);
+        const loginForm = document.getElementById("login-form");
+        const signupForm = document.getElementById("signup-form");
+        const forgotPasswordForm = document.getElementById(
+          "forgot-password-form",
+        );
 
-        if (error) {
-          errorEl.textContent = error;
-          errorEl.style.display = '';
-          return;
-        }
+        const toggleLink = document.getElementById("toggle-link");
+        const toggleText = document.getElementById("toggle-text");
+        const formHeader = document.getElementById("form-header-title");
+        const formDesc = document.getElementById("form-header-desc");
 
-        showToast('Welcome back!', 'success');
-        setTimeout(() => { window.location.href = 'index'; }, 500);
-      });
+        let mode = "login"; // 'login' or 'signup'
 
-      // Signup
-      signupForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = sanitizeInput(document.getElementById('signup-name').value);
-        const email = document.getElementById('signup-email').value.trim();
-        const password = document.getElementById('signup-password').value;
-        const college = sanitizeInput(document.getElementById('signup-college').value);
-        const city = sanitizeInput(document.getElementById('signup-city').value);
-        const errorEl = document.getElementById('signup-error');
-        const btn = document.getElementById('signup-btn');
+        toggleLink.addEventListener("click", (e) => {
+          e.preventDefault();
+          if (mode === "login") {
+            mode = "signup";
+            loginForm.classList.add("hidden");
+            signupForm.classList.remove("hidden");
+            forgotPasswordForm.classList.add("hidden");
+            toggleText.textContent = "Already have an account?";
+            toggleLink.textContent = "Login here";
+            formHeader.textContent = "Create Account";
+            formDesc.textContent = "Join the exclusive student membership.";
+          } else {
+            mode = "login";
+            signupForm.classList.add("hidden");
+            loginForm.classList.remove("hidden");
+            forgotPasswordForm.classList.add("hidden");
+            toggleText.textContent = "Don't have an account?";
+            toggleLink.textContent = "Sign up for free";
+            formHeader.textContent = "Welcome Back";
+            formDesc.textContent =
+              "Sign in to access your exclusive student membership.";
+          }
+        });
 
-        errorEl.style.display = 'none';
+        // Login
+        loginForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = document.getElementById("login-email").value.trim();
+          const password = document.getElementById("login-password").value;
+          const errorEl = document.getElementById("login-error");
+          const btn = document.getElementById("login-btn");
+          errorEl.classList.add("hidden");
+          if (!email) return;
 
-        if (!name) {
-          errorEl.textContent = 'Please enter your name';
-          errorEl.style.display = '';
-          return;
-        }
+          btn.disabled = true;
+          btn.textContent = "Logging in...";
+          const { user, error } = await signIn(email, password);
+          btn.disabled = false;
+          btn.textContent = "Login to UniDeals";
 
-        if (!isValidEmail(email)) {
-          errorEl.textContent = 'Please enter a valid email (no temporary email domains)';
-          errorEl.style.display = '';
-          return;
-        }
+          if (error) {
+            errorEl.textContent = error;
+            errorEl.classList.remove("hidden");
+            return;
+          }
+          window.location.href = "index.html";
+        });
 
-        const pwCheck = validatePassword(password);
-        if (!pwCheck.valid) {
-          errorEl.textContent = pwCheck.message;
-          errorEl.style.display = '';
-          return;
-        }
+        // Signup
+        signupForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const name = document.getElementById("signup-name").value.trim();
+          const email = document.getElementById("signup-email").value.trim();
+          const password = document.getElementById("signup-password").value;
+          const college = document
+            .getElementById("signup-college")
+            .value.trim();
+          const city = document.getElementById("signup-city").value.trim();
+          const errorEl = document.getElementById("signup-error");
+          const btn = document.getElementById("signup-btn");
+          errorEl.classList.add("hidden");
 
-        setButtonLoading(btn, true);
-        const { user, error } = await signUp(email, password, name, college, city);
-        setButtonLoading(btn, false);
+          btn.disabled = true;
+          btn.textContent = "Creating...";
+          const { user, error } = await signUp(
+            email,
+            password,
+            name,
+            college,
+            city,
+          );
+          btn.disabled = false;
+          btn.textContent = "Create Account";
 
-        if (error) {
-          errorEl.textContent = error;
-          errorEl.style.display = '';
-          return;
-        }
+          if (error) {
+            errorEl.textContent = error;
+            errorEl.classList.remove("hidden");
+            return;
+          }
+          window.location.href = "index.html";
+        });
 
-        showToast('Account created! Please check your email to verify.', 'success');
-        setTimeout(() => { window.location.href = 'index'; }, 1500);
-      });
+        // Google OAuth
+        document
+          .getElementById("google-btn")
+          .addEventListener("click", signInWithGoogle);
 
-      // Google OAuth
-      document.getElementById('google-btn').addEventListener('click', signInWithGoogle);
+        // Forgot Password
+        document
+          .getElementById("forgot-password-link")
+          .addEventListener("click", (e) => {
+            e.preventDefault();
+            loginForm.classList.add("hidden");
+            forgotPasswordForm.classList.remove("hidden");
+          });
 
-      // Forgot Password
-      forgotPasswordLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        loginForm.style.display = 'none';
-        forgotPasswordForm.style.display = '';
-      });
+        document
+          .getElementById("reset-cancel-btn")
+          .addEventListener("click", () => {
+            forgotPasswordForm.classList.add("hidden");
+            loginForm.classList.remove("hidden");
+          });
 
-      document.getElementById('reset-cancel-btn').addEventListener('click', () => {
-        forgotPasswordForm.style.display = 'none';
-        loginForm.style.display = '';
-      });
-
-      document.getElementById('reset-btn').addEventListener('click', async () => {
-        const email = document.getElementById('reset-email').value.trim();
-        const errorEl = document.getElementById('reset-error');
-
-        if (!isValidEmail(email)) {
-          errorEl.textContent = 'Please enter a valid email';
-          errorEl.style.display = '';
-          return;
-        }
-
-        const { error } = await resetPassword(email);
-        if (error) {
-          errorEl.textContent = error;
-          errorEl.style.display = '';
-          return;
-        }
-
-        showToast('Password reset link sent! Check your email.', 'success');
-        forgotPasswordForm.style.display = 'none';
-        loginForm.style.display = '';
-      });
-    })();
-  </script>
-</body>
+        document
+          .getElementById("reset-btn")
+          .addEventListener("click", async () => {
+            const email = document.getElementById("reset-email").value.trim();
+            if (!email) return;
+            const { error } = await resetPassword(email);
+            if (error) alert(error);
+            else {
+              alert("Password reset link sent!");
+              forgotPasswordForm.classList.add("hidden");
+              loginForm.classList.remove("hidden");
+            }
+          });
+      })();
+    </script>
+  </body>
 </html>

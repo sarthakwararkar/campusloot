@@ -1,257 +1,212 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Deal Details — CampusLoot</title>
-  <meta name="description" content="View deal details, claim the offer, and save for later. Exclusive student deals on CampusLoot.">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/components.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-</head>
-<body>
-
-  <header id="site-header"></header>
-
-  <div class="deal-detail" id="deal-detail">
-    <div class="loader-container" id="deal-loader">
-      <div class="loader"></div>
-    </div>
-  </div>
-
-  <!-- Related Deals -->
-  <section class="section" id="related-section" style="display:none;">
-    <div class="container">
-      <h2 class="section-title" style="margin-bottom:var(--space-lg);">🔗 Related Deals</h2>
-      <div class="deal-grid" id="related-deals-grid"></div>
-    </div>
-  </section>
-
-  <footer id="site-footer"></footer>
-
-  <script src="js/supabase.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/deals.js"></script>
-  <script src="js/components.js"></script>
-  <script>
-    (async function initDealPage() {
-      renderHeader('');
-      renderFooter();
-
-      const dealId = getQueryParam('id');
-      if (!dealId) {
-        window.location.href = '404.html';
-        return;
+<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Deal Details | CampusLoot</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#4a40e0",
+              secondary: "#702ae1",
+              tertiary: "#00647b",
+              surface: "#f5f6f7",
+              "on-surface": "#2c2f30",
+              "on-surface-variant": "#595c5d",
+              "surface-container-low": "#eff1f2",
+              "surface-container-highest": "#dadddf",
+              "primary-container": "#9795ff",
+              "on-primary": "#f4f1ff",
+              error: "#b41340",
+            },
+            fontFamily: {
+              headline: ["Plus Jakarta Sans"],
+              body: ["Inter"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        vertical-align: middle;
       }
+      body { font-family: "Inter", sans-serif; }
+      .font-headline { font-family: "Plus Jakarta Sans", sans-serif; }
+    </style>
+  </head>
+  <body class="bg-surface text-on-surface">
+    <!-- TopNavBar -->
+    <nav class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl shadow-sm h-20">
+      <div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-full">
+        <div class="flex items-center gap-8">
+          <span onclick="window.location.href='index.html'" class="text-2xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent font-headline tracking-tight cursor-pointer"><a href="index.html" class="hover:opacity-80 transition-opacity">CampusLoot</a></span>
+          <div class="hidden md:flex gap-8">
+            <a class="text-slate-600 hover:text-primary transition-colors font-headline font-bold" href="deals.html">Explore</a>
+            <a class="text-slate-600 hover:text-primary transition-colors font-headline font-bold" href="categories.html">Categories</a>
+            <a class="text-slate-600 hover:text-primary transition-colors font-headline font-bold" href="trending.html">Trending</a>
+            <a class="text-slate-600 hover:text-primary transition-colors font-headline font-bold" href="submit.html">Submit</a>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <button id="nav-login-btn" onclick="window.location.href = 'login.html'" class="px-6 py-2.5 bg-gradient-to-r from-primary to-secondary text-white rounded-full font-semibold hover:opacity-90 active:scale-95 duration-200">Login</button>
+        </div>
+      </div>
+    </nav>
 
-      // Increment view count
-      incrementView(dealId);
+    <main class="max-w-7xl mx-auto px-6 py-12">
+      <div id="deal-container" class="space-y-12">
+        <!-- Loading state -->
+        <div id="deal-loader" class="flex flex-col items-center justify-center py-24 space-y-4">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <p class="text-on-surface-variant font-medium">Fetching exclusive deal details...</p>
+        </div>
+        
+        <!-- Deal Content (Hidden initially) -->
+        <div id="deal-content" class="hidden">
+          <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-8">
+            <a href="index.html" class="hover:text-primary transition-colors">Home</a>
+            <span class="material-symbols-outlined text-sm">chevron_right</span>
+            <a href="deals.html" class="hover:text-primary transition-colors">Explore</a>
+            <span class="material-symbols-outlined text-sm">chevron_right</span>
+            <span id="breadcrumb-title" class="text-on-surface font-bold">Deal Details</span>
+          </nav>
 
-      // Fetch deal
-      const deal = await fetchDealById(dealId);
-      if (!deal) {
-        window.location.href = '404.html';
-        return;
-      }
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+            <!-- Left: Media -->
+            <div class="space-y-6">
+              <div id="deal-image-wrap" class="aspect-square bg-white rounded-[2.5rem] border shadow-2xl shadow-primary/5 flex items-center justify-center p-12 overflow-hidden group">
+                <!-- Image mounted here -->
+              </div>
+            </div>
 
-      // Update page title
-      document.title = `${deal.title} — CampusLoot`;
+            <!-- Right: Info -->
+            <div class="flex flex-col justify-center">
+              <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-bold tracking-wide mb-6">
+                <span class="material-symbols-outlined text-lg">verified</span>
+                <span id="deal-category-badge">Category</span>
+              </div>
 
-      const user = await getCurrentUser();
-      let savedDeals = new Set();
-      if (user) {
-        savedDeals = await getSavedDealIds(user.id);
-      }
+              <h1 id="deal-title" class="text-5xl font-headline font-extrabold tracking-tight text-on-surface mb-4 leading-tight">Loading...</h1>
+              <p id="deal-brand" class="text-2xl font-bold text-on-surface-variant mb-8"></p>
 
-      const isSaved = savedDeals.has(deal.id);
-      const container = document.getElementById('deal-detail');
-      container.innerHTML = '';
+              <div class="p-8 bg-surface-container-low rounded-[2rem] border border-white/40 mb-10">
+                <div class="flex items-end justify-between mb-8">
+                  <div>
+                    <p class="text-sm font-bold uppercase tracking-widest text-on-surface-variant/60 mb-2">Deal Price</p>
+                    <h2 id="deal-price" class="text-5xl font-black text-primary">₹0</h2>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-sm font-bold uppercase tracking-widest text-on-surface-variant/60 mb-2">Saves</p>
+                    <p id="deal-saves" class="text-2xl font-bold text-on-surface">0+</p>
+                  </div>
+                </div>
 
-      // Breadcrumb-style back link
-      const backLink = document.createElement('a');
-      backLink.href = 'deals.html';
-      backLink.className = 'btn btn-ghost btn-sm';
-      backLink.textContent = '← Back to Deals';
-      backLink.style.marginBottom = 'var(--space-lg)';
-      backLink.style.display = 'inline-block';
-      container.appendChild(backLink);
+                <button id="claim-btn" class="w-full py-6 bg-gradient-to-r from-primary to-secondary text-white text-xl font-headline font-bold rounded-2xl shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3">
+                  Claim Offer
+                  <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+              </div>
 
-      // Deal card
-      const card = document.createElement('div');
-      card.className = 'deal-detail-card';
+              <div class="space-y-6">
+                <h3 class="text-xl font-bold text-on-surface">About this deal</h3>
+                <p id="deal-description" class="text-on-surface-variant leading-relaxed text-lg">Loading description...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
 
-      // Image
-      const imageDiv = document.createElement('div');
-      imageDiv.className = 'deal-detail-image';
-      mountDealImage(imageDiv, deal, {
-        placeholderClass: 'deal-detail-image-placeholder',
-        lazy: false
-      });
-      card.appendChild(imageDiv);
+    <footer class="w-full border-t border-slate-100 bg-white py-12 mt-24">
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <span class="text-xl font-black text-slate-900 font-headline"><a href="index.html" class="hover:opacity-80 transition-opacity">CampusLoot</a></span>
+        <p class="text-sm text-slate-500 mt-4">© 2024 UniDeals India. The Student Curator.</p>
+      </div>
+    </footer>
 
-      // Body
-      const body = document.createElement('div');
-      body.className = 'deal-detail-body';
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/deals.js"></script>
+    <script>
+      (async function initDealPage() {
+        console.log("initDealPage: Starting initialization...", window.location.href);
 
-      const h1 = document.createElement('h1');
-      h1.textContent = deal.title;
-      body.appendChild(h1);
-
-      // Meta info
-      const meta = document.createElement('div');
-      meta.className = 'deal-detail-meta';
-
-      const brandBadge = document.createElement('span');
-      brandBadge.className = 'badge badge-primary';
-      brandBadge.style.display = 'inline-flex';
-      brandBadge.style.alignItems = 'center';
-      brandBadge.style.gap = '6px';
-      
-      const faviconUrl = dealFaviconUrl(deal);
-      if (faviconUrl) {
-        const brandLogo = document.createElement('img');
-        brandLogo.src = faviconUrl;
-        brandLogo.alt = deal.brand_name || '';
-        brandLogo.className = 'brand-logo';
-        brandLogo.style.width = '14px';
-        brandLogo.style.height = '14px';
-        brandLogo.loading = 'lazy';
-        brandLogo.onerror = () => brandLogo.remove();
-        brandBadge.appendChild(brandLogo);
-      }
-
-      const brandText = document.createElement('span');
-      brandText.textContent = deal.brand_name;
-      brandBadge.appendChild(brandText);
-      
-      meta.appendChild(brandBadge);
-
-      const catBadge = document.createElement('span');
-      catBadge.className = 'badge badge-primary';
-      catBadge.textContent = getCategoryLabel(deal.category);
-      meta.appendChild(catBadge);
-
-      const discountBadge = document.createElement('span');
-      discountBadge.className = 'badge badge-discount';
-      discountBadge.textContent = deal.discount_text;
-      meta.appendChild(discountBadge);
-
-      if (deal.views_count) {
-        const views = document.createElement('span');
-        views.className = 'badge badge-primary';
-        views.textContent = `👁 ${deal.views_count} views`;
-        meta.appendChild(views);
-      }
-
-      const date = document.createElement('span');
-      date.style.color = 'var(--text-tertiary)';
-      date.style.fontSize = 'var(--fs-sm)';
-      date.textContent = formatDate(deal.created_at);
-      meta.appendChild(date);
-
-      body.appendChild(meta);
-
-      // Price section
-      if (deal.original_price || deal.deal_price) {
-        const priceSection = document.createElement('div');
-        priceSection.style.cssText = 'display:flex;gap:var(--space-md);align-items:center;margin-bottom:var(--space-xl);padding:var(--space-lg);background:var(--success-light);border-radius:var(--radius-md);';
-        if (deal.original_price) {
-          const orig = document.createElement('span');
-          orig.style.cssText = 'text-decoration:line-through;color:var(--text-tertiary);font-size:var(--fs-lg);';
-          orig.textContent = formatPrice(deal.original_price);
-          priceSection.appendChild(orig);
+        const user = await getCurrentUser();
+        const loginBtn = document.getElementById("nav-login-btn");
+        if (user && loginBtn) {
+          loginBtn.textContent = "Dashboard";
+          loginBtn.onclick = () => (window.location.href = "profile.html");
         }
-        const current = document.createElement('span');
-        current.style.cssText = 'font-size:var(--fs-2xl);font-weight:800;color:var(--success);';
-        current.textContent = formatPrice(deal.deal_price || 'Free');
-        priceSection.appendChild(current);
-        body.appendChild(priceSection);
-      }
 
-      // Description
-      const desc = document.createElement('div');
-      desc.className = 'deal-detail-description';
-      desc.textContent = deal.description;
-      body.appendChild(desc);
+        const dealId = getQueryParam("id");
+        console.log("initDealPage: dealId from URL:", dealId);
 
-      // Action buttons
-      const actions = document.createElement('div');
-      actions.className = 'deal-detail-actions';
+        if (!dealId || dealId === 'undefined' || dealId === 'null') {
+          console.warn("initDealPage: Invalid dealId, redirecting to deals.html");
+          window.location.href = "deals.html";
+          return;
+        }
 
-      const claimBtn = document.createElement('a');
-      claimBtn.href = deal.affiliate_url || deal.deal_url;
-      claimBtn.target = '_blank';
-      claimBtn.rel = 'noopener noreferrer';
-      claimBtn.className = 'btn btn-accent btn-lg';
-      claimBtn.textContent = 'Claim This Deal →';
-      actions.appendChild(claimBtn);
+        const loader = document.getElementById("deal-loader");
+        const content = document.getElementById("deal-content");
 
-      const saveBtn = document.createElement('button');
-      saveBtn.className = `btn ${isSaved ? 'btn-danger' : 'btn-outline'} btn-lg`;
-      saveBtn.textContent = isSaved ? '❤️ Saved' : '🤍 Save Deal';
-      // Custom save logic for the deal page (different styling than cards)
-      saveBtn.addEventListener('click', async () => {
-        if (!user) { showLoginModal(); return; }
-        const wasSaved = saveBtn.classList.contains('btn-danger');
         try {
-          if (wasSaved) {
-            await unsaveDeal(deal.id);
-            saveBtn.className = 'btn btn-outline btn-lg';
-            saveBtn.textContent = '🤍 Save Deal';
-            showToast('Deal removed from saves', 'info');
-          } else {
-            await saveDeal(deal.id);
-            saveBtn.className = 'btn btn-danger btn-lg';
-            saveBtn.textContent = '❤️ Saved';
-            showToast('Deal saved!', 'success');
+          const deal = await fetchDealById(dealId);
+          if (!deal) {
+            window.location.href = "deals.html";
+            return;
           }
-        } catch { showToast('Something went wrong', 'error'); }
-      });
-      actions.appendChild(saveBtn);
 
-      body.appendChild(actions);
+          document.title = `${deal.brand_name || 'Deal'} | CampusLoot`;
+          document.getElementById('breadcrumb-title').textContent = deal.brand_name || 'Deal Details';
+          document.getElementById('deal-title').textContent = deal.title || 'Special Offer';
+          document.getElementById('deal-brand').textContent = deal.brand_name || '';
+          document.getElementById('deal-price').textContent = formatPrice(deal.deal_price || deal.discount_text);
+          document.getElementById('deal-category-badge').textContent = deal.category || 'Deal';
+          document.getElementById('deal-saves').textContent = `${(deal.saves_count || 0).toLocaleString()}+`;
+          document.getElementById('deal-description').textContent = deal.description || 'No description available.';
 
-      // Share section
-      const share = document.createElement('div');
-      share.className = 'deal-detail-share';
+          const imageWrap = document.getElementById('deal-image-wrap');
+          mountDealImage(imageWrap, deal, { 
+              placeholderClass: 'text-9xl text-on-surface-variant font-black opacity-30 select-none',
+              imgClass: 'w-64 h-64 object-contain transition-transform duration-700'
+          });
 
-      const shareLabel = document.createElement('span');
-      shareLabel.style.cssText = 'font-size:var(--fs-sm);color:var(--text-secondary);font-weight:500;';
-      shareLabel.textContent = 'Share:';
-      share.appendChild(shareLabel);
+          const claimBtn = document.getElementById('claim-btn');
+          claimBtn.onclick = () => {
+              const url = deal.affiliate_url || deal.deal_url;
+              if (url && url !== '#') {
+                  window.open(url, '_blank', 'noopener,noreferrer');
+              } else {
+                  showToast('This deal is currently offline', 'error');
+              }
+          };
 
-      const whatsappBtn = document.createElement('a');
-      whatsappBtn.href = `https://wa.me/?text=${encodeURIComponent(deal.title + ' — ' + window.location.href)}`;
-      whatsappBtn.target = '_blank';
-      whatsappBtn.className = 'btn btn-success btn-sm';
-      whatsappBtn.textContent = '💬 WhatsApp';
-      share.appendChild(whatsappBtn);
-
-      const copyBtn = document.createElement('button');
-      copyBtn.className = 'btn btn-ghost btn-sm';
-      copyBtn.textContent = '🔗 Copy Link';
-      copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(window.location.href);
-        showToast('Link copied!', 'success');
-      });
-      share.appendChild(copyBtn);
-
-      body.appendChild(share);
-      card.appendChild(body);
-      container.appendChild(card);
-
-      // Load related deals (same category)
-      const { deals: related } = await fetchDeals({ category: deal.category, page: 1 });
-      const filteredRelated = related.filter(d => d.id !== deal.id).slice(0, 3);
-      if (filteredRelated.length > 0) {
-        document.getElementById('related-section').style.display = '';
-        const relatedGrid = document.getElementById('related-deals-grid');
-        filteredRelated.forEach(d => {
-          relatedGrid.appendChild(renderDealCard(d, { savedDeals }));
-        });
-      }
-    })();
-  </script>
-</body>
+          incrementView(dealId).catch(console.error);
+          loader.classList.add('hidden');
+          content.classList.remove('hidden');
+        } catch (err) {
+          console.error("initDealPage Error:", err);
+          window.location.href = "deals.html";
+        }
+      })();
+    </script>
+  </body>
 </html>

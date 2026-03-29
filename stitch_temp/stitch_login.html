@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login | UniDeals India</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-container": "#dcc9ff",
+              "outline": "#757778",
+              "on-primary-fixed": "#000000",
+              "tertiary-fixed": "#00cffc",
+              "tertiary": "#00647b",
+              "on-tertiary": "#e2f6ff",
+              "primary-fixed-dim": "#8885ff",
+              "primary-dim": "#3d30d4",
+              "inverse-primary": "#8582ff",
+              "primary": "#4a40e0",
+              "on-secondary-fixed-variant": "#6514d6",
+              "on-tertiary-container": "#004050",
+              "surface-variant": "#dadddf",
+              "primary-fixed": "#9795ff",
+              "primary-container": "#9795ff",
+              "on-secondary-fixed": "#430097",
+              "error": "#b41340",
+              "surface-container-high": "#e0e3e4",
+              "error-dim": "#a70138",
+              "surface-container-lowest": "#ffffff",
+              "surface": "#f5f6f7",
+              "error-container": "#f74b6d",
+              "secondary-fixed-dim": "#d0b8ff",
+              "on-surface": "#2c2f30",
+              "inverse-on-surface": "#9b9d9e",
+              "surface-container-low": "#eff1f2",
+              "background": "#f5f6f7",
+              "surface-bright": "#f5f6f7",
+              "inverse-surface": "#0c0f10",
+              "on-primary": "#f4f1ff",
+              "surface-tint": "#4a40e0",
+              "surface-dim": "#d1d5d7",
+              "outline-variant": "#abadae",
+              "on-error": "#ffefef",
+              "secondary-fixed": "#dcc9ff",
+              "on-tertiary-fixed-variant": "#004a5c",
+              "on-primary-fixed-variant": "#1a0099",
+              "on-background": "#2c2f30",
+              "on-error-container": "#510017",
+              "on-tertiary-fixed": "#002a35",
+              "on-secondary": "#f8f0ff",
+              "secondary-dim": "#6411d5",
+              "tertiary-dim": "#00576c",
+              "on-primary-container": "#14007e",
+              "surface-container-highest": "#dadddf",
+              "on-surface-variant": "#595c5d",
+              "secondary": "#702ae1",
+              "tertiary-fixed-dim": "#00c0ea",
+              "surface-container": "#e6e8ea",
+              "on-secondary-container": "#5b00c7",
+              "tertiary-container": "#00cffc"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .mesh-gradient {
+            background: radial-gradient(at 0% 0%, #4a40e0 0px, transparent 50%),
+                        radial-gradient(at 100% 0%, #702ae1 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, #00cffc 0px, transparent 50%);
+            opacity: 0.15;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<main class="min-h-screen flex flex-col md:flex-row">
+<!-- Left Side: Editorial Lifestyle Imagery -->
+<section class="hidden md:flex md:w-1/2 lg:w-[55%] relative overflow-hidden bg-primary items-center justify-center">
+<!-- Background Image with Overlay -->
+<div class="absolute inset-0 z-0">
+<img alt="Diverse group of Indian students laughing in a bright, modern campus lounge with soft sunlight" class="w-full h-full object-cover opacity-60 mix-blend-luminosity" data-alt="Group of diverse Indian university students laughing together in a sun-drenched, high-end modern campus lounge with architectural shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSAI1F87vn4flZm-irI_H6SxjxPds5H9_NH8cik17LJpz8ngTx9OvSombBIk5KaKK6WkXofTmCVIrTgWNdpkJ7FnaCCT_oEdEwxxOl3NZ2vFHuO0wBfFqi3hZoU7UqXEYSC-xz5l8j1m9P_f2yOyZqoFSavj1m24iLEZKjGcPJBIZbxCpe-L6OLgEbs6xLnlP8q2064pcrb3b4sVh426z18fJfEUArlA91L7dmIeRIaVAKEF8YR8NTZJhgqvurcHMdIaK3BbM0gMad"/>
+<div class="absolute inset-0 bg-gradient-to-br from-primary/80 via-secondary/70 to-tertiary/40"></div>
+<div class="absolute inset-0 mesh-gradient"></div>
+</div>
+<!-- Content Overlay -->
+<div class="relative z-10 px-12 lg:px-24 max-w-2xl">
+<div class="mb-8">
+<span class="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-white font-label text-xs tracking-widest uppercase mb-6">Exclusive Access</span>
+<h1 class="font-headline text-5xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight mb-8">
+                        The Ethereal <br/> Curator.
+                    </h1>
+<p class="text-white/80 text-lg lg:text-xl font-body leading-relaxed max-w-md">
+                        Join the premium destination for university lifestyle. More than deals—it's your student identity curated.
+                    </p>
+</div>
+<!-- Featured Stats/Social Proof -->
+<div class="flex gap-12 mt-16 pt-12 border-t border-white/10">
+<div>
+<div class="text-white font-headline text-3xl font-bold">500+</div>
+<div class="text-white/60 font-label text-sm uppercase tracking-wider">Premium Brands</div>
+</div>
+<div>
+<div class="text-white font-headline text-3xl font-bold">1M+</div>
+<div class="text-white/60 font-label text-sm uppercase tracking-wider">Verified Students</div>
+</div>
+</div>
+</div>
+<!-- Subtle Brand Anchor in Corner -->
+<div class="absolute bottom-10 left-12 z-10">
+<span class="text-white/40 font-headline text-sm font-bold tracking-widest">UNIDEALS INDIA © 2024</span>
+</div>
+</section>
+<!-- Right Side: Authentication Form -->
+<section class="w-full md:w-1/2 lg:w-[45%] bg-surface flex flex-col justify-center px-6 py-12 lg:px-20 relative">
+<!-- Mobile Brand Header -->
+<div class="md:hidden absolute top-8 left-6">
+<span class="text-2xl font-headline font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">UniDeals</span>
+</div>
+<div class="max-w-md w-full mx-auto space-y-10">
+<!-- Form Header -->
+<div>
+<h2 class="font-headline text-3xl font-bold text-on-surface tracking-tight mb-2">Welcome Back</h2>
+<p class="text-on-surface-variant font-body">Sign in to access your exclusive student membership.</p>
+</div>
+<!-- Google Sign In -->
+<button class="w-full flex items-center justify-center gap-3 bg-surface-container-lowest py-4 px-6 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant/10 hover:bg-surface-bright transition-all active:scale-[0.98] duration-200 group">
+<svg class="w-5 h-5" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+<span class="font-body font-semibold text-on-surface">Continue with Google</span>
+</button>
+<!-- Divider -->
+<div class="relative flex items-center">
+<div class="flex-grow border-t border-outline-variant/20"></div>
+<span class="flex-shrink mx-4 text-outline font-label text-xs uppercase tracking-widest">or use email</span>
+<div class="flex-grow border-t border-outline-variant/20"></div>
+</div>
+<!-- Auth Form -->
+<form class="space-y-6">
+<div class="space-y-2">
+<label class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1" for="email">University Email</label>
+<input class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none" id="email" placeholder="name@university.edu.in" type="email"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center px-1">
+<label class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant" for="password">Password</label>
+<a class="text-xs font-semibold text-primary hover:text-secondary transition-colors" href="#">Forgot?</a>
+</div>
+<input class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none" id="password" placeholder="••••••••" type="password"/>
+</div>
+<button class="w-full bg-gradient-to-r from-primary to-secondary text-white font-body font-bold py-4 rounded-full shadow-[0_10px_30px_rgba(74,64,224,0.2)] hover:shadow-[0_15px_35px_rgba(74,64,224,0.3)] hover:-translate-y-0.5 transition-all active:scale-95 duration-200" type="submit">
+                        Login to UniDeals
+                    </button>
+</form>
+<!-- Verification Hint -->
+<div class="bg-tertiary/5 p-5 rounded-2xl flex gap-4 border border-tertiary/10">
+<span class="material-symbols-outlined text-tertiary shrink-0" data-icon="verified_user">verified_user</span>
+<p class="text-sm text-on-tertiary-container font-body leading-relaxed">
+<span class="font-bold">Student Verification:</span> To unlock all premium deals, please ensure you use your university issued email address (.edu.in).
+                    </p>
+</div>
+<!-- Footer Links -->
+<div class="text-center pt-4">
+<p class="text-on-surface-variant font-body">
+                        Don't have an account? 
+                        <a class="text-primary font-bold hover:underline decoration-primary/30 underline-offset-4 transition-all" href="#">Sign up for free</a>
+</p>
+</div>
+</div>
+<!-- Absolute Bottom Links -->
+<div class="absolute bottom-8 left-0 right-0 px-6 lg:px-20 flex justify-between items-center opacity-60">
+<div class="flex gap-6">
+<a class="text-[10px] font-label font-semibold uppercase tracking-widest hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="text-[10px] font-label font-semibold uppercase tracking-widest hover:text-primary transition-colors" href="#">Terms</a>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-lg" data-icon="language">language</span>
+<span class="text-[10px] font-label font-semibold uppercase tracking-widest">India (English)</span>
+</div>
+</div>
+</section>
+</main>
+</body></html>

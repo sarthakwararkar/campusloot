@@ -1,198 +1,221 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard — CampusLoot</title>
-  <meta name="description" content="CampusLoot admin dashboard for managing deals, submissions, and users.">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/components.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard — CampusLoot</title>
+    <meta
+      name="description"
+      content="CampusLoot admin dashboard for managing deals, submissions, and users."
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  </head>
+  <body>
+    <header id="site-header"></header>
 
-  <header id="site-header"></header>
-
-  <div class="container admin-page" id="admin-container">
-    <div class="loader-container" id="admin-loader">
-      <div class="loader"></div>
+    <div class="container admin-page" id="admin-container">
+      <div class="loader-container" id="admin-loader">
+        <div class="loader"></div>
+      </div>
     </div>
-  </div>
 
-  <footer id="site-footer"></footer>
+    <footer id="site-footer"></footer>
 
-  <script src="js/supabase.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/deals.js"></script>
-  <script src="js/admin.js"></script>
-  <script src="js/components.js"></script>
-  <script>
-    (async function initAdminPage() {
-      renderHeader('admin');
-      renderFooter();
+    <script src="js/supabase.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/deals.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+      (async function initAdminPage() {
+        renderHeader("admin");
+        renderFooter();
 
-      const user = await requireAdmin();
-      if (!user) return;
+        const user = await requireAdmin();
+        if (!user) return;
 
-      const container = document.getElementById('admin-container');
-      container.innerHTML = '';
+        const container = document.getElementById("admin-container");
+        container.innerHTML = "";
 
-      // Page title
-      const title = document.createElement('h1');
-      title.textContent = '⚙️ Admin Dashboard';
-      title.style.marginBottom = 'var(--space-xl)';
-      container.appendChild(title);
+        // Page title
+        const title = document.createElement("h1");
+        title.textContent = "⚙️ Admin Dashboard";
+        title.style.marginBottom = "var(--space-xl)";
+        container.appendChild(title);
 
-      // Stats
-      await loadStats();
-      // Pending Submissions
-      await loadPendingSubmissions();
-      // All Deals Management
-      await loadAllDeals();
+        // Stats
+        await loadStats();
+        // Pending Submissions
+        await loadPendingSubmissions();
+        // All Deals Management
+        await loadAllDeals();
 
-      async function loadStats() {
-        const stats = await fetchAdminStats();
-        const grid = document.createElement('div');
-        grid.className = 'admin-stats';
-        const statItems = [
-          { value: stats.totalDeals, label: 'Total Deals', icon: '📦' },
-          { value: stats.totalUsers, label: 'Total Users', icon: '👥' },
-          { value: stats.totalSaves, label: 'Total Saves', icon: '❤️' },
-          { value: stats.pendingSubmissions, label: 'Pending Reviews', icon: '⏳' }
-        ];
-        statItems.forEach(s => {
-          const card = document.createElement('div');
-          card.className = 'admin-stat-card';
-          const num = document.createElement('div');
-          num.className = 'stat-number';
-          num.textContent = `${s.icon} ${s.value}`;
-          card.appendChild(num);
-          const label = document.createElement('div');
-          label.className = 'stat-label';
-          label.textContent = s.label;
-          card.appendChild(label);
-          grid.appendChild(card);
-        });
-        container.appendChild(grid);
-      }
-
-      async function loadPendingSubmissions() {
-        const section = document.createElement('div');
-        section.className = 'admin-section';
-        const h2 = document.createElement('h2');
-        h2.textContent = '📝 Pending Submissions';
-        section.appendChild(h2);
-
-        const submissions = await fetchPendingSubmissions();
-        if (submissions.length === 0) {
-          section.appendChild(renderEmptyState('✅', 'All caught up!', 'No pending submissions to review.'));
-          container.appendChild(section);
-          return;
+        async function loadStats() {
+          const stats = await fetchAdminStats();
+          const grid = document.createElement("div");
+          grid.className = "admin-stats";
+          const statItems = [
+            { value: stats.totalDeals, label: "Total Deals", icon: "📦" },
+            { value: stats.totalUsers, label: "Total Users", icon: "👥" },
+            { value: stats.totalSaves, label: "Total Saves", icon: "❤️" },
+            {
+              value: stats.pendingSubmissions,
+              label: "Pending Reviews",
+              icon: "⏳",
+            },
+          ];
+          statItems.forEach((s) => {
+            const card = document.createElement("div");
+            card.className = "admin-stat-card";
+            const num = document.createElement("div");
+            num.className = "stat-number";
+            num.textContent = `${s.icon} ${s.value}`;
+            card.appendChild(num);
+            const label = document.createElement("div");
+            label.className = "stat-label";
+            label.textContent = s.label;
+            card.appendChild(label);
+            grid.appendChild(card);
+          });
+          container.appendChild(grid);
         }
 
-        submissions.forEach(sub => {
-          const card = document.createElement('div');
-          card.style.cssText = 'padding:var(--space-lg);border:1px solid var(--border-light);border-radius:var(--radius-md);margin-bottom:var(--space-md);';
+        async function loadPendingSubmissions() {
+          const section = document.createElement("div");
+          section.className = "admin-section";
+          const h2 = document.createElement("h2");
+          h2.textContent = "📝 Pending Submissions";
+          section.appendChild(h2);
 
-          const top = document.createElement('div');
-          top.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--space-md);';
-
-          const info = document.createElement('div');
-          const titleEl = document.createElement('h3');
-          titleEl.style.fontSize = 'var(--fs-base)';
-          titleEl.textContent = sub.title;
-          info.appendChild(titleEl);
-
-          const meta = document.createElement('p');
-          meta.style.cssText = 'font-size:var(--fs-sm);color:var(--text-secondary);margin-top:var(--space-xs);';
-          const submitterName = sub.users?.full_name || sub.users?.email || 'Unknown';
-          meta.textContent = `${sub.brand_name || 'Unknown Brand'} • ${sub.category || 'other'} • by ${submitterName} • ${formatDate(sub.created_at)}`;
-          info.appendChild(meta);
-
-          if (sub.description) {
-            const desc = document.createElement('p');
-            desc.style.cssText = 'font-size:var(--fs-sm);color:var(--text-secondary);margin-top:var(--space-sm);';
-            desc.textContent = sub.description;
-            info.appendChild(desc);
+          const submissions = await fetchPendingSubmissions();
+          if (submissions.length === 0) {
+            section.appendChild(
+              renderEmptyState(
+                "✅",
+                "All caught up!",
+                "No pending submissions to review.",
+              ),
+            );
+            container.appendChild(section);
+            return;
           }
 
-          if (sub.deal_url) {
-            const url = document.createElement('a');
-            url.href = sub.deal_url;
-            url.target = '_blank';
-            url.className = 'btn btn-ghost btn-sm';
-            url.style.marginTop = 'var(--space-sm)';
-            url.textContent = '🔗 View URL';
-            info.appendChild(url);
-          }
+          submissions.forEach((sub) => {
+            const card = document.createElement("div");
+            card.style.cssText =
+              "padding:var(--space-lg);border:1px solid var(--border-light);border-radius:var(--radius-md);margin-bottom:var(--space-md);";
 
-          top.appendChild(info);
+            const top = document.createElement("div");
+            top.style.cssText =
+              "display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--space-md);";
 
-          const actions = document.createElement('div');
-          actions.className = 'admin-actions';
+            const info = document.createElement("div");
+            const titleEl = document.createElement("h3");
+            titleEl.style.fontSize = "var(--fs-base)";
+            titleEl.textContent = sub.title;
+            info.appendChild(titleEl);
 
-          const approveBtn = document.createElement('button');
-          approveBtn.className = 'btn btn-success btn-sm';
-          approveBtn.textContent = '✓ Approve';
-          approveBtn.addEventListener('click', async () => {
-            setButtonLoading(approveBtn, true);
-            const result = await approveDeal(sub);
-            if (result.success) {
-              showToast('Deal approved and published!', 'success');
-              card.remove();
-            } else {
-              showToast(result.error, 'error');
-              setButtonLoading(approveBtn, false);
+            const meta = document.createElement("p");
+            meta.style.cssText =
+              "font-size:var(--fs-sm);color:var(--text-secondary);margin-top:var(--space-xs);";
+            const submitterName =
+              sub.users?.full_name || sub.users?.email || "Unknown";
+            meta.textContent = `${sub.brand_name || "Unknown Brand"} • ${sub.category || "other"} • by ${submitterName} • ${formatDate(sub.created_at)}`;
+            info.appendChild(meta);
+
+            if (sub.description) {
+              const desc = document.createElement("p");
+              desc.style.cssText =
+                "font-size:var(--fs-sm);color:var(--text-secondary);margin-top:var(--space-sm);";
+              desc.textContent = sub.description;
+              info.appendChild(desc);
             }
-          });
-          actions.appendChild(approveBtn);
 
-          const rejectBtn = document.createElement('button');
-          rejectBtn.className = 'btn btn-danger btn-sm';
-          rejectBtn.textContent = '✕ Reject';
-          rejectBtn.addEventListener('click', async () => {
-            const reason = prompt('Rejection reason (optional):');
-            setButtonLoading(rejectBtn, true);
-            const result = await rejectDeal(sub.id, reason || '');
-            if (result.success) {
-              showToast('Submission rejected', 'info');
-              card.remove();
-            } else {
-              showToast(result.error, 'error');
-              setButtonLoading(rejectBtn, false);
+            if (sub.deal_url) {
+              const url = document.createElement("a");
+              url.href = sub.deal_url;
+              url.target = "_blank";
+              url.className = "btn btn-ghost btn-sm";
+              url.style.marginTop = "var(--space-sm)";
+              url.textContent = "🔗 View URL";
+              info.appendChild(url);
             }
+
+            top.appendChild(info);
+
+            const actions = document.createElement("div");
+            actions.className = "admin-actions";
+
+            const approveBtn = document.createElement("button");
+            approveBtn.className = "btn btn-success btn-sm";
+            approveBtn.textContent = "✓ Approve";
+            approveBtn.addEventListener("click", async () => {
+              setButtonLoading(approveBtn, true);
+              const result = await approveDeal(sub);
+              if (result.success) {
+                showToast("Deal approved and published!", "success");
+                card.remove();
+              } else {
+                showToast(result.error, "error");
+                setButtonLoading(approveBtn, false);
+              }
+            });
+            actions.appendChild(approveBtn);
+
+            const rejectBtn = document.createElement("button");
+            rejectBtn.className = "btn btn-danger btn-sm";
+            rejectBtn.textContent = "✕ Reject";
+            rejectBtn.addEventListener("click", async () => {
+              const reason = prompt("Rejection reason (optional):");
+              setButtonLoading(rejectBtn, true);
+              const result = await rejectDeal(sub.id, reason || "");
+              if (result.success) {
+                showToast("Submission rejected", "info");
+                card.remove();
+              } else {
+                showToast(result.error, "error");
+                setButtonLoading(rejectBtn, false);
+              }
+            });
+            actions.appendChild(rejectBtn);
+
+            top.appendChild(actions);
+            card.appendChild(top);
+            section.appendChild(card);
           });
-          actions.appendChild(rejectBtn);
 
-          top.appendChild(actions);
-          card.appendChild(top);
-          section.appendChild(card);
-        });
-
-        container.appendChild(section);
-      }
-
-      async function loadAllDeals() {
-        const section = document.createElement('div');
-        section.className = 'admin-section';
-        const h2 = document.createElement('h2');
-        h2.textContent = '📦 All Deals';
-        section.appendChild(h2);
-
-        const deals = await fetchAllDealsAdmin();
-        if (deals.length === 0) {
-          section.appendChild(renderEmptyState('📦', 'No deals yet', 'Deals will appear here once added.'));
           container.appendChild(section);
-          return;
         }
 
-        const tableWrap = document.createElement('div');
-        tableWrap.style.overflowX = 'auto';
+        async function loadAllDeals() {
+          const section = document.createElement("div");
+          section.className = "admin-section";
+          const h2 = document.createElement("h2");
+          h2.textContent = "📦 All Deals";
+          section.appendChild(h2);
 
-        const table = document.createElement('table');
-        table.className = 'admin-table';
-        table.innerHTML = `
+          const deals = await fetchAllDealsAdmin();
+          if (deals.length === 0) {
+            section.appendChild(
+              renderEmptyState(
+                "📦",
+                "No deals yet",
+                "Deals will appear here once added.",
+              ),
+            );
+            container.appendChild(section);
+            return;
+          }
+
+          const tableWrap = document.createElement("div");
+          tableWrap.style.overflowX = "auto";
+
+          const table = document.createElement("table");
+          table.className = "admin-table";
+          table.innerHTML = `
           <thead><tr>
             <th>Title</th>
             <th>Brand</th>
@@ -205,67 +228,74 @@
           </tr></thead>
           <tbody id="admin-deals-tbody"></tbody>
         `;
-        tableWrap.appendChild(table);
-        section.appendChild(tableWrap);
-        container.appendChild(section);
+          tableWrap.appendChild(table);
+          section.appendChild(tableWrap);
+          container.appendChild(section);
 
-        const tbody = document.getElementById('admin-deals-tbody');
-        deals.forEach(deal => {
-          const tr = document.createElement('tr');
+          const tbody = document.getElementById("admin-deals-tbody");
+          deals.forEach((deal) => {
+            const tr = document.createElement("tr");
 
-          const tdTitle = document.createElement('td');
-          tdTitle.textContent = deal.title;
-          tdTitle.style.maxWidth = '200px';
-          tdTitle.style.overflow = 'hidden';
-          tdTitle.style.textOverflow = 'ellipsis';
-          tdTitle.style.whiteSpace = 'nowrap';
-          tr.appendChild(tdTitle);
+            const tdTitle = document.createElement("td");
+            tdTitle.textContent = deal.title;
+            tdTitle.style.maxWidth = "200px";
+            tdTitle.style.overflow = "hidden";
+            tdTitle.style.textOverflow = "ellipsis";
+            tdTitle.style.whiteSpace = "nowrap";
+            tr.appendChild(tdTitle);
 
-          const tdBrand = document.createElement('td');
-          tdBrand.textContent = deal.brand_name;
-          tr.appendChild(tdBrand);
+            const tdBrand = document.createElement("td");
+            tdBrand.textContent = deal.brand_name;
+            tr.appendChild(tdBrand);
 
-          const tdCat = document.createElement('td');
-          tdCat.textContent = deal.category;
-          tr.appendChild(tdCat);
+            const tdCat = document.createElement("td");
+            tdCat.textContent = deal.category;
+            tr.appendChild(tdCat);
 
-          const tdViews = document.createElement('td');
-          tdViews.textContent = deal.views_count || 0;
-          tr.appendChild(tdViews);
+            const tdViews = document.createElement("td");
+            tdViews.textContent = deal.views_count || 0;
+            tr.appendChild(tdViews);
 
-          const tdSaves = document.createElement('td');
-          tdSaves.textContent = deal.saves_count || 0;
-          tr.appendChild(tdSaves);
+            const tdSaves = document.createElement("td");
+            tdSaves.textContent = deal.saves_count || 0;
+            tr.appendChild(tdSaves);
 
-          // Toggle switches
-          ['is_active', 'is_featured', 'is_verified'].forEach(field => {
-            const td = document.createElement('td');
-            const toggle = document.createElement('label');
-            toggle.className = 'toggle';
-            const input = document.createElement('input');
-            input.type = 'checkbox';
-            input.checked = deal[field];
-            input.addEventListener('change', async () => {
-              const result = await toggleDealStatus(deal.id, field, input.checked);
-              if (result.success) {
-                showToast(`Deal ${field.replace('is_', '')} updated`, 'success');
-              } else {
-                input.checked = !input.checked;
-                showToast('Failed to update', 'error');
-              }
+            // Toggle switches
+            ["is_active", "is_featured", "is_verified"].forEach((field) => {
+              const td = document.createElement("td");
+              const toggle = document.createElement("label");
+              toggle.className = "toggle";
+              const input = document.createElement("input");
+              input.type = "checkbox";
+              input.checked = deal[field];
+              input.addEventListener("change", async () => {
+                const result = await toggleDealStatus(
+                  deal.id,
+                  field,
+                  input.checked,
+                );
+                if (result.success) {
+                  showToast(
+                    `Deal ${field.replace("is_", "")} updated`,
+                    "success",
+                  );
+                } else {
+                  input.checked = !input.checked;
+                  showToast("Failed to update", "error");
+                }
+              });
+              toggle.appendChild(input);
+              const slider = document.createElement("span");
+              slider.className = "toggle-slider";
+              toggle.appendChild(slider);
+              td.appendChild(toggle);
+              tr.appendChild(td);
             });
-            toggle.appendChild(input);
-            const slider = document.createElement('span');
-            slider.className = 'toggle-slider';
-            toggle.appendChild(slider);
-            td.appendChild(toggle);
-            tr.appendChild(td);
-          });
 
-          tbody.appendChild(tr);
-        });
-      }
-    })();
-  </script>
-</body>
+            tbody.appendChild(tr);
+          });
+        }
+      })();
+    </script>
+  </body>
 </html>
