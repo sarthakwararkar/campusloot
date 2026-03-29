@@ -108,71 +108,7 @@
     </style>
   </head>
   <body class="bg-surface text-on-surface">
-    <!-- TopNavBar -->
-    <nav
-      class="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none"
-    >
-      <div
-        class="flex justify-between items-center max-w-7xl mx-auto px-6 h-20"
-      >
-        <div class="flex items-center gap-8">
-          <span
-            class="text-2xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent font-['Plus_Jakarta_Sans'] tracking-tight"
-            style=""
-            >Campus Loot</span
-          >
-          <div class="hidden md:flex gap-8">
-            <a
-              class="text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition-colors font-['Plus_Jakarta_Sans'] font-bold tracking-tight transition-all"
-              href="deals.html"
-              style=""
-              >Explore</a
-            >
-            <a
-              class="text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition-colors font-['Plus_Jakarta_Sans'] font-bold tracking-tight"
-              href="#"
-              style=""
-              >Categories</a
-            >
-            <a
-              class="text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition-colors font-['Plus_Jakarta_Sans'] font-bold tracking-tight"
-              href="#"
-              style=""
-              >Trending</a
-            >
-            <a
-              class="text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition-colors font-['Plus_Jakarta_Sans'] font-bold tracking-tight"
-              href="submit.html"
-              style=""
-              >Submit</a
-            >
-          </div>
-        </div>
-        <div class="flex items-center gap-4">
-          <div class="relative hidden lg:block">
-            <span
-              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant"
-              style=""
-              >search</span
-            >
-            <input
-              id="nav-search-input"
-              class="bg-surface-container-highest border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary-container w-64"
-              placeholder="Search brands..."
-              type="text"
-            />
-          </div>
-          <button
-            id="nav-login-btn"
-            onclick="window.location.href = 'login.html'"
-            class="px-6 py-2.5 bg-gradient-to-r from-primary to-secondary text-white rounded-full font-semibold hover:opacity-90 active:scale-95 duration-200 shadow-sm"
-            style=""
-          >
-            Login
-          </button>
-        </div>
-      </div>
-    </nav>
+    <header id="site-header"></header>
     <main class="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row gap-12">
       <!-- Persistent Glassmorphic Filter Sidebar -->
       <aside class="w-full md:w-64 flex-shrink-0">
@@ -388,140 +324,7 @@
         </div>
       </section>
     </main>
-    <!-- Footer -->
-    <footer
-      class="w-full border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 mt-24"
-    >
-      <div
-        class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 py-12"
-      >
-        <div class="space-y-6">
-          <span
-            class="text-xl font-black text-slate-900 dark:text-slate-100 font-headline"
-            style=""
-            >Campus Loot</span
-          >
-          <p class="text-sm text-slate-500 font-body leading-relaxed" style="">
-            India's most exclusive curator of student experiences and premium
-            memberships. Empowering the next generation.
-          </p>
-          <div class="flex gap-4">
-            <div
-              class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
-            >
-              <span class="material-symbols-outlined" style="">public</span>
-            </div>
-            <div
-              class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
-            >
-              <span class="material-symbols-outlined" style=""
-                >alternate_email</span
-              >
-            </div>
-          </div>
-        </div>
-        <div>
-          <h4 class="font-headline font-bold text-on-surface mb-6" style="">
-            Quick Links
-          </h4>
-          <ul class="space-y-4">
-            <li class="" style="">
-              <a
-                class="text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors text-sm underline decoration-indigo-500/30 underline-offset-4"
-                href="#"
-                style=""
-                >Privacy Policy</a
-              >
-            </li>
-            <li class="" style="">
-              <a
-                class="text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors text-sm underline decoration-indigo-500/30 underline-offset-4"
-                href="#"
-                style=""
-                >Terms of Service</a
-              >
-            </li>
-            <li class="" style="">
-              <a
-                class="text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors text-sm underline decoration-indigo-500/30 underline-offset-4"
-                href="#"
-                style=""
-                >Partner with Us</a
-              >
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-headline font-bold text-on-surface mb-6" style="">
-            Community
-          </h4>
-          <ul class="space-y-4">
-            <li class="" style="">
-              <a
-                class="text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors text-sm underline decoration-indigo-500/30 underline-offset-4"
-                href="#"
-                style=""
-                >Careers</a
-              >
-            </li>
-            <li class="" style="">
-              <a
-                class="text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors text-sm underline decoration-indigo-500/30 underline-offset-4"
-                href="#"
-                style=""
-                >Contact</a
-              >
-            </li>
-            <li class="" style="">
-              <a
-                class="text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors text-sm underline decoration-indigo-500/30 underline-offset-4"
-                href="#"
-                style=""
-                >Help Center</a
-              >
-            </li>
-          </ul>
-        </div>
-        <div
-          class="bg-surface-container-low p-6 rounded-2xl border border-white/40"
-        >
-          <h4 class="font-headline font-bold text-on-surface mb-2" style="">
-            Join the Club
-          </h4>
-          <p class="text-xs text-slate-500 mb-4" style="">
-            Get first access to drops and exclusive brand partners.
-          </p>
-          <div class="flex flex-col gap-2">
-            <input
-              class="bg-white border-none rounded-xl text-xs p-3 focus:ring-1 focus:ring-primary"
-              placeholder="student@edu.in"
-              type="email"
-            />
-            <button
-              class="w-full py-3 bg-primary text-white rounded-xl text-xs font-bold hover:bg-primary-dim transition-colors"
-              style=""
-            >
-              Subscribe
-            </button>
-          </div>
-        </div>
-      </div>
-      <div
-        class="max-w-7xl mx-auto px-6 py-8 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4"
-      >
-        <p class="text-sm text-slate-500 font-['Inter']" style="">
-          © 2024 Campus Loot. Student Deals Platform.
-        </p>
-        <div class="flex gap-6">
-          <span class="text-xs font-bold text-indigo-600" style=""
-            >MADE IN INDIA</span
-          >
-          <span class="text-xs font-bold text-slate-400" style=""
-            >STATUS: ALL SYSTEMS GO</span
-          >
-        </div>
-      </div>
-    </footer>
+    <footer id="site-footer"></footer>
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="js/supabase.js"></script>
     <script src="js/utils.js"></script>
@@ -529,70 +332,156 @@
     <script src="js/components.js"></script>
     <script src="js/deals.js"></script>
     <script>
-      (async function initDealsPage() {
-        // Nav login logic
-        const user = await getCurrentUser();
-        const loginBtn = document.getElementById("nav-login-btn");
-        if (user && loginBtn) {
-          loginBtn.textContent = "Dashboard";
-          loginBtn.onclick = () => (window.location.href = "profile.html");
-        }
+      (async function initTrendingPage() {
+        // Initialize header/footer
+        renderHeader('trending');
+        renderFooter();
 
         const grid = document.getElementById("deals-grid");
         const loader = document.getElementById("deals-loader");
+        const countEl = document.getElementById("deals-count");
+        const loadMoreBtn = document.querySelector('button.px-12.py-5'); // "Load More Deals"
+        const paginationContainer = document.querySelector('.flex.items-center.gap-4');
         const navSearch = document.getElementById("nav-search-input");
 
-        if (navSearch) {
-          navSearch.addEventListener("keypress", (e) => {
-            if (e.key === "Enter" && navSearch.value.trim()) {
-              window.location.href = `deals.html?search=${encodeURIComponent(navSearch.value.trim())}`;
-            }
-          });
-        }
+        let currentPage = 1;
+        let currentCategory = 'all';
+        let currentSort = 'most-saved'; // Trending = Most Saved
+        let currentSearch = '';
+        let totalDeals = 0;
+        let dealsLoadedCount = 0;
+        let user = await getCurrentUser();
+        let savedSet = new Set();
+        if (user) savedSet = await getSavedDealIds(user.id);
 
-        // Basic load function
-        async function loadDeals(filters = {}) {
-          grid.innerHTML = "";
+        async function loadDeals(page = 1, append = false) {
+          if (!append) {
+            grid.innerHTML = "";
+            dealsLoadedCount = 0;
+          }
           loader.classList.remove("hidden");
+          if (loadMoreBtn) loadMoreBtn.disabled = true;
 
-          const { deals } = await fetchDeals(filters);
+          const filters = {
+            category: currentCategory,
+            sort: currentSort,
+            search: currentSearch,
+            page: page
+          };
+
+          const { deals, total } = await fetchDeals(filters);
           loader.classList.add("hidden");
+          if (loadMoreBtn) loadMoreBtn.disabled = false;
 
           if (!deals) {
-            grid.innerHTML =
-              '<p class="text-error col-span-full text-center py-8">Failed to load deals.</p>';
+            if (!append) grid.innerHTML = '<p class="text-error col-span-full text-center py-8">Failed to load deals.</p>';
             return;
           }
 
-          const countEl = document.getElementById("deals-count");
-          if (countEl) countEl.textContent = `Showing ${deals.length} deals`;
+          totalDeals = total;
+          dealsLoadedCount += deals.length;
+          currentPage = page;
 
-          if (deals.length === 0) {
-            grid.innerHTML =
-              '<p class="col-span-full text-center py-8 text-on-surface-variant">No deals found matching your criteria.</p>';
+          if (countEl) countEl.textContent = `Showing ${dealsLoadedCount} of ${totalDeals} trending deals`;
+
+          if (deals.length === 0 && !append) {
+            grid.innerHTML = '<p class="col-span-full text-center py-8 text-on-surface-variant">No trending deals found matching your criteria.</p>';
           } else {
-            let savedSet = new Set();
-            if (user) {
-              savedSet = await getSavedDealIds(user.id);
-            }
             deals.forEach((deal) => {
               grid.appendChild(renderDealCard(deal, { savedDeals: savedSet }));
             });
           }
+
+          updatePagination();
+          updateLoadMoreVisibility();
         }
 
-        // Get URL parameters for filters
-        const urlParams = new URLSearchParams(window.location.search);
-        let currentSort = urlParams.get("sort") || "newest";
-        let currentCategory = urlParams.get("category") || "all";
-        let currentSearch = urlParams.get("search") || "";
+        function updatePagination() {
+          if (!paginationContainer) return;
+          paginationContainer.innerHTML = '';
+          const totalPages = Math.ceil(totalDeals / 12);
+          if (totalPages <= 1) return;
 
-        // Initial load
-        await loadDeals({
-          sort: "most-saved",
-          category: currentCategory,
-          search: currentSearch,
+          for (let i = 1; i <= Math.min(totalPages, 5); i++) {
+            const btn = document.createElement('button');
+            btn.className = `w-10 h-10 rounded-lg flex items-center justify-center font-bold transition-colors ${i === currentPage ? 'bg-primary text-white' : 'bg-white text-on-surface-variant hover:bg-surface-container'}`;
+            btn.textContent = i;
+            btn.onclick = () => {
+              window.scrollTo({ top: 300, behavior: 'smooth' });
+              loadDeals(i, false);
+            };
+            paginationContainer.appendChild(btn);
+          }
+           if (totalPages > 5) {
+             const dot = document.createElement('span');
+             dot.className = 'text-on-surface-variant';
+             dot.textContent = '...';
+             paginationContainer.appendChild(dot);
+             const lastBtn = document.createElement('button');
+             lastBtn.className = `w-10 h-10 rounded-lg flex items-center justify-center bg-white text-on-surface-variant hover:bg-surface-container font-bold transition-colors`;
+             lastBtn.textContent = totalPages;
+             lastBtn.onclick = () => loadDeals(totalPages, false);
+             paginationContainer.appendChild(lastBtn);
+          }
+        }
+
+        function updateLoadMoreVisibility() {
+          if (!loadMoreBtn) return;
+          if (dealsLoadedCount >= totalDeals) {
+            loadMoreBtn.classList.add('hidden');
+          } else {
+            loadMoreBtn.classList.remove('hidden');
+          }
+        }
+
+        if (loadMoreBtn) {
+          loadMoreBtn.onclick = () => loadDeals(currentPage + 1, true);
+        }
+
+        // Sidebar Category Filters
+        const categoryCheckboxes = document.querySelectorAll('aside input[type="checkbox"]');
+        categoryCheckboxes.forEach((cb, idx) => {
+          cb.onchange = () => {
+            const categories = ['Fashion & Lifestyle', 'Tech & Gadgets', 'Food & Dining', 'Travel & Stays'];
+            if (cb.checked) {
+              currentCategory = categories[idx] || 'all';
+              categoryCheckboxes.forEach(other => { if (other !== cb) other.checked = false; });
+            } else {
+              currentCategory = 'all';
+            }
+            loadDeals(1, false);
+          };
         });
+
+        // Brand Search In Sidebar
+        const brandInput = document.querySelector('aside input[placeholder="e.g. Nike, Apple..."]');
+        if (brandInput) {
+           brandInput.oninput = debounce(() => {
+             currentSearch = brandInput.value.trim();
+             loadDeals(1, false);
+           }, 500);
+        }
+
+        function debounce(func, timeout = 300) {
+          let timer;
+          return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => { func.apply(this, args); }, timeout);
+          };
+        }
+
+        // Initial Load
+        loadDeals(1, false);
+
+        // Header Search
+        if (navSearch) {
+          navSearch.onkeypress = (e) => {
+            if (e.key === 'Enter') {
+              currentSearch = navSearch.value.trim();
+              loadDeals(1, false);
+            }
+          };
+        }
       })();
     </script>
   </body>

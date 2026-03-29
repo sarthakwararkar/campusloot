@@ -110,57 +110,7 @@
   </head>
   <body class="bg-surface font-body text-on-surface antialiased">
     <!-- Top Navigation Bar -->
-    <nav
-      class="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl no-border shadow-sm shadow-indigo-500/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none h-20"
-    >
-      <div
-        class="flex justify-between items-center max-w-7xl mx-auto px-6 h-full"
-      >
-        <div class="flex items-center gap-8">
-          <span
-            class="text-2xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent font-['Plus_Jakarta_Sans'] tracking-tight"
-            style=""
-            >Campus Loot<br
-          /></span>
-          <div class="hidden md:flex gap-6 items-center">
-            <a
-              class="text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition-colors font-['Plus_Jakarta_Sans'] font-bold tracking-tight transition-all"
-              href="deals.html"
-              style=""
-              >Explore</a
-            >
-            <a
-              class="text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition-colors font-['Plus_Jakarta_Sans'] font-bold tracking-tight transition-all"
-              href="categories.html"
-              style=""
-              >Categories</a
-            >
-            <a
-              class="text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition-colors font-['Plus_Jakarta_Sans'] font-bold tracking-tight transition-all"
-              href="trending.html"
-              style=""
-              >Trending</a
-            >
-            <a
-              class="text-slate-600 dark:text-slate-400 hover:text-indigo-500 transition-colors font-['Plus_Jakarta_Sans'] font-bold tracking-tight transition-all"
-              href="submit.html"
-              style=""
-              >Submit</a
-            >
-          </div>
-        </div>
-        <div class="flex items-center gap-4">
-          <button
-            id="nav-login-btn"
-            onclick="window.location.href = 'login.html'"
-            class="px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-on-primary font-semibold transition-all hover:scale-95 active:scale-90 duration-200"
-            style=""
-          >
-            Login
-          </button>
-        </div>
-      </div>
-    </nav>
+    <header id="site-header"></header>
     <main>
       <!-- Hero Section -->
       <section class="relative pt-20 pb-32 overflow-hidden">
@@ -499,10 +449,7 @@
         ></div>
       </section>
     </main>
-    <!-- Footer -->
-    <footer
-      class="w-full border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 py-12"
-    >
+    <footer id="site-footer"></footer>
       <div
         class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12"
       >
@@ -667,37 +614,42 @@
         >
       </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="js/supabase.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/components.js"></script>
     <script src="js/deals.js"></script>
     <script>
-      (async function initHome() {
-        // Nav login
-        const user = await getCurrentUser();
-        const loginBtn = document.getElementById("nav-login-btn");
-        if (user && loginBtn) {
-          loginBtn.textContent = "Dashboard";
-          loginBtn.onclick = () => (window.location.href = "profile.html");
+      (async function initHomePage() {
+        // Initialize header/footer
+        renderHeader('home');
+        renderFooter();
+
+        // Local search logic
+        const homeSearch = document.getElementById("home-search-input");
+        const homeSearchBtn = document.getElementById("home-search-btn");
+
+        if (homeSearch && homeSearchBtn) {
+          homeSearchBtn.onclick = () => {
+            const val = homeSearch.value.trim();
+            if (val) window.location.href = `deals.html?search=${encodeURIComponent(val)}`;
+          };
+          homeSearch.onkeypress = (e) => {
+            if (e.key === "Enter" && homeSearch.value.trim()) {
+              window.location.href = `deals.html?search=${encodeURIComponent(homeSearch.value.trim())}`;
+            }
+          };
         }
 
-        // Search Handlers
-        const searchInput = document.getElementById("home-search-input");
-        const searchBtn = document.getElementById("home-search-btn");
-
-        const doSearch = () => {
-          if (searchInput && searchInput.value.trim()) {
-            window.location.href = `deals.html?search=${encodeURIComponent(searchInput.value.trim())}`;
-          }
-        };
-
-        if (searchBtn) searchBtn.addEventListener("click", doSearch);
-        if (searchInput) {
-          searchInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") doSearch();
-          });
+        // Global search (from header component)
+        const navSearch = document.getElementById("nav-search-input");
+        if (navSearch) {
+          navSearch.onkeypress = (e) => {
+            if (e.key === "Enter" && navSearch.value.trim()) {
+              window.location.href = `deals.html?search=${encodeURIComponent(navSearch.value.trim())}`;
+            }
+          };
         }
 
         // Load Featured Deals

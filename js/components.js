@@ -386,6 +386,8 @@ function renderHeader(activePage = '') {
       <nav class="nav-links" id="nav-links">
         <a href="index.html" class="${activePage === 'home' ? 'active' : ''}">Home</a>
         <a href="deals.html" class="${activePage === 'deals' ? 'active' : ''}">All Deals</a>
+        <a href="categories.html" class="${activePage === 'categories' ? 'active' : ''}">Categories</a>
+        <a href="trending.html" class="${activePage === 'trending' ? 'active' : ''}">Trending</a>
         <a href="submit.html" class="${activePage === 'submit' ? 'active' : ''}">Submit Deal</a>
       </nav>
       <div class="nav-auth" id="nav-auth"></div>
@@ -396,6 +398,8 @@ function renderHeader(activePage = '') {
     <div class="mobile-nav" id="mobile-nav">
       <a href="index.html">Home</a>
       <a href="deals.html">All Deals</a>
+      <a href="categories.html">Categories</a>
+      <a href="trending.html">Trending</a>
       <a href="submit.html">Submit a Deal</a>
       <div id="mobile-auth"></div>
     </div>

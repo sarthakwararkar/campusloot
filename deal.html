@@ -50,22 +50,7 @@
   </head>
   <body class="bg-surface text-on-surface">
     <!-- TopNavBar -->
-    <nav class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl shadow-sm h-20">
-      <div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-full">
-        <div class="flex items-center gap-8">
-          <span onclick="window.location.href='index.html'" class="text-2xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent font-headline tracking-tight cursor-pointer"><a href="index.html" class="hover:opacity-80 transition-opacity">Campus Loot</a></span>
-          <div class="hidden md:flex gap-8">
-            <a class="text-slate-600 hover:text-primary transition-colors font-headline font-bold" href="deals.html">Explore</a>
-            <a class="text-slate-600 hover:text-primary transition-colors font-headline font-bold" href="categories.html">Categories</a>
-            <a class="text-slate-600 hover:text-primary transition-colors font-headline font-bold" href="trending.html">Trending</a>
-            <a class="text-slate-600 hover:text-primary transition-colors font-headline font-bold" href="submit.html">Submit</a>
-          </div>
-        </div>
-        <div class="flex items-center gap-4">
-          <button id="nav-login-btn" onclick="window.location.href = 'login.html'" class="px-6 py-2.5 bg-gradient-to-r from-primary to-secondary text-white rounded-full font-semibold hover:opacity-90 active:scale-95 duration-200">Login</button>
-        </div>
-      </div>
-    </nav>
+    <header id="site-header"></header>
 
     <main class="max-w-7xl mx-auto px-6 py-12">
       <div id="deal-container" class="space-y-12">
@@ -131,12 +116,7 @@
       </div>
     </main>
 
-    <footer class="w-full border-t border-slate-100 bg-white py-12 mt-24">
-      <div class="max-w-7xl mx-auto px-6 text-center">
-        <span class="text-xl font-black text-slate-900 font-headline"><a href="index.html" class="hover:opacity-80 transition-opacity">Campus Loot</a></span>
-        <p class="text-sm text-slate-500 mt-4">© 2024 Campus Loot. Student Deals Platform.</p>
-      </div>
-    </footer>
+    <footer id="site-footer"></footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
@@ -146,6 +126,10 @@
     <script src="js/deals.js"></script>
     <script>
       (async function initDealPage() {
+        // Initialize header/footer
+        renderHeader('explore');
+        renderFooter();
+
         console.log("initDealPage: Starting initialization...", window.location.href);
 
         const user = await getCurrentUser();
