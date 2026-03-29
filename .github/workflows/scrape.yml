@@ -1,0 +1,27 @@
+name: Scrape Deals
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # runs every 6 hours, free on GitHub Actions
+  workflow_dispatch:           # allows manual trigger from GitHub Actions tab
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4 supabase
+
+      - name: Run scraper
+        run: python scripts/scraper.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}

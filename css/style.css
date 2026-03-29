@@ -1287,3 +1287,178 @@ select.form-input {
     font-size: 0.6rem;
   }
 }
+
+/* ============================================
+   Profile Page — Design System
+   ============================================ */
+.profile-hero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+  padding: var(--space-2xl);
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-premium);
+  margin-bottom: var(--space-xl);
+}
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: var(--radius-lg);
+  background: var(--gradient-primary);
+  color: var(--white);
+  font-size: var(--fs-3xl);
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 20px var(--primary-glow);
+}
+.profile-info { flex: 1; }
+.profile-name {
+  font-size: var(--fs-2xl);
+  font-weight: 900;
+  margin-bottom: var(--space-xs);
+}
+.profile-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-lg);
+}
+.profile-stats {
+  display: flex;
+  gap: var(--space-xl);
+}
+.profile-stat {
+  display: flex;
+  flex-direction: column;
+}
+.profile-stat-number {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  color: var(--primary);
+}
+.profile-stat-label {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+.profile-tabs {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+  border-bottom: var(--border-light);
+  padding-bottom: var(--space-sm);
+  overflow-x: auto;
+}
+.profile-tab {
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+.profile-tab:hover {
+  background: var(--gray-100);
+  color: var(--text-primary);
+}
+.profile-tab.active {
+  background: var(--black);
+  color: var(--white);
+}
+
+.profile-card {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-xl);
+}
+
+.profile-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.profile-table th {
+  text-align: left;
+  padding: var(--space-md);
+  color: var(--text-tertiary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--fs-xs);
+  border-bottom: var(--border-heavy);
+}
+.profile-table td {
+  padding: var(--space-md);
+  border-bottom: var(--border-light);
+  font-weight: 500;
+}
+.profile-table tr:hover {
+  background: var(--gray-100);
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: var(--space-lg);
+  flex: 1;
+}
+.form-label {
+  display: block;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-sm);
+}
+.form-input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  border: var(--border-light);
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: var(--fs-base);
+  transition: all var(--transition-fast);
+}
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+.form-error {
+  color: #EF4444;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+}
+
+@media (max-width: 768px) {
+  .profile-hero {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--space-xl);
+  }
+  .profile-stats {
+    justify-content: center;
+  }
+  .profile-tabs {
+    gap: var(--space-xs);
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -299,3 +299,48 @@ async function getUserSubmissions(userId) {
   }
   return data || [];
 }
+
+/**
+ * Fetch scraped deals awaiting review
+ * @returns {Promise<Array>}
+ */
+async function fetchScrapedPendingDeals() {
+  const { data, error } = await supabase
+    .from('deals')
+    .select('*')
+    .eq('source', 'scraped')
+    .eq('needs_review', true)
+    .eq('is_active', false)
+    .order('created_at', { ascending: false });
+  if (error) {
+    console.error('Error fetching scraped deals:', error);
+    return [];
+  }
+  return data || [];
+}
+
+/**
+ * Approve a scraped deal (makes it active and visible)
+ * @param {string} id - deal UUID
+ * @returns {Promise<{success: boolean, error: string|null}>}
+ */
+async function approveScrapedDeal(id) {
+  const { error } = await supabase
+    .from('deals')
+    .update({ is_active: true, is_verified: true, needs_review: false })
+    .eq('id', id);
+  return { success: !error, error: error?.message || null };
+}
+
+/**
+ * Skip a scraped deal (not useful, but don't delete it)
+ * @param {string} id - deal UUID
+ * @returns {Promise<{success: boolean, error: string|null}>}
+ */
+async function skipScrapedDeal(id) {
+  const { error } = await supabase
+    .from('deals')
+    .update({ needs_review: false })
+    .eq('id', id);
+  return { success: !error, error: error?.message || null };
+}

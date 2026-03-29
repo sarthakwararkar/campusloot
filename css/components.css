@@ -391,6 +391,24 @@
   color: var(--white);
   box-shadow: 3px 3px 0px var(--primary);
 }
+.badge-verified {
+  background: #ECFDF5;
+  color: #059669;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  display: inline-block;
+  border: 1px solid #A7F3D0;
+}
+.badge-scraped {
+  background: #EFF6FF;
+  color: #2563EB;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  border: 1px solid #BFDBFE;
+}
 
 /* ---- Toast ---- */
 .toast-container {

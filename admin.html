@@ -50,6 +50,8 @@
         await loadStats();
         // Pending Submissions
         await loadPendingSubmissions();
+        // Scraped Deals Review Queue
+        await loadScrapedDeals();
         // All Deals Management
         await loadAllDeals();
 
@@ -209,6 +211,99 @@
 
             top.appendChild(actions);
             card.appendChild(top);
+            section.appendChild(card);
+          });
+
+          container.appendChild(section);
+        }
+
+        async function loadScrapedDeals() {
+          const section = document.createElement("div");
+          section.className = "admin-section";
+          const h2 = document.createElement("h2");
+          h2.textContent = "🤖 Scraped Deals — Needs Review";
+          section.appendChild(h2);
+
+          const deals = await fetchScrapedPendingDeals();
+          if (deals.length === 0) {
+            section.appendChild(
+              renderEmptyState(
+                "🤖",
+                "No scraped deals to review",
+                "New deals from the scraper will appear here.",
+              ),
+            );
+            container.appendChild(section);
+            return;
+          }
+
+          deals.forEach((deal) => {
+            const card = document.createElement("div");
+            card.style.cssText =
+              "padding:var(--space-lg);border:1px solid var(--border-light);border-radius:var(--radius-md);margin-bottom:var(--space-md);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-md);";
+
+            const info = document.createElement("div");
+            info.style.flex = "1";
+            const titleEl = document.createElement("h3");
+            titleEl.style.fontSize = "var(--fs-base)";
+            titleEl.textContent = deal.title;
+            info.appendChild(titleEl);
+
+            const meta = document.createElement("p");
+            meta.style.cssText =
+              "font-size:var(--fs-sm);color:var(--text-secondary);margin-top:var(--space-xs);";
+            meta.textContent = `${deal.brand_name || "Unknown"} • ${deal.category || "other"}`;
+            info.appendChild(meta);
+
+            if (deal.source_url) {
+              const url = document.createElement("a");
+              url.href = deal.source_url;
+              url.target = "_blank";
+              url.rel = "noopener";
+              url.className = "btn btn-ghost btn-sm";
+              url.style.marginTop = "var(--space-sm)";
+              url.textContent = "🔗 Verify Source";
+              info.appendChild(url);
+            }
+
+            card.appendChild(info);
+
+            const actions = document.createElement("div");
+            actions.className = "admin-actions";
+
+            const approveBtn = document.createElement("button");
+            approveBtn.className = "btn btn-success btn-sm";
+            approveBtn.textContent = "✓ Approve";
+            approveBtn.addEventListener("click", async () => {
+              setButtonLoading(approveBtn, true);
+              const result = await approveScrapedDeal(deal.id);
+              if (result.success) {
+                showToast("Scraped deal approved!", "success");
+                card.remove();
+              } else {
+                showToast(result.error || "Failed", "error");
+                setButtonLoading(approveBtn, false);
+              }
+            });
+            actions.appendChild(approveBtn);
+
+            const skipBtn = document.createElement("button");
+            skipBtn.className = "btn btn-ghost btn-sm";
+            skipBtn.textContent = "✕ Skip";
+            skipBtn.addEventListener("click", async () => {
+              setButtonLoading(skipBtn, true);
+              const result = await skipScrapedDeal(deal.id);
+              if (result.success) {
+                showToast("Deal skipped", "info");
+                card.remove();
+              } else {
+                showToast(result.error || "Failed", "error");
+                setButtonLoading(skipBtn, false);
+              }
+            });
+            actions.appendChild(skipBtn);
+
+            card.appendChild(actions);
             section.appendChild(card);
           });
 

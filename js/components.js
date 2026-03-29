@@ -142,6 +142,18 @@ function renderDealCard(deal, options = {}) {
 
   card.appendChild(bodyDiv);
 
+  // Source badge for verified scraped deals
+  if (deal.source === 'scraped' && deal.is_verified) {
+    const badge = document.createElement('span');
+    badge.className = 'badge-verified';
+    badge.textContent = '✓ Verified';
+    badge.style.position = 'absolute';
+    badge.style.top = '12px';
+    badge.style.left = '12px';
+    badge.style.zIndex = '2';
+    card.appendChild(badge);
+  }
+
   const claimBtn = document.createElement('button');
   claimBtn.className = 'w-full py-4 bg-surface-container-low text-primary font-bold rounded-2xl group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2';
   claimBtn.innerHTML = `View Deal <span class="material-symbols-outlined text-lg">arrow_forward</span>`;
