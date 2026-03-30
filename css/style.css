@@ -17,18 +17,19 @@
   --gray-100: #F4F4F5;
   
   /* Vibrant Neon Accents */
-  --primary: #F43F5E;       /* Rose-500 */
-  --primary-hover: #E11D48;  /* Rose-600 */
-  --primary-glow: rgba(244, 63, 94, 0.4);
-  --accent: #8B5CF6;         /* Violet-500 */
-  --accent-glow: rgba(139, 92, 246, 0.35);
+  --primary: #4a40e0;       /* Indigo-600 */
+  --primary-hover: #3d30d4;  /* Indigo-700 */
+  --primary-glow: rgba(74, 64, 224, 0.4);
+  --accent: #00cffc;         /* Neon Blue */
+  --accent-glow: rgba(0, 207, 252, 0.35);
   --neon-teal: #2DD4BF;
   --neon-amber: #FBBF24;
+  --secondary: #702ae1;      /* Violet-600 */
   
   /* Gradients */
   --gradient-hero: linear-gradient(135deg, #09090B 0%, #1E1B4B 40%, #312E81 70%, #09090B 100%);
-  --gradient-primary: linear-gradient(135deg, #F43F5E, #8B5CF6);
-  --gradient-text: linear-gradient(90deg, #F43F5E, #8B5CF6, #2DD4BF);
+  --gradient-primary: linear-gradient(135deg, #4a40e0, #702ae1);
+  --gradient-text: linear-gradient(90deg, #4a40e0, #702ae1, #00cffc);
   --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
   --gradient-surface: linear-gradient(180deg, #FAFAFA 0%, #F0F0F5 100%);
   
@@ -56,10 +57,10 @@
   /* Shadows — Layered + Glow */
   --shadow-flat: 4px 4px 0px 0px var(--black);
   --shadow-premium: 0 4px 32px -8px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
-  --shadow-hover: 0 8px 40px -8px rgba(244,63,94,0.3), 0 4px 12px rgba(0,0,0,0.08);
-  --shadow-glow: 0 0 30px rgba(139, 92, 246, 0.15), 0 0 60px rgba(244, 63, 94, 0.08);
+  --shadow-hover: 0 8px 40px -8px rgba(74,64,224,0.3), 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-glow: 0 0 30px rgba(112, 42, 225, 0.15), 0 0 60px rgba(74, 64, 224, 0.08);
   --shadow-card: 0 2px 20px -4px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
-  --shadow-card-hover: 0 12px 40px -8px rgba(244,63,94,0.2), 0 0 0 1px rgba(244,63,94,0.15);
+  --shadow-card-hover: 0 12px 40px -8px rgba(74,64,224,0.2), 0 0 0 1px rgba(74,64,224,0.15);
 
   /* Typography */
   --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;

@@ -166,14 +166,14 @@ async function getUserCurrency() {
   if (cached) return cached;
 
   try {
-    // Using ipapi.co (free tier, no API key needed for basic usage)
     const res = await fetch('https://ipapi.co/json/');
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
     const currency = data.country_code === 'IN' ? 'INR' : 'USD';
     localStorage.setItem('cl_currency', currency);
     return currency;
   } catch (err) {
-    console.error('Currency detection failed, falling back to INR:', err);
+    // Silent fallback to INR for local/CORS issues to keep console clean
     return 'INR';
   }
 }

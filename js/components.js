@@ -515,42 +515,116 @@ function renderFooter() {
   const footer = document.getElementById('site-footer');
   if (!footer) return;
 
-  footer.className = 'footer';
+  footer.className = 'footer pt-32 pb-12 bg-surface text-on-surface';
   footer.innerHTML = `
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="logo">🎓 Campus<span>Loot</span></a>
-          <p>India's #1 student deals platform. Discover exclusive discounts, freebies, and offers curated just for college students.</p>
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div class="col-span-1 md:col-span-1">
+        <span class="text-xl font-black font-headline mb-4 block">🎓 Campus Loot</span>
+        <p class="text-sm text-on-surface-variant leading-relaxed mb-6">
+          India's premier destination for exclusive student perks. Elevate your university life with Student Deals Platform.
+        </p>
+        <div class="flex gap-4">
+          <span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">share</span>
+          <span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">mail</span>
         </div>
-        <div>
-          <h4>Quick Links</h4>
-          <div class="footer-links">
-            <a href="index.html">Home</a>
-            <a href="deals.html">All Deals</a>
-            <a href="submit.html">Submit a Deal</a>
-          </div>
-        </div>
-        <div>
-          <h4>Categories</h4>
-          <div class="footer-links">
-            <a href="deals.html?category=software">Software</a>
-            <a href="deals.html?category=courses">Courses</a>
-            <a href="deals.html?category=ott">OTT</a>
-            <a href="deals.html?category=food">Food</a>
-          </div>
-        </div>
-        <div>
-          <h4>Account</h4>
-          <div class="footer-links">
-            <a href="login.html">Login</a>
-            <a href="profile.html">Profile</a>
+      </div>
+      <div>
+        <h4 class="font-bold mb-6">Company</h4>
+        <ul class="space-y-4">
+          <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="#">Privacy Policy</a></li>
+          <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold mb-6">Partnerships</h4>
+        <ul class="space-y-4">
+          <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="#">Partner with Us</a></li>
+          <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="submit.html">Submit a Deal</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold mb-6">Get in Touch</h4>
+        <a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="#">Contact</a>
+        <div class="mt-8 p-4 bg-surface-container rounded-2xl">
+          <p class="text-xs font-bold text-on-surface-variant mb-2 uppercase">Newsletter</p>
+          <div class="flex gap-2">
+            <input class="w-full bg-surface-container-lowest border-none rounded-lg text-xs py-2 px-3 focus:ring-1 focus:ring-primary" placeholder="Email" type="email" />
+            <button class="bg-primary text-white p-2 rounded-lg flex items-center justify-center hover:bg-primary-hover transition-colors">
+              <span class="material-symbols-outlined text-sm">send</span>
+            </button>
           </div>
         </div>
       </div>
-      <div class="footer-bottom">
-        &copy; ${new Date().getFullYear()} CampusLoot. Made with 💜 for Indian students.
+    </div>
+    <div class="max-w-7xl mx-auto px-6 mt-12 pt-12 border-t border-surface-container flex flex-col md:flex-row justify-between items-center gap-4">
+      <span class="text-sm text-on-surface-variant">© ${new Date().getFullYear()} Campus Loot. Empowering the next generation.</span>
+      <div class="flex items-center gap-6">
+        <span class="text-xs text-on-surface-variant">Made with ❤️ for students</span>
+        <div class="flex gap-2">
+          <span class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold">IN</span>
+        </div>
       </div>
     </div>
   `;
+}
+/**
+ * Render a standardized pagination component
+ * @param {string} containerId - The ID of the container element
+ * @param {number} currentPage - Currently active page
+ * @param {number} totalItems - Total number of items
+ * @param {number} itemsPerPage - Items per page
+ * @param {function} onPageChange - Callback function when a page is clicked
+ */
+function renderPagination(containerId, currentPage, totalItems, itemsPerPage, onPageChange) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.innerHTML = '';
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  if (totalPages <= 1) return;
+
+  const paginationNav = document.createElement('div');
+  paginationNav.className = 'pagination-nav';
+
+  // Limit visible pages (e.g., 1, 2, 3... last)
+  const maxVisiblePages = 5;
+  let startPage = Math.max(1, currentPage - 2);
+  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+  
+  if (endPage - startPage < maxVisiblePages - 1) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    const btn = document.createElement('button');
+    btn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+    btn.textContent = i;
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onPageChange(i);
+    });
+    paginationNav.appendChild(btn);
+  }
+
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      const dots = document.createElement('span');
+      dots.className = 'pagination-dots';
+      dots.textContent = '...';
+      paginationNav.appendChild(dots);
+    }
+    
+    const lastBtn = document.createElement('button');
+    lastBtn.className = `pagination-btn ${totalPages === currentPage ? 'active' : ''}`;
+    lastBtn.textContent = totalPages;
+    lastBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onPageChange(totalPages);
+    });
+    paginationNav.appendChild(lastBtn);
+  }
+
+  container.appendChild(paginationNav);
 }
