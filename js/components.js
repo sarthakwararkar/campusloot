@@ -104,11 +104,15 @@ function renderDealCard(deal, options = {}) {
     card.appendChild(saveContainer);
   }
 
+  const hasBanner = !!deal.image_url;
   const imageDiv = document.createElement('div');
-  imageDiv.className = 'aspect-square rounded-2xl bg-surface-container-low mb-6 overflow-hidden flex items-center justify-center p-8 group-hover:scale-[1.02] transition-transform';
+  imageDiv.className = hasBanner 
+    ? 'aspect-[16/9] md:aspect-[4/3] rounded-2xl bg-surface-container-low mb-6 overflow-hidden flex items-center justify-center group-hover:scale-[1.02] transition-transform' 
+    : 'aspect-square rounded-2xl bg-surface-container-low mb-6 overflow-hidden flex items-center justify-center p-8 group-hover:scale-[1.02] transition-transform';
+  
   mountDealImage(imageDiv, deal, { 
       placeholderClass: 'text-6xl text-on-surface-variant font-black opacity-30 select-none',
-      imgClass: 'w-24 h-24 object-contain mix-blend-multiply'
+      imgClass: hasBanner ? 'w-full h-full object-cover' : 'w-24 h-24 object-contain mix-blend-multiply'
   });
   card.appendChild(imageDiv);
 

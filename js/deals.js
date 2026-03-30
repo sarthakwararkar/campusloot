@@ -205,7 +205,8 @@ async function submitDeal(formData) {
       description: sanitizeInput(formData.description, 1000),
       brand_name: sanitizeInput(formData.brand_name),
       deal_url: sanitizeInput(formData.deal_url, 2000),
-      category: formData.category
+      category: formData.category,
+      image_url: formData.image_url ? formData.image_url : null
     });
 
   if (error) {
@@ -343,4 +344,20 @@ async function skipScrapedDeal(id) {
     .update({ needs_review: false })
     .eq('id', id);
   return { success: !error, error: error?.message || null };
+}
+
+/**
+ * Update just the image URL of an existing deal (used for backfill)
+ * @param {string} id 
+ * @param {string} imageUrl 
+ * @returns {Promise<{success: boolean, error: string|null}>}
+ */
+async function updateDealImage(id, imageUrl) {
+  try {
+    const { error } = await supabase.from('deals').update({ image_url: imageUrl }).eq('id', id);
+    if (error) throw error;
+    return { success: true, error: null };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
 }

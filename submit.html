@@ -394,7 +394,9 @@
     <script src="js/auth.js"></script>
     <script src="js/deals.js"></script>
     <script src="js/components.js"></script>
-    <script>
+    <script type="module">
+      import { generateDealImage, base64ToBlob } from './js/gemini.js';
+      
       (async function initSubmitPage() {
         // Initialize header/footer
         renderHeader('submit');
@@ -431,31 +433,70 @@
           }
 
           const btn = document.getElementById("submit-btn");
-          const spinner = document.getElementById("submit-spinner");
           const originalHtml = btn.innerHTML;
 
           btn.innerHTML =
-            'Submitting... <span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">sync</span>';
+            'Generating image... <span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">auto_awesome</span>';
           btn.disabled = true;
 
-          const result = await submitDeal({
-            title,
-            brand_name: brand,
-            category,
-            description,
-            deal_url: url,
-          });
+          try {
+            // 1. Generate Image with Gemini
+            const base64Image = await generateDealImage(title, brand, category);
+            let uploadedImageUrl = null;
 
-          btn.innerHTML = originalHtml;
-          btn.disabled = false;
+            if (base64Image) {
+              btn.innerHTML =
+                'Uploading... <span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">cloud_upload</span>';
+              
+              const blob = base64ToBlob(base64Image);
+              const fileName = `${Date.now()}-${brand.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}.png`;
+              
+              // 2. Upload to Supabase Storage
+              const { data, error } = await supabase.storage
+                .from('deal-images')
+                .upload(fileName, blob, {
+                  cacheControl: '3600',
+                  upsert: false
+                });
+                
+              if (error) {
+                console.error("Storage upload error:", error);
+              } else {
+                // 3. Get Public URL
+                const { data: publicUrlData } = supabase.storage
+                  .from('deal-images')
+                  .getPublicUrl(fileName);
+                  
+                uploadedImageUrl = publicUrlData.publicUrl;
+              }
+            }
 
-          if (!result.success) {
-            alert(result.error || "Failed to submit deal. Please try again.");
-            return;
+            btn.innerHTML =
+              'Submitting... <span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">sync</span>';
+
+            // 4. Submit Deal
+            const result = await submitDeal({
+              title,
+              brand_name: brand,
+              category,
+              description,
+              deal_url: url,
+              image_url: uploadedImageUrl
+            });
+
+            if (!result.success) {
+              alert(result.error || "Failed to submit deal. Please try again.");
+            } else {
+              // Show success overlay
+              successOverlay.classList.remove("hidden");
+            }
+          } catch (err) {
+            console.error(err);
+            alert("An error occurred during submission.");
+          } finally {
+            btn.innerHTML = originalHtml;
+            btn.disabled = false;
           }
-
-          // Show success overlay
-          successOverlay.classList.remove("hidden");
         });
       })();
     </script>

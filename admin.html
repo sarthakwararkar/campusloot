@@ -37,7 +37,81 @@
     <script src="js/deals.js"></script>
     <script src="js/admin.js"></script>
     <script src="js/components.js"></script>
-    <script>
+    <script type="module">
+      import { generateDealImage, base64ToBlob } from './js/gemini.js';
+
+      window.backfillImages = async function() {
+        const btn = document.getElementById("backfill-images-btn");
+        if (btn.disabled) return;
+        
+        btn.disabled = true;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = 'Fetching deals... <span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">sync</span>';
+
+        try {
+          // Fetch deals missing image_url
+          const { data: deals, error } = await supabase
+            .from('deals')
+            .select('*')
+            .is('image_url', null)
+            .eq('is_active', true);
+
+          if (error) throw error;
+
+          if (!deals || deals.length === 0) {
+            alert('No active deals are missing images!');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            return;
+          }
+
+          const confirmGen = confirm(`Found ${deals.length} deals missing images. Process up to 5 deals now?`);
+          if (!confirmGen) {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            return;
+          }
+
+          // Process batch of 5
+          const batch = deals.slice(0, 5);
+          let successCount = 0;
+
+          for (let i = 0; i < batch.length; i++) {
+            const deal = batch[i];
+            btn.innerHTML = `Generating ${i+1}/${batch.length}... <span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">auto_awesome</span>`;
+            
+            const b64 = await generateDealImage(deal.title, deal.brand_name, deal.category);
+            if (b64) {
+              btn.innerHTML = `Uploading ${i+1}/${batch.length}... <span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">cloud_upload</span>`;
+              
+              const blob = base64ToBlob(b64);
+              const fileName = `${Date.now()}-${deal.brand_name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}.png`;
+              
+              const { error: uploadError } = await supabase.storage
+                .from('deal-images')
+                .upload(fileName, blob, { cacheControl: '3600', upsert: false });
+                
+              if (!uploadError) {
+                const { data: publicUrlData } = supabase.storage
+                  .from('deal-images')
+                  .getPublicUrl(fileName);
+                  
+                const { success } = await updateDealImage(deal.id, publicUrlData.publicUrl);
+                if (success) successCount++;
+              }
+            }
+          }
+          alert(`Successfully backfilled ${successCount} images. Refresh page to see changes. If more remain, click generate again.`);
+          
+        } catch (err) {
+          console.error(err);
+          alert('An error occurred during backfill.');
+        } finally {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
+      };
+
       (async function initAdminPage() {
         renderHeader("admin");
         renderFooter();
@@ -56,6 +130,24 @@
 
         // Stats
         await loadStats();
+
+        // Gemini Backfill Action
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "admin-section";
+        actionsDiv.style.marginTop = "var(--space-md)";
+        actionsDiv.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface-container-low); padding:var(--space-lg); border-radius:var(--radius-lg); flex-wrap:wrap; gap:var(--space-md);">
+            <div>
+              <h3 style="margin-bottom:var(--space-xs); font-size:var(--fs-lg);">🖼️ Gemini Image Backfill</h3>
+              <p style="color:var(--text-secondary); font-size:var(--fs-sm);">Generate premium banner images for active deals that are missing visuals.</p>
+            </div>
+            <button id="backfill-images-btn" class="btn btn-primary" onclick="window.backfillImages()">
+              Generate Missing Images
+            </button>
+          </div>
+        `;
+        container.appendChild(actionsDiv);
+
         // Pending Submissions
         await loadPendingSubmissions();
         // Scraped Deals Review Queue
