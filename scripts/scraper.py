@@ -47,14 +47,24 @@ def get_existing_deals() -> dict:
 def upsert_deal(deal: dict, existing: dict):
     """Insert deal if new, update existing if match found by URL or Title."""
     url = deal.get("source_url", "")
-    title = deal.get("title", "").lower().strip()
+    title = deal.get("title", "").strip()
+    title_lower = title.lower()
     
     # 1. Check if URL already exists
     deal_id = existing["urls"].get(url)
     
-    # 2. If not, check if Title already exists (important for manual deals with NULL urls)
+    # 2. If not, check if Title already exists (Fuzzy/Partial matching)
     if not deal_id:
-        deal_id = existing["titles"].get(title)
+        # Check for exact match first
+        deal_id = existing["titles"].get(title_lower)
+        
+        # If no exact match, check if any DB title is IN the scraped title (or vice versa)
+        if not deal_id:
+            for db_title_lower, db_id in existing["titles"].items():
+                if db_title_lower in title_lower or title_lower in db_title_lower:
+                    if len(db_title_lower) > 5: # Avoid matching very short titles like "Dell"
+                        deal_id = db_id
+                        break
 
     if deal_id:
         try:
@@ -66,7 +76,7 @@ def upsert_deal(deal: dict, existing: dict):
                 update_payload["source_url"] = url
             
             supabase.table("deals").update(update_payload).eq("id", deal_id).execute()
-            print(f"  [updated] {deal['title']}")
+            print(f"  [updated] {title}")
         except Exception as e:
             print(f"  Error updating {title}: {e}")
         return
@@ -79,9 +89,9 @@ def upsert_deal(deal: dict, existing: dict):
     
     try:
         supabase.table("deals").insert(deal).execute()
-        print(f"  [new] {deal['title']}")
+        print(f"  [new] {title}")
     except Exception as e:
-        print(f"  Error inserting {deal['title']}: {e}")
+        print(f"  Error inserting {title}: {e}")
 
 def scrape_studentbeans_india(existing: dict):
     """Scrape StudentBeans India deals listing."""
@@ -98,16 +108,22 @@ def scrape_studentbeans_india(existing: dict):
         soup = BeautifulSoup(resp.text, "html.parser")
         
         # Broad selectors to handle layout changes
-        cards = soup.select("a[data-testid='offer-card']") or soup.select(".offer-card, [class*='OfferCard']")
+        cards = (
+            soup.select("a[data-testid='offer-card']") or 
+            soup.select(".offer-card, [class*='OfferCard']") or
+            soup.select("a[href*='/student-discount/']") # Broadest fallback
+        )
             
         print(f"  Found {len(cards)} items")
         
-        for card in cards[:20]:
+        for card in cards[:25]:
             title_el = card.select_one("[data-testid='offer-title']") or card.select_one("h3, .title, [class*='Title']")
             brand_el = card.select_one("[data-testid='brand-name']") or card.select_one(".brand, [class*='Brand']")
             discount_el = card.select_one("[data-testid='discount-text']") or card.select_one(".discount, [class*='Discount']")
             
             href = card.get("href", "")
+            if not href: continue
+            
             if not href.startswith("http"):
                 link = "https://www.studentbeans.com" + href
             else:
@@ -128,7 +144,7 @@ def scrape_studentbeans_india(existing: dict):
         print(f"  StudentBeans error: {e}")
 
 def scrape_static_deals(existing: dict):
-    """Handles well-known evergreen student deals."""
+    """Handles well-known evergreen student deals - updated to match existing DB names."""
     static_deals = [
         {
             "title": "GitHub Student Developer Pack",
@@ -140,7 +156,7 @@ def scrape_static_deals(existing: dict):
             "is_verified": True,
         },
         {
-            "title": "Spotify Premium Student — ₹59/month",
+            "title": "Spotify Premium Student",
             "brand_name": "Spotify",
             "description": "Get Spotify Premium at half price with valid student email. Includes ad-free music.",
             "category": "ott",
@@ -149,7 +165,7 @@ def scrape_static_deals(existing: dict):
             "is_verified": True,
         },
         {
-            "title": "Notion Personal Pro — Free for Students",
+            "title": "Notion Personal Pro",
             "brand_name": "Notion",
             "description": "Full Notion Personal Pro plan free with .edu or verified student email.",
             "category": "software",
@@ -158,7 +174,7 @@ def scrape_static_deals(existing: dict):
             "is_verified": True,
         },
         {
-            "title": "Apple Education Store Discounts",
+            "title": "Apple Education Store: Save on MacBook & iPad",
             "brand_name": "Apple",
             "description": "Save on MacBook, iPad, and Pro Apps with Apple's official India Education Store.",
             "category": "other",
@@ -167,7 +183,7 @@ def scrape_static_deals(existing: dict):
             "is_verified": True,
         },
         {
-            "title": "Amazon Prime Student — 50% Off",
+            "title": "Amazon Prime Student India: 50% Cashback",
             "brand_name": "Amazon",
             "description": "Youth Offer: 50% cashback on Prime membership setup for 18-24 year olds.",
             "category": "other",
@@ -176,7 +192,7 @@ def scrape_static_deals(existing: dict):
             "is_verified": True,
         },
         {
-            "title": "Canva Pro — Free for Education",
+            "title": "Canva Pro for Education",
             "brand_name": "Canva",
             "description": "Premium design tools free for students and teachers at verified institutions.",
             "category": "software",
