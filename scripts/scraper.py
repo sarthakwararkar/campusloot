@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """
-CampusLoot deal scraper.
-Targets: StudentBeans India, UNiDAYS India, Amazon Student India, GitHub Student Pack,
-Spotify Student India, Apple Education Store India.
-Run via GitHub Actions every 6 hours.
+CampusLoot deal scraper v1.1
+Targets: StudentBeans India, Amazon Student India, GitHub Student Pack, etc.
+Handles deduping by title and source_url.
 """
 
 import os
@@ -15,7 +14,6 @@ import time
 
 # Robust environment variable loading
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-# Use the correct key name — matching both .env and original scripts
 SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_SERVICE_KEY")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
@@ -31,41 +29,52 @@ except Exception as e:
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.5",
 }
 
-def get_existing_urls() -> set:
-    """Fetch all source_urls already in the DB to avoid duplicates."""
+def get_existing_deals() -> dict:
+    """Fetch all deals to avoid duplicates. Returns {source_url: id, title: id}."""
     try:
-        result = supabase.table("deals").select("source_url").execute()
-        return {row["source_url"] for row in result.data if row.get("source_url")}
+        # Fetching both title and source_url for smart matching
+        result = supabase.table("deals").select("id, title, source_url").execute()
+        
+        urls = {row["source_url"]: row["id"] for row in result.data if row.get("source_url")}
+        titles = {row["title"].lower().strip(): row["id"] for row in result.data if row.get("title")}
+        return {"urls": urls, "titles": titles}
     except Exception as e:
-        print(f"  Warning: Failed to fetch existing URLs: {e}")
-        return set()
+        print(f"  Warning: Failed to fetch existing deals: {e}")
+        return {"urls": {}, "titles": {}}
 
-def upsert_deal(deal: dict, existing_urls: set):
-    """Insert deal if new, update last_scraped_at if exists."""
+def upsert_deal(deal: dict, existing: dict):
+    """Insert deal if new, update existing if match found by URL or Title."""
     url = deal.get("source_url", "")
-    if not url:
-        return
+    title = deal.get("title", "").lower().strip()
+    
+    # 1. Check if URL already exists
+    deal_id = existing["urls"].get(url)
+    
+    # 2. If not, check if Title already exists (important for manual deals with NULL urls)
+    if not deal_id:
+        deal_id = existing["titles"].get(title)
 
-    if url in existing_urls:
+    if deal_id:
         try:
-            # Just update the last_scraped_at timestamp
-            supabase.table("deals").update(
-                {"last_scraped_at": datetime.now(timezone.utc).isoformat()}
-            ).eq("source_url", url).execute()
+            # Update existing deal (sync source_url if it was missing)
+            update_payload = {
+                "last_scraped_at": datetime.now(timezone.utc).isoformat(),
+            }
+            if not existing["urls"].get(url):
+                update_payload["source_url"] = url
+            
+            supabase.table("deals").update(update_payload).eq("id", deal_id).execute()
             print(f"  [updated] {deal['title']}")
         except Exception as e:
-            print(f"  Error updating {url}: {e}")
+            print(f"  Error updating {title}: {e}")
         return
 
-    # New deal — insert with needs_review=true
+    # 3. Truly new deal — insert
     deal["source"] = "scraped"
     deal["needs_review"] = True
-    deal["is_active"] = False
-    deal["is_featured"] = False
-    deal["is_verified"] = False
+    deal["is_active"] = False # Default to inactive for review
     deal["last_scraped_at"] = datetime.now(timezone.utc).isoformat()
     
     try:
@@ -74,27 +83,29 @@ def upsert_deal(deal: dict, existing_urls: set):
     except Exception as e:
         print(f"  Error inserting {deal['title']}: {e}")
 
-def scrape_studentbeans_india(existing_urls: set):
+def scrape_studentbeans_india(existing: dict):
     """Scrape StudentBeans India deals listing."""
     print("Scraping StudentBeans India...")
     try:
         url = "https://www.studentbeans.com/student-discount/in"
         resp = requests.get(url, headers=HEADERS, timeout=15)
-        resp.raise_for_status()
+        print(f"  Status code: {resp.status_code}")
+        
+        if resp.status_code != 200:
+            print(f"  Warning: StudentBeans returned status {resp.status_code}. Might be blocked.")
+            return
+
         soup = BeautifulSoup(resp.text, "html.parser")
         
-        # StudentBeans markers can change frequently. Adding a fallback check.
-        cards = soup.select("a[data-testid='offer-card']")
-        if not cards:
-            # Fallback to a broader selector if data-testid is missing
-            cards = soup.select(".offer-card, [class*='OfferCard']")
+        # Broad selectors to handle layout changes
+        cards = soup.select("a[data-testid='offer-card']") or soup.select(".offer-card, [class*='OfferCard']")
             
-        print(f"  Found {len(cards)} cards")
+        print(f"  Found {len(cards)} items")
         
         for card in cards[:20]:
-            title_el = card.select_one("[data-testid='offer-title']") or card.select_one("h3, .title")
-            brand_el = card.select_one("[data-testid='brand-name']") or card.select_one(".brand")
-            discount_el = card.select_one("[data-testid='discount-text']") or card.select_one(".discount")
+            title_el = card.select_one("[data-testid='offer-title']") or card.select_one("h3, .title, [class*='Title']")
+            brand_el = card.select_one("[data-testid='brand-name']") or card.select_one(".brand, [class*='Brand']")
+            discount_el = card.select_one("[data-testid='discount-text']") or card.select_one(".discount, [class*='Discount']")
             
             href = card.get("href", "")
             if not href.startswith("http"):
@@ -112,11 +123,11 @@ def scrape_studentbeans_india(existing_urls: set):
                 "category": "software",
                 "source_url": link,
                 "deal_url": link,
-            }, existing_urls)
+            }, existing)
     except Exception as e:
         print(f"  StudentBeans error: {e}")
 
-def scrape_static_deals(existing_urls: set):
+def scrape_static_deals(existing: dict):
     """Handles well-known evergreen student deals."""
     static_deals = [
         {
@@ -177,40 +188,17 @@ def scrape_static_deals(existing_urls: set):
     
     print("Checking static evergreen deals...")
     for deal in static_deals:
-        upsert_deal(deal, existing_urls)
-
-def mark_dead_deals():
-    """Check deals with source_url — if they 404, mark is_active=false."""
-    print("Checking for dead deals...")
-    try:
-        result = supabase.table("deals").select("id, source_url").eq("source", "scraped").eq("is_active", True).execute()
-        for deal in result.data:
-            url = deal.get("source_url")
-            if not url:
-                continue
-            try:
-                # Use a small timeout and allow redirects
-                resp = requests.head(url, headers=HEADERS, timeout=8, allow_redirects=True)
-                if resp.status_code == 404:
-                    supabase.table("deals").update({"is_active": False}).eq("id", deal["id"]).execute()
-                    print(f"  [dead] {url}")
-            except Exception:
-                pass  # Ignore network errors during dead check
-    except Exception as e:
-        print(f"  Error checking dead deals: {e}")
+        upsert_deal(deal, existing)
 
 if __name__ == "__main__":
     start_time = time.time()
     print(f"--- CampusLoot Scraper Started: {datetime.now(timezone.utc)} ---")
     
-    existing = get_existing_urls()
-    print(f"Found {len(existing)} existing source URLs in database\n")
+    existing = get_existing_deals()
+    print(f"Found {len(existing['urls'])} URLs and {len(existing['titles'])} Titles in database\n")
 
-    # Run each task independently
     scrape_static_deals(existing)
     scrape_studentbeans_india(existing)
-    
-    # mark_dead_deals() # Optional: Disable if taking too long in GH Actions
     
     duration = time.time() - start_time
     print(f"\n--- Scraper Finished in {duration:.2f} seconds ---")
