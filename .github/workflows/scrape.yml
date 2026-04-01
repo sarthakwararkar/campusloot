@@ -20,8 +20,20 @@ jobs:
       - name: Install dependencies
         run: pip install requests beautifulsoup4 supabase
 
-      - name: Run scraper
+      - name: Run Primary Scraper
         run: python scripts/scraper.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+      - name: Run Tier 1 Scrapers (GrabOn, DesiDime)
+        run: python scripts/scrape_tier1.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+      - name: Run Evergreen Scrapers (GitHub, Swiggy, etc.)
+        run: python scripts/scrape_evergreen.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
