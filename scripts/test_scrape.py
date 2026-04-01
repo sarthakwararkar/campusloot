@@ -7,33 +7,45 @@ HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
 }
 
-def dry_run_tier1():
-    print("--- Dry Run: GrabOn ---")
+def check_grabon():
+    print("--- Testing GrabOn ---")
+    url = "https://www.grabon.in/education-coupons/"
     try:
-        url = "https://www.grabon.in/education-coupons/"
         resp = requests.get(url, headers=HEADERS, timeout=15)
-        print(f"Status: {resp.status_code}, Length: {len(resp.text)}")
         soup = BeautifulSoup(resp.text, "html.parser")
-        cards = soup.select("div[data-type='cp']")
-        print(f"Found {len(cards)} GrabOn cards")
+        cards = soup.select('div[data-type="cp"]')
+        print(f"Success! Found {len(cards)} deals.")
         for card in cards[:3]:
             title = card.select_one("p.title")
-            print(f"  - {title.get_text(strip=True) if title else 'No Title'}")
+            print(f"  [Deal] {title.get_text(strip=True) if title else 'Unknown'}")
     except Exception as e:
-        print(f"GrabOn error: {e}")
+        print(f"Error: {e}")
 
-    print("\n--- Dry Run: CouponDunia ---")
+def check_desidime():
+    print("\n--- Testing DesiDime ---")
+    url = "https://www.desidime.com/groups/education"
     try:
-        url = "https://www.coupondunia.in/category/education-and-learning/education"
         resp = requests.get(url, headers=HEADERS, timeout=15)
         soup = BeautifulSoup(resp.text, "html.parser")
-        cards = soup.select(".offer-card-container")
-        print(f"Found {len(cards)} CouponDunia cards")
+        cards = soup.select("article")
+        print(f"Success! Found {len(cards)} deals.")
         for card in cards[:3]:
-            title = card.select_one("h3.offer-get-code-link")
-            print(f"  - {title.get_text(strip=True) if title else 'No Title'}")
+            title_tag = card.select_one('a[href^="/deals/"]')
+            print(f"  [Deal] {title_tag.get_text(strip=True) if title_tag else 'Unknown'}")
     except Exception as e:
-        print(f"CouponDunia error: {e}")
+        print(f"Error: {e}")
+
+def check_evergreen():
+    print("\n--- Testing Evergreen (Swiggy) ---")
+    url = "https://blog.swiggy.com/swiggy-catalyst/sign-up-for-the-swiggy-student-rewards-program-with-your-college-id-card-now/"
+    try:
+        resp = requests.get(url, headers=HEADERS, timeout=15)
+        soup = BeautifulSoup(resp.text, "html.parser")
+        print(f"Success! Reached Swiggy blog. Title: {soup.title.string.strip() if soup.title else 'No Title'}")
+    except Exception as e:
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
-    dry_run_tier1()
+    check_grabon()
+    check_desidime()
+    check_evergreen()
