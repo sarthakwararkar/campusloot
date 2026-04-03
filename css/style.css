@@ -7,67 +7,70 @@
 
 /* ---- CSS Variables (V5 FLASHY DESIGNER Theme) ---- */
 :root {
-  /* Core Palette — Deep Dark + Neon */
-  --black: #09090B;
-  --white: #FAFAFA;
-  --gray-900: #18181B;
-  --gray-800: #27272A;
-  --gray-700: #3F3F46;
-  --gray-200: #E4E4E7;
-  --gray-100: #F4F4F5;
+  /* Core Palette — Indigo / Slate / White */
+  --black: #0f172a;
+  /* slate-900 */
+  --white: #ffffff;
+  --gray-900: #0f172a;
+  --gray-800: #1e293b;
+  --gray-700: #334155;
+  --gray-200: #e2e8f0;
+  --gray-100: #f1f5f9;
 
-  /* Vibrant Neon Accents */
-  --primary: #4a40e0;
-  /* Indigo-600 */
-  --primary-hover: #3d30d4;
-  /* Indigo-700 */
-  --primary-glow: rgba(74, 64, 224, 0.4);
-  --accent: #00cffc;
-  /* Neon Blue */
-  --accent-glow: rgba(0, 207, 252, 0.35);
-  --neon-teal: #2DD4BF;
-  --neon-amber: #FBBF24;
-  --secondary: #702ae1;
-  /* Violet-600 */
+  /* Accent Colors */
+  --primary: #4f46e5;
+  /* indigo-600 */
+  --primary-hover: #4338ca;
+  /* indigo-700 */
+  --primary-glow: rgba(79, 70, 229, 0.15);
+  --accent: #4f46e5;
+  --accent-glow: rgba(79, 70, 229, 0.1);
+  --secondary: #64748b;
+  /* slate-500 */
 
-  /* Gradients */
-  --gradient-hero: linear-gradient(135deg, #09090B 0%, #1E1B4B 40%, #312E81 70%, #09090B 100%);
-  --gradient-primary: linear-gradient(135deg, #4a40e0, #702ae1);
-  --gradient-text: linear-gradient(90deg, #4a40e0, #702ae1, #00cffc);
-  --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-  --gradient-surface: linear-gradient(180deg, #FAFAFA 0%, #F0F0F5 100%);
+  /* Minimalist Gradients */
+  --gradient-hero: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  --gradient-primary: linear-gradient(135deg, #4f46e5, #4338ca);
+  --gradient-text: linear-gradient(90deg, #4f46e5, #4338ca);
+  --gradient-card: linear-gradient(145deg, #ffffff, #f8fafc);
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
 
   /* Backgrounds & Surfaces */
-  --bg: #F4F4F5;
-  --surface: var(--white);
-  --surface-dark: var(--black);
+  --bg: #f8fafc;
+  /* slate-50 */
+  --surface: #ffffff;
+  --surface-dark: #f1f5f9;
 
   /* Text */
-  --text-primary: #09090B;
-  --text-inverse: var(--white);
-  --text-secondary: #52525B;
-  --text-tertiary: #A1A1AA;
+  --text-primary: #0f172a;
+  /* slate-900 */
+  --text-inverse: #ffffff;
+  --text-secondary: #64748b;
+  /* slate-500 */
+  --text-tertiary: #94a3b8;
+  /* slate-400 */
 
-  /* Borders & Radii — Rounded for Modern Feel */
-  --border-heavy: 1.5px solid var(--black);
-  --border-light: 1px solid var(--gray-200);
-  --border-glow: 1px solid rgba(139, 92, 246, 0.3);
+  /* Borders & Radii — Clean Modern */
+  --border-heavy: 1px solid #cbd5e1;
+  --border-light: 1px solid #e2e8f0;
+  --border-glow: 1px solid rgba(79, 70, 229, 0.2);
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
   --radius-pill: 99px;
 
-  /* Shadows — Layered + Glow */
-  --shadow-flat: 4px 4px 0px 0px var(--black);
-  --shadow-premium: 0 4px 32px -8px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-hover: 0 8px 40px -8px rgba(74, 64, 224, 0.3), 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-glow: 0 0 30px rgba(112, 42, 225, 0.15), 0 0 60px rgba(74, 64, 224, 0.08);
-  --shadow-card: 0 2px 20px -4px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
-  --shadow-card-hover: 0 12px 40px -8px rgba(74, 64, 224, 0.2), 0 0 0 1px rgba(74, 64, 224, 0.15);
+  /* Minimal Shadows */
+  --shadow-flat: 0 1px 3px rgba(0, 0, 0, 0.05);
+  /* Soft flat shadow */
+  --shadow-premium: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+  --shadow-glow: 0 0 15px rgba(79, 70, 229, 0.1);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+  --shadow-card-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(79, 70, 229, 0.2);
 
   /* Typography */
-  --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --fs-xs: 0.75rem;
   --fs-sm: 0.875rem;
   --fs-base: 1rem;
@@ -88,8 +91,8 @@
   --space-3xl: 8rem;
 
   /* Transitions */
-  --transition-fast: 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  --transition-base: 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Layout */
   --header-height: 80px;

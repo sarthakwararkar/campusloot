@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  
+
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
@@ -111,14 +111,17 @@
   </style>
   <title>CampusLoot | Student Deals India</title>
 
-  <meta name="description" content="Exclusive CampusLoot | Student Deals India on CampusLoot. Find the best student discounts and deals in India." />
+  <meta name="description"
+    content="Exclusive CampusLoot | Student Deals India on CampusLoot. Find the best student discounts and deals in India." />
   <meta property="og:title" content="CampusLoot | Student Deals India" />
-  <meta property="og:description" content="Exclusive CampusLoot | Student Deals India on CampusLoot. Find the best student discounts and deals in India." />
+  <meta property="og:description"
+    content="Exclusive CampusLoot | Student Deals India on CampusLoot. Find the best student discounts and deals in India." />
   <meta property="og:image" content="/og-image.png" />
   <meta property="og:url" content="https://campusloot.com/index.html" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="CampusLoot | Student Deals India" />
-  <meta name="twitter:description" content="Exclusive CampusLoot | Student Deals India on CampusLoot. Find the best student discounts and deals in India." />
+  <meta name="twitter:description"
+    content="Exclusive CampusLoot | Student Deals India on CampusLoot. Find the best student discounts and deals in India." />
   <meta name="twitter:image" content="/og-image.png" />
   <link rel="icon" href="/favicon.ico" />
   <!-- Google Search Console: get token from search.google.com/search-console -->
@@ -133,210 +136,197 @@
   <header id="site-header"></header>
   <main>
     <!-- Hero Section -->
-    <section class="relative pt-20 pb-32 overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-tr from-primary/5 via-surface to-secondary/5 -z-10"></div>
-      <div
-        class="absolute top-0 right-0 w-[600px] h-[600px] bg-tertiary-fixed/10 blur-[120px] rounded-full -mr-48 -mt-48">
-      </div>
-      <div class="max-w-7xl mx-auto px-6 text-center">
-        <span
-          class="inline-block py-1 px-4 mb-6 rounded-full bg-primary-container/20 text-primary-dim text-sm font-bold tracking-wider uppercase">Exclusive
-          Membership</span>
-        <h1
-          class="text-6xl md:text-8xl font-headline font-extrabold tracking-tighter text-on-surface leading-[0.9] mb-8">
-          Exclusive Student <br />
-          <span class="text-primary">Deals in India</span>
-        </h1>
-        <p class="max-w-2xl mx-auto text-xl text-on-surface-variant leading-relaxed mb-12">
-          Access the most prestigious curated discounts from global brands,
-          exclusively for the next generation of Indian leaders.
-        </p>
-        <!-- Search Bar -->
-        <div class="max-w-2xl mx-auto relative group">
-          <div
-            class="absolute -inset-1 bg-gradient-to-r from-tertiary-container to-primary rounded-2xl blur opacity-20 group-focus-within:opacity-40 transition duration-1000">
-          </div>
-          <div
-            class="relative flex items-center bg-surface-container-lowest rounded-2xl shadow-xl shadow-primary/5 overflow-hidden">
-            <span class="material-symbols-outlined ml-6 text-on-surface-variant" data-icon="search">search</span>
-            <input id="home-search-input"
-              class="w-full py-6 px-4 bg-transparent border-none focus:ring-0 text-lg placeholder:text-on-surface-variant/50"
-              placeholder="Search brands, products, or categories..." type="text" />
-            <button id="home-search-btn"
-              class="mr-4 px-8 py-3 bg-inverse-surface text-surface rounded-xl font-bold hover:bg-primary transition-colors cursor-pointer z-10">
-              Find
+    <section class="max-w-7xl mx-auto px-6 pt-24 pb-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <div>
+          <span
+            class="inline-block px-3 py-1 mb-6 text-xs font-bold tracking-wider text-indigo-600 uppercase bg-indigo-50 rounded-full border border-indigo-100">
+            Exclusive Student Offers
+          </span>
+          <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6">
+            Exclusive Student<br>Deals in India
+          </h1>
+          <p class="text-lg text-slate-500 mb-10 max-w-lg">
+            A curated collection for the next generation of leaders. Access
+            bespoke offers on technology, lifestyle, and academic essentials
+            tailored for the modern scholar.
+          </p>
+          <div class="flex items-center gap-4">
+            <button
+              class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-sm hover:bg-indigo-700 transition-colors">
+              Start Exploring
+            </button>
+            <button
+              class="px-8 py-3 bg-white text-indigo-600 font-bold rounded-xl border border-indigo-100 shadow-sm hover:bg-indigo-50 transition-colors">
+              Partner Institutions
             </button>
           </div>
         </div>
-
-        <!-- Stats Bar (FIX 5) -->
-        <div class="stats-bar max-w-2xl mx-auto flex justify-center gap-12 mt-12 pb-8">
-          <div class="stat-item">
-            <div class="stat-number" id="stat-deals">0</div>
-            <div class="stat-label">Active Deals</div>
-          </div>
-          <div class="stat-item border-l border-slate-200/50 pl-12">
-            <div class="stat-number" id="stat-users">0</div>
-            <div class="stat-label">Happy Students</div>
-          </div>
-          <div class="stat-item border-l border-slate-200/50 pl-12">
-            <div class="stat-number" id="stat-savings">₹1M+</div>
-            <div class="stat-label">Total Savings</div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Trending Brands -->
-    <section class="py-12 bg-surface-container-low/50">
-      <div class="max-w-7xl mx-auto px-6">
-        <p class="text-center text-[10px] font-extrabold uppercase tracking-[0.4em] text-on-surface-variant/70 mb-8">
-          Trusted by Global Icons
-        </p>
-        <div class="brand-marquee">
-          <div class="brand-marquee-track">
-            <!-- Original Set -->
-            <img alt="Apple" onclick="window.location.href = 'deals.html?search=apple'" class="brand-logo-item"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgvs-IaSKiUNA3rCITl34PHUpGTMQLJXA_u4r-wj5IYGlcv7qHTDLzTB_738spv4JvlmCEH1q20DwaHj1UUYOgiv0BYbaidsDnl56MIPglzkiL8g1c7l0So4E7o5BjFeAnx5wZneHTRLhdVFh9s8qPzLBvtPUu2b2gRhvp3FioHNQJEoi1tC6-ikvozxireV37Y33fZUIT4lLqTpklGkCxHKX6T5dH4Y4gGReZJTx7zz730Dk2Vx-M2m7nJflArm15pb3g0Ejv0y2v" />
-            <img alt="Amazon" onclick="window.location.href = 'deals.html?search=amazon'" class="brand-logo-item"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHS3zQ69iQKGeRChJPDSWlSmXYUpJGXHS7--RmpaNtKkdyJQWKeFYZChcMzMdNYCHK0m0pAQ-LPt-DdTpnZ78yptetDMEeh69gaHYbqT7jB7GuH3PWxezPEi_Z5Q7M5WpLA4SlSGRoSLAttpiq46AKz14q-RJml_09j378UBCAAFC9odHKL9qnNW6y-1Cidkl1QEsZa5t2xNGMF3DeDu8ffxca659uYLzn7wbCm8IappJ9pa_lwRqsTf76M2lm6HCu8Z7ueC6UjMpc" />
-            <img alt="Myntra" onclick="window.location.href = 'deals.html?search=myntra'" class="brand-logo-item"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNUUU0Wwr-c60ZoENSjFXIF3hlk7q-zaJA0OLfq4vqI0qujaES1qT6cgtvrN5U3Ri9eLK7KKT94A2nBq-JmzeQq8KopfOnqhWN2IKveweaoiZ5f9dXtEU4WVSaq2zXCqrRxH-OFP6NUNL1rR7LDr9m9Hudkzy3QdbBQNuinbBBMqhyj2_J6hgx34NCQESQOTJhz_OWH-SrwZ7pW6CFrmCO4TaWqs2Owv7XUF7bKRDH0OWG9QZgpDbktzNVWx6jiqcE8Xxtdce-g55M" />
-            <img alt="Zomato" onclick="window.location.href = 'deals.html?search=zomato'" class="brand-logo-item"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLbJc7XeSQJUweAizCgcWJTkd7CQs8TofCF1S5gGE9ZohXH7x4WrRz2MMSxqdwJiEC-xp76E1SP-eRJYTf3wBPamG_5YLHhIP1oAa9MF0UlljOpsTxhkxkcZpur8BaHfWmmo9_R3AIqZ6LJLQFW3_5141pinpNdOygyvklAv0KxAAPXXPrRK5r1fMzTkG8LL-dgSXsNFik8ogxNwkExs6X8qg6iD9x1ZmpQiLM1A_2aNBqmbyJn-sC-wEAHk9GVWAH2YXVYkeNxBwx" />
-            <img alt="Nike" onclick="window.location.href = 'deals.html?search=nike'" class="brand-logo-item"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBm5cza3BPvJBi9JOkXnJK5bvtY_tlxZznzjinMymMqKHw61J-6dnm5Vi2w9Lqkt_xGkg78F90F1Qxht44HcpzWWdRQNg7aQeRZcbLaHGGNN5d3JaggxuwQtiUzpaDMmx-oJVnGNnjKskY6lSPwFjEtcycGGdJ84ltiOIR7S0jXbB7YJMT0xzOYznHqMG6b51eLBBq2figi9ADBGCs9usHlkSvcTe11OP_Ef6m_XNAkA-SdlDbmFwdmIz8lpI_I4mAkaZzmzMXzWi-S" />
-            <!-- Duplicated Set for Smooth Loop -->
-            <img alt="Apple" onclick="window.location.href = 'deals.html?search=apple'" class="brand-logo-item"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgvs-IaSKiUNA3rCITl34PHUpGTMQLJXA_u4r-wj5IYGlcv7qHTDLzTB_738spv4JvlmCEH1q20DwaHj1UUYOgiv0BYbaidsDnl56MIPglzkiL8g1c7l0So4E7o5BjFeAnx5wZneHTRLhdVFh9s8qPzLBvtPUu2b2gRhvp3FioHNQJEoi1tC6-ikvozxireV37Y33fZUIT4lLqTpklGkCxHKX6T5dH4Y4gGReZJTx7zz730Dk2Vx-M2m7nJflArm15pb3g0Ejv0y2v" />
-            <img alt="Amazon" onclick="window.location.href = 'deals.html?search=amazon'" class="brand-logo-item"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHS3zQ69iQKGeRChJPDSWlSmXYUpJGXHS7--RmpaNtKkdyJQWKeFYZChcMzMdNYCHK0m0pAQ-LPt-DdTpnZ78yptetDMEeh69gaHYbqT7jB7GuH3PWxezPEi_Z5Q7M5WpLA4SlSGRoSLAttpiq46AKz14q-RJml_09j378UBCAAFC9odHKL9qnNW6y-1Cidkl1QEsZa5t2xNGMF3DeDu8ffxca659uYLzn7wbCm8IappJ9pa_lwRqsTf76M2lm6HCu8Z7ueC6UjMpc" />
-            <img alt="Myntra" onclick="window.location.href = 'deals.html?search=myntra'" class="brand-logo-item"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNUUU0Wwr-c60ZoENSjFXIF3hlk7q-zaJA0OLfq4vqI0qujaES1qT6cgtvrN5U3Ri9eLK7KKT94A2nBq-JmzeQq8KopfOnqhWN2IKveweaoiZ5f9dXtEU4WVSaq2zXCqrRxH-OFP6NUNL1rR7LDr9m9Hudkzy3QdbBQNuinbBBMqhyj2_J6hgx34NCQESQOTJhz_OWH-SrwZ7pW6CFrmCO4TaWqs2Owv7XUF7bKRDH0OWG9QZgpDbktzNVWx6jiqcE8Xxtdce-g55M" />
-            <img alt="Zomato" onclick="window.location.href = 'deals.html?search=zomato'" class="brand-logo-item"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLbJc7XeSQJUweAizCgcWJTkd7CQs8TofCF1S5gGE9ZohXH7x4WrRz2MMSxqdwJiEC-xp76E1SP-eRJYTf3wBPamG_5YLHhIP1oAa9MF0UlljOpsTxhkxkcZpur8BaHfWmmo9_R3AIqZ6LJLQFW3_5141pinpNdOygyvklAv0KxAAPXXPrRK5r1fMzTkG8LL-dgSXsNFik8ogxNwkExs6X8qg6iD9x1ZmpQiLM1A_2aNBqmbyJn-sC-wEAHk9GVWAH2YXVYkeNxBwx" />
-            <img alt="Nike" onclick="window.location.href = 'deals.html?search=nike'" class="brand-logo-item"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBm5cza3BPvJBi9JOkXnJK5bvtY_tlxZznzjinMymMqKHw61J-6dnm5Vi2w9Lqkt_xGkg78F90F1Qxht44HcpzWWdRQNg7aQeRZcbLaHGGNN5d3JaggxuwQtiUzpaDMmx-oJVnGNnjKskY6lSPwFjEtcycGGdJ84ltiOIR7S0jXbB7YJMT0xzOYznHqMG6b51eLBBq2figi9ADBGCs9usHlkSvcTe11OP_Ef6m_XNAkA-SdlDbmFwdmIz8lpI_I4mAkaZzmzMXzWi-S" />
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Featured Deals Carousel -->
-    <section class="py-24">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="flex justify-between items-end mb-12">
-          <div>
-            <h2 class="text-4xl font-headline font-bold tracking-tight">
-              Curated Masterpieces
-            </h2>
-            <p class="text-on-surface-variant mt-2">
-              Selected weekly for maximum impact.
-            </p>
-          </div>
-          <button onclick="window.location.href = 'deals.html'"
-            class="text-primary font-bold flex items-center gap-2 group">
-            View all deals
-            <span class="material-symbols-outlined transition-transform group-hover:translate-x-1"
-              data-icon="arrow_forward">arrow_forward</span>
-          </button>
-        </div>
-        <div id="featured-deals-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="col-span-full py-12 text-center text-slate-500">
-            <span class="material-symbols-outlined text-4xl mb-4 animate-spin text-primary">autorenew</span>
-            <p>Loading curated masterpieces...</p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Categories Grid -->
-    <section class="py-24 bg-surface-container-low">
-      <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-4xl font-headline font-bold text-center mb-16">
-          The Student Portfolio
-        </h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <!-- Tech -->
-          <div onclick="
-                window.location.href = 'categories.html?category=electronics'
-              "
-            class="bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col items-center justify-center text-center gap-4 hover:bg-primary group transition-all duration-300 cursor-pointer">
-            <div class="w-16 h-16 rounded-2xl bg-primary/10 group-hover:bg-white/20 flex items-center justify-center">
-              <span class="material-symbols-outlined text-primary group-hover:text-white text-3xl"
-                data-icon="devices">devices</span>
+        <div class="relative">
+          <div
+            class="aspect-[4/3] w-full rounded-[2rem] overflow-hidden bg-slate-100 p-2 shadow-2xl border border-slate-100">
+            <div class="w-full h-full bg-cover bg-center rounded-[1.5rem]"
+              style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop');">
             </div>
-            <span class="font-bold text-lg group-hover:text-white">Tech &amp; Gadgets</span>
+          </div>
+          <div
+            class="absolute -bottom-6 left-1/2 -translate-x-1/2 md:left-12 md:translate-x-0 bg-white/90 backdrop-blur border border-slate-100 shadow-lg rounded-2xl px-6 py-4 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+              <span class="material-symbols-outlined text-indigo-600">verified</span>
+            </div>
+            <div>
+              <p class="font-bold text-slate-900 text-sm">University Confirmed</p>
+              <p class="text-xs text-slate-500">Over 100+ institutions verified.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="max-w-4xl mx-auto px-6 py-12 relative z-20">
+      <div class="bg-white border border-slate-200 rounded-2xl p-2 shadow-sm flex items-center">
+        <span class="material-symbols-outlined text-slate-400 ml-4">search</span>
+        <input id="home-search-input" type="text" placeholder="Search for brands, categories, or universities"
+          class="flex-1 bg-transparent border-none focus:ring-0 px-4 py-3 placeholder:text-slate-400">
+        <button id="home-search-btn"
+          class="bg-indigo-600 text-white font-bold px-8 py-3 rounded-xl hover:bg-indigo-700 transition-colors">
+          Search Deals
+        </button>
+      </div>
+    </section>
+    <!-- Curated Deals -->
+    <section class="max-w-7xl mx-auto px-6 py-16">
+      <div class="flex justify-between items-end mb-10">
+        <div>
+          <h2 class="text-3xl font-extrabold tracking-tight text-slate-900">
+            Curated Deals
+          </h2>
+          <p class="text-slate-500 mt-2 text-sm">
+            The best offers specifically selected for their academic and professional value.
+          </p>
+        </div>
+        <button onclick="window.location.href = 'deals.html'"
+          class="text-indigo-600 font-bold flex items-center gap-2 group text-sm hover:text-indigo-700 transition-colors">
+          View All collections
+          <span
+            class="material-symbols-outlined transition-transform group-hover:translate-x-1 text-sm">arrow_forward</span>
+        </button>
+      </div>
+      <div id="featured-deals-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="col-span-full py-12 text-center text-slate-400">
+          <span class="material-symbols-outlined text-4xl mb-4 animate-spin text-indigo-600">autorenew</span>
+          <p>Loading curated masterpieces...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Grid -->
+    <section class="bg-slate-50 py-20 border-y border-slate-100">
+      <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-2xl font-extrabold text-center mb-2 text-slate-900">
+          Browse by Category
+        </h2>
+        <p class="text-center text-slate-500 text-sm mb-12">
+          Navigate through our meticulously arranged collections to find exactly what you need.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <!-- Tech -->
+          <div onclick="window.location.href = 'categories.html?category=electronics'"
+            class="bg-white border border-slate-100 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-600/30 group transition-all duration-300 cursor-pointer shadow-sm">
+            <span
+              class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 text-2xl transition-colors">devices</span>
+            <span
+              class="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">Electronics</span>
+          </div>
+          <!-- Software -->
+          <div onclick="window.location.href = 'categories.html?category=software'"
+            class="bg-white border border-slate-100 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-600/30 group transition-all duration-300 cursor-pointer shadow-sm">
+            <span
+              class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 text-2xl transition-colors">code</span>
+            <span class="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">Software</span>
           </div>
           <!-- Fashion -->
-          <div onclick="
-                window.location.href = 'categories.html?category=clothing'
-              "
-            class="bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col items-center justify-center text-center gap-4 hover:bg-secondary group transition-all duration-300 cursor-pointer">
-            <div class="w-16 h-16 rounded-2xl bg-secondary/10 group-hover:bg-white/20 flex items-center justify-center">
-              <span class="material-symbols-outlined text-secondary group-hover:text-white text-3xl"
-                data-icon="apparel">apparel</span>
-            </div>
-            <span class="font-bold text-lg group-hover:text-white">Fashion</span>
+          <div onclick="window.location.href = 'categories.html?category=clothing'"
+            class="bg-white border border-slate-100 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-600/30 group transition-all duration-300 cursor-pointer shadow-sm">
+            <span
+              class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 text-2xl transition-colors">apparel</span>
+            <span class="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">Fashion</span>
+          </div>
+          <!-- Education -->
+          <div onclick="window.location.href = 'categories.html?category=courses'"
+            class="bg-white border border-slate-100 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-600/30 group transition-all duration-300 cursor-pointer shadow-sm">
+            <span
+              class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 text-2xl transition-colors">school</span>
+            <span
+              class="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">Education</span>
           </div>
           <!-- Food -->
           <div onclick="window.location.href = 'categories.html?category=food'"
-            class="bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col items-center justify-center text-center gap-4 hover:bg-error group transition-all duration-300 cursor-pointer">
-            <div class="w-16 h-16 rounded-2xl bg-error/10 group-hover:bg-white/20 flex items-center justify-center">
-              <span class="material-symbols-outlined text-error group-hover:text-white text-3xl"
-                data-icon="restaurant">restaurant</span>
-            </div>
-            <span class="font-bold text-lg group-hover:text-white">Food &amp; Dining</span>
+            class="bg-white border border-slate-100 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-600/30 group transition-all duration-300 cursor-pointer shadow-sm">
+            <span
+              class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 text-2xl transition-colors">restaurant</span>
+            <span class="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">Food &
+              Dining</span>
           </div>
-          <!-- Travel -->
-          <div onclick="
-                window.location.href = 'categories.html?category=services'
-              "
-            class="bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col items-center justify-center text-center gap-4 hover:bg-tertiary group transition-all duration-300 cursor-pointer">
-            <div class="w-16 h-16 rounded-2xl bg-tertiary/10 group-hover:bg-white/20 flex items-center justify-center">
-              <span class="material-symbols-outlined text-tertiary group-hover:text-white text-3xl"
-                data-icon="flight_takeoff">flight_takeoff</span>
-            </div>
-            <span class="font-bold text-lg group-hover:text-white">Travel &amp; Services</span>
+          <!-- Sports -->
+          <div onclick="window.location.href = 'categories.html?category=other'"
+            class="bg-white border border-slate-100 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-600/30 group transition-all duration-300 cursor-pointer shadow-sm">
+            <span
+              class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 text-2xl transition-colors">sports_tennis</span>
+            <span class="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">Sports</span>
           </div>
         </div>
       </div>
     </section>
-    <!-- Social Proof -->
-    <section class="py-32 overflow-hidden relative">
-      <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-        <h2 class="text-5xl font-headline font-extrabold tracking-tight mb-8">
-          Join the movement.
-        </h2>
-        <p class="text-2xl text-on-surface-variant font-medium mb-12 italic">
-          "Over 1 million Indian students are already saving ₹2,000+ monthly
-          with Campus Loot."
-        </p>
-        <div class="flex justify-center -space-x-4 mb-8">
-          <img class="w-16 h-16 rounded-full border-4 border-surface"
-            data-alt="headshot of a young man smiling with short hair and modern glasses"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi2DnaniP6D5XBkaZS6LW3UGJ8bAEG1ds4Eus_LO96oTfY6H1pkgve5JQOniFuiho2Cf04ZAWndjnxaa3sKRJAqESTfBgBZb7JuJxvsPQyHxlQ0BlU5HFNqG4gkwBPu7zwZLAttHIEgNjecyCQXYtvosEw1c3l_xzKKx33dpUAeV801_HPloub8B-S_poevvB6Rvx7YkZxR4KMYX1ritaTMWBLMe6TG3xSQenuTiS1Bh0nL0ucb5tD0G0Itx-4gx0JDu17CnUeVA2N" />
-          <img class="w-16 h-16 rounded-full border-4 border-surface"
-            data-alt="headshot of a cheerful woman with long dark hair and a warm smile"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR-ssjMZWjobExij2gPSGksZH1Ll2FmJh9rtkQv9rQ4BLsAku8cLTSQ7Ru3gRG_AbhJuKxIJcIH5ui9D1dUiOlpX0xt5EM9bUOxLn8zzXtbwEBgF43svnMG49ITNrMi1sfM73FGTAwPdUfvRiZBNlJV27ceT3kDMlhrz6skJoTsX2cmvHtg8MRUEKemRnCPt-E1u6vHbsxkndqhIA_ZhBawQjNpdWOaiqkHiEmjvQvamdkbZnOKJfwVu21qTk5wbc3Q1ER_7IkqtRe" />
-          <img class="w-16 h-16 rounded-full border-4 border-surface"
-            data-alt="headshot of a man with a beard and professional look"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ2dCLqBEUShV83j-nkZ0p9Tcr_tG4pUw7S-SiEluILdN24y6BUEmJ9ePQzW298RB3gfI094CSemQwBB6xv1T4uw0-kTNjiybGJgUBRiPrHMWkl-Kh_3LDZRnz264nQkeqPabB3OgO46y2hJTX482LjcDODfLK9XujSqiBrnwLx1d-xaD1xqqXDaDSPFWgQIBpZwivGjbZ5mQGORjDytgge7pUtXqRMp1HoschhYC8G4OP_6Y5PkJt9QADigzhHW3v5IqCn0VmzvFX" />
-          <div
-            class="w-16 h-16 rounded-full border-4 border-surface bg-primary text-on-primary flex items-center justify-center font-bold text-sm">
-            +1M
+
+    <!-- Social Proof / Stats Split content -->
+    <section class="max-w-7xl mx-auto px-6 py-24">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+        <div class="grid grid-cols-2 gap-y-12 gap-x-8">
+          <div>
+            <div class="text-3xl font-extrabold text-indigo-600 mb-1" id="stat-deals">500+</div>
+            <div class="text-xs text-slate-500 uppercase tracking-widest font-bold">Active Deals</div>
+          </div>
+          <div>
+            <div class="text-3xl font-extrabold text-indigo-600 mb-1" id="stat-users">1M+</div>
+            <div class="text-xs text-slate-500 uppercase tracking-widest font-bold">Happy Students</div>
+          </div>
+          <div>
+            <div class="text-3xl font-extrabold text-indigo-600 mb-1" id="stat-savings">₹40Cr+</div>
+            <div class="text-xs text-slate-500 uppercase tracking-widest font-bold">Total Savings</div>
+          </div>
+          <div>
+            <div class="text-3xl font-extrabold text-indigo-600 mb-1">100+</div>
+            <div class="text-xs text-slate-500 uppercase tracking-widest font-bold">Universities</div>
           </div>
         </div>
-        <div class="flex items-center justify-center gap-8 opacity-40">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
-            <span class="font-bold">Safe &amp; Secure</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined" data-icon="school">school</span>
-            <span class="font-bold">Student Verified</span>
+
+        <div>
+          <h2 class="text-3xl font-extrabold text-slate-900 mb-6">
+            Built on Integrity,<br>Defined by Quality.
+          </h2>
+          <p class="text-slate-500 text-sm leading-relaxed mb-8">
+            CampusLoot isn't just about saving money; it's about elevating your collegiate experience. Every offer is
+            vetted for quality and relevance to the modern student.
+          </p>
+          <div class="space-y-4">
+            <div class="flex items-start gap-4">
+              <span class="material-symbols-outlined text-indigo-600">verified_user</span>
+              <div>
+                <p class="font-bold text-slate-900 text-sm">Secure Verification</p>
+                <p class="text-xs text-slate-500">We verify every student to provide maximum security.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="material-symbols-outlined text-indigo-600">approval</span>
+              <div>
+                <p class="font-bold text-slate-900 text-sm">Curated Selection</p>
+                <p class="text-xs text-slate-500">Our deals are hand-picked from top-tier brands.</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <!-- Decorative blur -->
-      <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-32 bg-primary/20 blur-[100px] rounded-full">
       </div>
     </section>
   </main>
@@ -429,7 +419,7 @@
 
   <!-- Cookie Consent Banner -->
   <script>
-    (function() {
+    (function () {
       if (!localStorage.getItem('cookieConsent')) {
         var banner = document.createElement('div');
         banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;color:#fff;padding:15px;text-align:center;font-family:sans-serif;z-index:9999;display:flex;justify-content:center;align-items:center;gap:15px;flex-wrap:wrap;border-top:1px solid #333;box-shadow:0 -5px 15px rgba(0,0,0,0.2);';
@@ -437,11 +427,11 @@
           '<div style="display:flex;gap:10px;"><button id="acceptCookies" style="background:#4a40e0;color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:bold;font-size:14px;">Accept</button> ' +
           '<button id="declineCookies" style="background:transparent;color:#ccc;border:1px solid #ccc;padding:8px 16px;border-radius:4px;cursor:pointer;font-size:14px;">Decline</button></div>';
         document.body.appendChild(banner);
-        document.getElementById('acceptCookies').onclick = function() {
+        document.getElementById('acceptCookies').onclick = function () {
           localStorage.setItem('cookieConsent', 'accepted');
           banner.style.display = 'none';
         };
-        document.getElementById('declineCookies').onclick = function() {
+        document.getElementById('declineCookies').onclick = function () {
           localStorage.setItem('cookieConsent', 'declined');
           banner.style.display = 'none';
         };

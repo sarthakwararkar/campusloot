@@ -68,7 +68,7 @@ function renderDealCard(deal, options = {}) {
   const isSaved = savedDeals.has(deal.id);
 
   const card = document.createElement('article');
-  card.className = 'group relative bg-surface-container-lowest rounded-3xl p-5 shadow-sm hover:shadow-[0_20px_50px_rgba(74,64,224,0.08)] transition-all duration-300 transform hover:-translate-y-2 cursor-pointer';
+  card.className = 'group relative bg-white border border-slate-100 rounded-2xl p-5 hover:border-indigo-600/30 transition-all duration-300 cursor-pointer overflow-hidden';
   card.dataset.dealId = deal.id;
   card.dataset.category = deal.category;
   card.addEventListener('click', (e) => {
@@ -107,8 +107,8 @@ function renderDealCard(deal, options = {}) {
   const hasBanner = !!deal.image_url;
   const imageDiv = document.createElement('div');
   imageDiv.className = hasBanner
-    ? 'aspect-[16/9] md:aspect-[4/3] rounded-2xl bg-surface-container-low mb-6 overflow-hidden flex items-center justify-center group-hover:scale-[1.02] transition-transform'
-    : 'aspect-square rounded-2xl bg-surface-container-low mb-6 overflow-hidden flex items-center justify-center p-8 group-hover:scale-[1.02] transition-transform';
+    ? 'aspect-[16/9] md:aspect-[4/3] rounded-xl bg-slate-50 mb-6 overflow-hidden flex items-center justify-center group-hover:opacity-90 transition-opacity'
+    : 'aspect-square rounded-xl bg-slate-50 mb-6 overflow-hidden flex items-center justify-center p-8 group-hover:opacity-90 transition-opacity';
 
   mountDealImage(imageDiv, deal, {
     placeholderClass: 'text-6xl text-on-surface-variant font-black opacity-30 select-none',
@@ -122,25 +122,25 @@ function renderDealCard(deal, options = {}) {
   const titleRow = document.createElement('div');
   titleRow.className = 'flex items-center gap-2';
   const priceSpan = document.createElement('span');
-  priceSpan.className = 'text-primary font-bold text-2xl';
+  priceSpan.className = 'text-indigo-600 font-bold text-2xl';
   priceSpan.textContent = formatPrice(deal.deal_price || deal.discount_text || 'Free');
   titleRow.appendChild(priceSpan);
 
   if (deal.is_featured) {
     const verifiedBadge = document.createElement('span');
-    verifiedBadge.className = 'bg-tertiary-container/30 text-tertiary px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-tighter';
+    verifiedBadge.className = 'bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide';
     verifiedBadge.textContent = 'Featured';
     titleRow.appendChild(verifiedBadge);
   }
   bodyDiv.appendChild(titleRow);
 
   const brandObj = document.createElement('h3');
-  brandObj.className = 'font-headline font-bold text-lg text-on-surface line-clamp-1';
+  brandObj.className = 'font-semibold text-lg text-slate-900 line-clamp-1';
   brandObj.textContent = deal.brand_name || 'Brand';
   bodyDiv.appendChild(brandObj);
 
   const descObj = document.createElement('p');
-  descObj.className = 'text-sm text-on-surface-variant line-clamp-1';
+  descObj.className = 'text-sm text-slate-500 line-clamp-1';
   descObj.textContent = deal.title || deal.description || '';
   bodyDiv.appendChild(descObj);
 
@@ -159,7 +159,7 @@ function renderDealCard(deal, options = {}) {
   }
 
   const claimBtn = document.createElement('button');
-  claimBtn.className = 'w-full py-4 bg-surface-container-low text-primary font-bold rounded-2xl group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2';
+  claimBtn.className = 'w-full py-3 mt-2 bg-slate-50 text-indigo-600 font-bold rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-colors flex items-center justify-center gap-2 text-sm';
   claimBtn.innerHTML = `View Deal <span class="material-symbols-outlined text-lg">arrow_forward</span>`;
   claimBtn.onclick = (e) => {
     e.stopPropagation();
@@ -383,43 +383,43 @@ function renderHeader(activePage = '') {
   const header = document.getElementById('site-header');
   if (!header) return;
 
-  header.className = 'header';
+  header.className = 'w-full z-50 bg-white border-b border-slate-100';
   header.innerHTML = `
-    <div class="header-inner">
-      <a href="index.html" class="logo">🎓 Campus<span>Loot</span></a>
-      <nav class="nav-links" id="nav-links">
-        <a href="index.html" class="${activePage === 'home' ? 'active' : ''}">Home</a>
-        <a href="deals.html" class="${activePage === 'deals' ? 'active' : ''}">All Deals</a>
-        <a href="categories.html" class="${activePage === 'categories' ? 'active' : ''}">Categories</a>
-        <a href="trending.html" class="${activePage === 'trending' ? 'active' : ''}">Trending</a>
-        <a href="submit.html" class="${activePage === 'submit' ? 'active' : ''}">Submit Deal</a>
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+          <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">CampusLoot</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-8" id="nav-links">
+        <a href="deals.html" class="text-sm font-medium ${activePage === 'deals' || activePage === 'home' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-900'} transition-colors">Explore</a>
+        <a href="categories.html" class="text-sm font-medium ${activePage === 'categories' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-900'} transition-colors">Categories</a>
+        <a href="trending.html" class="text-sm font-medium ${activePage === 'trending' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-900'} transition-colors">About</a>
       </nav>
-      <div class="nav-auth" id="nav-auth"></div>
-      <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
+      <div class="hidden md:flex items-center gap-4" id="nav-auth"></div>
+      <button class="md:hidden p-2 text-slate-500 hover:text-slate-900" id="hamburger-btn" aria-label="Toggle menu">
+        <span class="material-symbols-outlined">menu</span>
       </button>
     </div>
-    <div class="mobile-nav" id="mobile-nav">
-      <a href="index.html">Home</a>
-      <a href="deals.html">All Deals</a>
-      <a href="categories.html">Categories</a>
-      <a href="trending.html">Trending</a>
-      <a href="submit.html">Submit a Deal</a>
-      <div id="mobile-auth"></div>
+    <div class="hidden md:hidden bg-white border-b border-slate-100" id="mobile-nav">
+      <div class="flex flex-col p-6 gap-4">
+        <a href="deals.html" class="text-slate-500 hover:text-indigo-600 font-medium">Explore</a>
+        <a href="categories.html" class="text-slate-500 hover:text-indigo-600 font-medium">Categories</a>
+        <a href="trending.html" class="text-slate-500 hover:text-indigo-600 font-medium">About</a>
+        <div id="mobile-auth" class="pt-4 border-t border-slate-100 flex flex-col gap-2"></div>
+      </div>
     </div>
   `;
 
   // Hamburger toggle
   const hamburger = document.getElementById('hamburger-btn');
   const mobileNav = document.getElementById('mobile-nav');
-  hamburger.addEventListener('click', () => {
-    mobileNav.classList.toggle('open');
-  });
-
-  // Scroll shadow
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 10);
-  });
+  if (hamburger && mobileNav) {
+    hamburger.addEventListener('click', () => {
+      mobileNav.classList.toggle('hidden');
+    });
+  }
 
   // Update auth buttons
   updateAuthNav();
@@ -451,19 +451,19 @@ async function updateAuthNav() {
     if (isAdmin) {
       const adminLink = document.createElement('a');
       adminLink.href = 'admin.html';
-      adminLink.className = 'btn btn-ghost btn-sm';
-      adminLink.textContent = '⚙️ Admin';
+      adminLink.className = 'text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors';
+      adminLink.textContent = 'Admin';
       navAuth.appendChild(adminLink);
     }
 
     const profileLink = document.createElement('a');
     profileLink.href = 'profile.html';
-    profileLink.className = 'btn btn-ghost btn-sm';
-    profileLink.textContent = `👤 ${name}`;
+    profileLink.className = 'text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors';
+    profileLink.textContent = name;
     navAuth.appendChild(profileLink);
 
     const logoutBtn = document.createElement('button');
-    logoutBtn.className = 'btn btn-outline btn-sm';
+    logoutBtn.className = 'px-5 py-2 text-sm font-bold text-slate-600 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors';
     logoutBtn.textContent = 'Logout';
     logoutBtn.addEventListener('click', async () => {
       await signOut();
@@ -498,9 +498,15 @@ async function updateAuthNav() {
     navAuth.innerHTML = '';
     const loginBtn = document.createElement('a');
     loginBtn.href = 'login.html';
-    loginBtn.className = 'btn btn-primary btn-sm';
+    loginBtn.className = 'text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors';
     loginBtn.textContent = 'Login';
     navAuth.appendChild(loginBtn);
+
+    const joinBtn = document.createElement('a');
+    joinBtn.href = 'login.html';
+    joinBtn.className = 'px-5 py-2 text-sm font-bold text-white bg-indigo-600 rounded-full hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-600/20';
+    joinBtn.textContent = 'Join';
+    navAuth.appendChild(joinBtn);
 
     if (mobileAuth) {
       mobileAuth.innerHTML = '';
@@ -519,54 +525,26 @@ function renderFooter() {
   const footer = document.getElementById('site-footer');
   if (!footer) return;
 
-  footer.className = 'footer pt-32 pb-12 bg-surface text-on-surface';
+  footer.className = 'w-full bg-white border-t border-slate-100 py-12';
   footer.innerHTML = `
-    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
-      <div class="col-span-1 md:col-span-1">
-        <span class="text-xl font-black font-headline mb-4 block">🎓 Campus Loot</span>
-        <p class="text-sm text-on-surface-variant leading-relaxed mb-6">
-          India's premier destination for exclusive student perks. Elevate your university life with Student Deals Platform.
-        </p>
-        <div class="flex gap-4">
-          <span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">share</span>
-          <span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">mail</span>
-        </div>
-      </div>
-      <div>
-        <h4 class="font-bold mb-6">Company</h4>
-        <ul class="space-y-4">
-          <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="privacy.html">Privacy Policy</a></li>
-          <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="terms.html">Terms of Service</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-bold mb-6">Partnerships</h4>
-        <ul class="space-y-4">
-          <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="#">Partner with Us</a></li>
-          <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="submit.html">Submit a Deal</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-bold mb-6">Get in Touch</h4>
-        <a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="#">Contact</a>
-        <div class="mt-8 p-4 bg-surface-container rounded-2xl">
-          <p class="text-xs font-bold text-on-surface-variant mb-2 uppercase">Newsletter</p>
-          <div class="flex gap-2">
-            <input class="w-full bg-surface-container-lowest border-none rounded-lg text-xs py-2 px-3 focus:ring-1 focus:ring-primary" placeholder="Email" type="email" />
-            <button class="bg-primary text-white p-2 rounded-lg flex items-center justify-center hover:bg-primary-hover transition-colors">
-              <span class="material-symbols-outlined text-sm">send</span>
-            </button>
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+        <a href="index.html" class="flex items-center gap-2 group">
+          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
           </div>
+          <span class="text-xl font-bold tracking-tight text-slate-900">CampusLoot</span>
+        </a>
+        <div class="flex items-center gap-6">
+          <a href="privacy.html" class="text-sm font-medium text-slate-400 hover:text-slate-900 transition-colors">Privacy Policy</a>
+          <a href="terms.html" class="text-sm font-medium text-slate-400 hover:text-slate-900 transition-colors">Terms of Service</a>
+          <a href="#" class="text-sm font-medium text-slate-400 hover:text-slate-900 transition-colors">Partner with Us</a>
+          <a href="#" class="text-sm font-medium text-slate-400 hover:text-slate-900 transition-colors">Contact</a>
         </div>
       </div>
-    </div>
-    <div class="max-w-7xl mx-auto px-6 mt-12 pt-12 border-t border-surface-container flex flex-col md:flex-row justify-between items-center gap-4">
-      <span class="text-sm text-on-surface-variant">© ${new Date().getFullYear()} Campus Loot. Empowering the next generation.</span>
-      <div class="flex items-center gap-6">
-        <span class="text-xs text-on-surface-variant">Made with ❤️ for students</span>
-        <div class="flex gap-2">
-          <span class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-xs font-bold">IN</span>
-        </div>
+      <div class="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-slate-100 text-sm text-slate-400">
+        <p>© ${new Date().getFullYear()} CampusLoot. Empowering the next generation of leaders.</p>
+        <p>Student verified India wide.</p>
       </div>
     </div>
   `;
