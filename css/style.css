@@ -621,15 +621,15 @@ h6 {
 
 .brand-logo-item {
   height: 2.2rem;
-  filter: grayscale(1) brightness(0.6);
-  opacity: 0.45;
+  filter: none;
+  opacity: 0.75;
   transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
   cursor: pointer;
   flex-shrink: 0;
 }
 
 .brand-logo-item:hover {
-  filter: grayscale(0) brightness(1);
+  filter: brightness(1.1);
   opacity: 1;
   transform: translateY(-2px) scale(1.08);
 }
@@ -650,17 +650,17 @@ h6 {
 .stat-number {
   font-size: var(--fs-2xl);
   font-weight: 900;
-  color: var(--white);
+  color: var(--text-primary);
   letter-spacing: -0.04em;
 }
 
 .stat-label {
   font-size: var(--fs-xs);
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-secondary);
   margin-top: 2px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-weight: 700;
 }
 
 /* ---- Section ---- */
