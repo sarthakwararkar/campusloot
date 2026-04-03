@@ -91,13 +91,13 @@ function renderDealCard(deal, options = {}) {
       handleSaveClick(deal.id, saveBtn);
       const icon = saveBtn.querySelector('span');
       if (saveBtn.classList.contains('saved')) {
-          icon.style = 'font-variation-settings: "FILL" 1;';
-          saveBtn.classList.remove('text-on-surface-variant');
-          saveBtn.classList.add('text-error');
+        icon.style = 'font-variation-settings: "FILL" 1;';
+        saveBtn.classList.remove('text-on-surface-variant');
+        saveBtn.classList.add('text-error');
       } else {
-          icon.style = '';
-          saveBtn.classList.remove('text-error');
-          saveBtn.classList.add('text-on-surface-variant');
+        icon.style = '';
+        saveBtn.classList.remove('text-error');
+        saveBtn.classList.add('text-on-surface-variant');
       }
     };
     saveContainer.appendChild(saveBtn);
@@ -106,13 +106,13 @@ function renderDealCard(deal, options = {}) {
 
   const hasBanner = !!deal.image_url;
   const imageDiv = document.createElement('div');
-  imageDiv.className = hasBanner 
-    ? 'aspect-[16/9] md:aspect-[4/3] rounded-2xl bg-surface-container-low mb-6 overflow-hidden flex items-center justify-center group-hover:scale-[1.02] transition-transform' 
+  imageDiv.className = hasBanner
+    ? 'aspect-[16/9] md:aspect-[4/3] rounded-2xl bg-surface-container-low mb-6 overflow-hidden flex items-center justify-center group-hover:scale-[1.02] transition-transform'
     : 'aspect-square rounded-2xl bg-surface-container-low mb-6 overflow-hidden flex items-center justify-center p-8 group-hover:scale-[1.02] transition-transform';
-  
-  mountDealImage(imageDiv, deal, { 
-      placeholderClass: 'text-6xl text-on-surface-variant font-black opacity-30 select-none',
-      imgClass: hasBanner ? 'w-full h-full object-cover' : 'w-24 h-24 object-contain mix-blend-multiply'
+
+  mountDealImage(imageDiv, deal, {
+    placeholderClass: 'text-6xl text-on-surface-variant font-black opacity-30 select-none',
+    imgClass: hasBanner ? 'w-full h-full object-cover' : 'w-24 h-24 object-contain mix-blend-multiply'
   });
   card.appendChild(imageDiv);
 
@@ -125,7 +125,7 @@ function renderDealCard(deal, options = {}) {
   priceSpan.className = 'text-primary font-bold text-2xl';
   priceSpan.textContent = formatPrice(deal.deal_price || deal.discount_text || 'Free');
   titleRow.appendChild(priceSpan);
-  
+
   if (deal.is_featured) {
     const verifiedBadge = document.createElement('span');
     verifiedBadge.className = 'bg-tertiary-container/30 text-tertiary px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-tighter';
@@ -161,10 +161,10 @@ function renderDealCard(deal, options = {}) {
   const claimBtn = document.createElement('button');
   claimBtn.className = 'w-full py-4 bg-surface-container-low text-primary font-bold rounded-2xl group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2';
   claimBtn.innerHTML = `View Deal <span class="material-symbols-outlined text-lg">arrow_forward</span>`;
-  claimBtn.onclick = (e) => { 
-    e.stopPropagation(); 
+  claimBtn.onclick = (e) => {
+    e.stopPropagation();
     if (deal.id) {
-      window.location.href = `deal.html?id=${encodeURIComponent(deal.id)}`; 
+      window.location.href = `deal.html?id=${encodeURIComponent(deal.id)}`;
     } else {
       console.error('renderDealCard: Deal ID missing on button click', deal);
       // Fallback: try card dataset
@@ -535,8 +535,8 @@ function renderFooter() {
       <div>
         <h4 class="font-bold mb-6">Company</h4>
         <ul class="space-y-4">
-          <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="#">Privacy Policy</a></li>
-          <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="#">Terms of Service</a></li>
+          <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="privacy.html">Privacy Policy</a></li>
+          <li><a class="text-sm text-on-surface-variant hover:text-primary transition-colors underline decoration-primary/30 underline-offset-4" href="terms.html">Terms of Service</a></li>
         </ul>
       </div>
       <div>
@@ -594,7 +594,7 @@ function renderPagination(containerId, currentPage, totalItems, itemsPerPage, on
   const maxVisiblePages = 5;
   let startPage = Math.max(1, currentPage - 2);
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-  
+
   if (endPage - startPage < maxVisiblePages - 1) {
     startPage = Math.max(1, endPage - maxVisiblePages + 1);
   }
@@ -618,7 +618,7 @@ function renderPagination(containerId, currentPage, totalItems, itemsPerPage, on
       dots.textContent = '...';
       paginationNav.appendChild(dots);
     }
-    
+
     const lastBtn = document.createElement('button');
     lastBtn.className = `pagination-btn ${totalPages === currentPage ? 'active' : ''}`;
     lastBtn.textContent = totalPages;

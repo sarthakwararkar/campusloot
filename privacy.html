@@ -1,0 +1,81 @@
+<!doctype html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+  <title>Privacy | CampusLoot</title>
+
+  <meta name="description" content="Exclusive Privacy on CampusLoot. Find the best student discounts and deals in India." />
+  <meta property="og:title" content="Privacy | CampusLoot" />
+  <meta property="og:description" content="Exclusive Privacy on CampusLoot. Find the best student discounts and deals in India." />
+  <meta property="og:image" content="/og-image.png" />
+  <meta property="og:url" content="https://campusloot.com/privacy.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Privacy | CampusLoot" />
+  <meta name="twitter:description" content="Exclusive Privacy on CampusLoot. Find the best student discounts and deals in India." />
+  <meta name="twitter:image" content="/og-image.png" />
+  <link rel="icon" href="/favicon.ico" />
+
+</head>
+
+<body class="bg-surface font-body text-on-surface antialiased">
+    <header id="site-header"></header>
+    <main class="max-w-4xl mx-auto px-6 py-24">
+        <h1 class="text-4xl md:text-5xl font-headline font-extrabold mb-8 text-on-surface">Privacy Policy</h1>
+        <div class="prose prose-slate max-w-none text-on-surface-variant space-y-6">
+            <p>Last updated: April 2026</p>
+
+            <h2 class="text-2xl font-bold text-on-surface">1. Information We Collect</h2>
+            <p>We collect information you provide directly to us, such as when you create or modify your account,
+                contact customer support, or otherwise communicate with us. This info includes name, email, and
+                university domain status.</p>
+
+            <h2 class="text-2xl font-bold text-on-surface">2. How We Use Your Data</h2>
+            <p>We use the data we collect to provide, maintain, and improve our services, including to personalize and
+                improve your experience on CampusLoot, providing relevant student deals and offers.</p>
+
+            <h2 class="text-2xl font-bold text-on-surface">3. Third-party Disclosures</h2>
+            <p>We may share your information with vendors, consultants, and other service providers who need access to
+                such information to carry out work on our behalf. We do not sell your personal data.</p>
+
+            <h2 class="text-2xl font-bold text-on-surface">4. Contact Us</h2>
+            <p>If you have any questions about this Privacy Policy, please contact us at privacy@campusloot.com.</p>
+        </div>
+    </main>
+    <footer id="site-footer"></footer>
+    <script src="js/components.js"></script>
+    <script src="js/main.js"></script>
+
+  <!-- Cookie Consent Banner -->
+  <script>
+    (function() {
+      if (!localStorage.getItem('cookieConsent')) {
+        var banner = document.createElement('div');
+        banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;color:#fff;padding:15px;text-align:center;font-family:sans-serif;z-index:9999;display:flex;justify-content:center;align-items:center;gap:15px;flex-wrap:wrap;border-top:1px solid #333;box-shadow:0 -5px 15px rgba(0,0,0,0.2);';
+        banner.innerHTML = '<span style="font-size:14px;">We use cookies to improve your experience. See our <a href="privacy.html" style="color:#4a40e0;text-decoration:underline;">Privacy Policy</a>.</span> ' +
+          '<div style="display:flex;gap:10px;"><button id="acceptCookies" style="background:#4a40e0;color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:bold;font-size:14px;">Accept</button> ' +
+          '<button id="declineCookies" style="background:transparent;color:#ccc;border:1px solid #ccc;padding:8px 16px;border-radius:4px;cursor:pointer;font-size:14px;">Decline</button></div>';
+        document.body.appendChild(banner);
+        document.getElementById('acceptCookies').onclick = function() {
+          localStorage.setItem('cookieConsent', 'accepted');
+          banner.style.display = 'none';
+        };
+        document.getElementById('declineCookies').onclick = function() {
+          localStorage.setItem('cookieConsent', 'declined');
+          banner.style.display = 'none';
+        };
+      }
+    })();
+  </script>
+
+</body>
+
+</html>
