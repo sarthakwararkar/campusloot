@@ -1,567 +1,414 @@
 <!doctype html>
 <html class="light" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Campus Loot | Student Deals India</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet"
-    />
-    <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "secondary-container": "#dcc9ff",
-              outline: "#757778",
-              "on-primary-fixed": "#000000",
-              "tertiary-fixed": "#00cffc",
-              tertiary: "#00647b",
-              "on-tertiary": "#e2f6ff",
-              "primary-fixed-dim": "#8885ff",
-              "primary-dim": "#3d30d4",
-              "inverse-primary": "#8582ff",
-              primary: "#4a40e0",
-              "on-secondary-fixed-variant": "#6514d6",
-              "on-tertiary-container": "#004050",
-              "surface-variant": "#dadddf",
-              "primary-fixed": "#9795ff",
-              "primary-container": "#9795ff",
-              "on-secondary-fixed": "#430097",
-              error: "#b41340",
-              "surface-container-high": "#e0e3e4",
-              "error-dim": "#a70138",
-              "surface-container-lowest": "#ffffff",
-              surface: "#f5f6f7",
-              "error-container": "#f74b6d",
-              "secondary-fixed-dim": "#d0b8ff",
-              "on-surface": "#2c2f30",
-              "inverse-on-surface": "#9b9d9e",
-              "surface-container-low": "#eff1f2",
-              background: "#f5f6f7",
-              "surface-bright": "#f5f6f7",
-              "inverse-surface": "#0c0f10",
-              "on-primary": "#f4f1ff",
-              "surface-tint": "#4a40e0",
-              "surface-dim": "#d1d5d7",
-              "outline-variant": "#abadae",
-              "on-error": "#ffefef",
-              "secondary-fixed": "#dcc9ff",
-              "on-tertiary-fixed-variant": "#004a5c",
-              "on-primary-fixed-variant": "#1a0099",
-              "on-background": "#2c2f30",
-              "on-error-container": "#510017",
-              "on-tertiary-fixed": "#002a35",
-              "on-secondary": "#f8f0ff",
-              "secondary-dim": "#6411d5",
-              "tertiary-dim": "#00576c",
-              "on-primary-container": "#14007e",
-              "surface-container-highest": "#dadddf",
-              "on-surface-variant": "#595c5d",
-              secondary: "#702ae1",
-              "tertiary-fixed-dim": "#00c0ea",
-              "surface-container": "#e6e8ea",
-              "on-secondary-container": "#5b00c7",
-              "tertiary-container": "#00cffc",
-            },
-            fontFamily: {
-              headline: ["Plus Jakarta Sans"],
-              body: ["Inter"],
-              label: ["Inter"],
-            },
-            borderRadius: {
-              DEFAULT: "0.25rem",
-              lg: "0.5rem",
-              xl: "0.75rem",
-              full: "9999px",
-            },
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Campus Loot | Student Deals India</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary-container": "#dcc9ff",
+            outline: "#757778",
+            "on-primary-fixed": "#000000",
+            "tertiary-fixed": "#00cffc",
+            tertiary: "#00647b",
+            "on-tertiary": "#e2f6ff",
+            "primary-fixed-dim": "#8885ff",
+            "primary-dim": "#3d30d4",
+            "inverse-primary": "#8582ff",
+            primary: "#4a40e0",
+            "on-secondary-fixed-variant": "#6514d6",
+            "on-tertiary-container": "#004050",
+            "surface-variant": "#dadddf",
+            "primary-fixed": "#9795ff",
+            "primary-container": "#9795ff",
+            "on-secondary-fixed": "#430097",
+            error: "#b41340",
+            "surface-container-high": "#e0e3e4",
+            "error-dim": "#a70138",
+            "surface-container-lowest": "#ffffff",
+            surface: "#f5f6f7",
+            "error-container": "#f74b6d",
+            "secondary-fixed-dim": "#d0b8ff",
+            "on-surface": "#2c2f30",
+            "inverse-on-surface": "#9b9d9e",
+            "surface-container-low": "#eff1f2",
+            background: "#f5f6f7",
+            "surface-bright": "#f5f6f7",
+            "inverse-surface": "#0c0f10",
+            "on-primary": "#f4f1ff",
+            "surface-tint": "#4a40e0",
+            "surface-dim": "#d1d5d7",
+            "outline-variant": "#abadae",
+            "on-error": "#ffefef",
+            "secondary-fixed": "#dcc9ff",
+            "on-tertiary-fixed-variant": "#004a5c",
+            "on-primary-fixed-variant": "#1a0099",
+            "on-background": "#2c2f30",
+            "on-error-container": "#510017",
+            "on-tertiary-fixed": "#002a35",
+            "on-secondary": "#f8f0ff",
+            "secondary-dim": "#6411d5",
+            "tertiary-dim": "#00576c",
+            "on-primary-container": "#14007e",
+            "surface-container-highest": "#dadddf",
+            "on-surface-variant": "#595c5d",
+            secondary: "#702ae1",
+            "tertiary-fixed-dim": "#00c0ea",
+            "surface-container": "#e6e8ea",
+            "on-secondary-container": "#5b00c7",
+            "tertiary-container": "#00cffc",
+          },
+          fontFamily: {
+            headline: ["Plus Jakarta Sans"],
+            body: ["Inter"],
+            label: ["Inter"],
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px",
           },
         },
-      };
-    </script>
-    <style>
-      .material-symbols-outlined {
-        font-variation-settings:
-          "FILL" 0,
-          "wght" 400,
-          "GRAD" 0,
-          "opsz" 24;
-      }
-      .glass-card {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-      }
-      .editorial-gap {
-        margin-top: 2.5rem;
-      }
-    </style>
-  </head>
-  <body class="bg-surface font-body text-on-surface antialiased">
-    <!-- Top Navigation Bar -->
-    <header id="site-header"></header>
-    <main>
-      <!-- Hero Section -->
-      <section class="relative pt-20 pb-32 overflow-hidden">
-        <div
-          class="absolute inset-0 bg-gradient-to-tr from-primary/5 via-surface to-secondary/5 -z-10"
-        ></div>
-        <div
-          class="absolute top-0 right-0 w-[600px] h-[600px] bg-tertiary-fixed/10 blur-[120px] rounded-full -mr-48 -mt-48"
-        ></div>
-        <div class="max-w-7xl mx-auto px-6 text-center">
-          <span
-            class="inline-block py-1 px-4 mb-6 rounded-full bg-primary-container/20 text-primary-dim text-sm font-bold tracking-wider uppercase"
-           
-            >Exclusive Membership</span
-          >
-          <h1
-            class="text-6xl md:text-8xl font-headline font-extrabold tracking-tighter text-on-surface leading-[0.9] mb-8"
-           
-          >
-            Exclusive Student <br />
-            <span class="text-primary">Deals in India</span>
-          </h1>
-          <p
-            class="max-w-2xl mx-auto text-xl text-on-surface-variant leading-relaxed mb-12"
-           
-          >
-            Access the most prestigious curated discounts from global brands,
-            exclusively for the next generation of Indian leaders.
-          </p>
-          <!-- Search Bar -->
-          <div class="max-w-2xl mx-auto relative group">
-            <div
-              class="absolute -inset-1 bg-gradient-to-r from-tertiary-container to-primary rounded-2xl blur opacity-20 group-focus-within:opacity-40 transition duration-1000"
-            ></div>
-            <div
-              class="relative flex items-center bg-surface-container-lowest rounded-2xl shadow-xl shadow-primary/5 overflow-hidden"
-            >
-              <span
-                class="material-symbols-outlined ml-6 text-on-surface-variant"
-                data-icon="search"
-               
-                >search</span
-              >
-              <input
-                id="home-search-input"
-                class="w-full py-6 px-4 bg-transparent border-none focus:ring-0 text-lg placeholder:text-on-surface-variant/50"
-                placeholder="Search brands, products, or categories..."
-                type="text"
-              />
-              <button
-                id="home-search-btn"
-                class="mr-4 px-8 py-3 bg-inverse-surface text-surface rounded-xl font-bold hover:bg-primary transition-colors cursor-pointer z-10"
-               
-              >
-                Find
-              </button>
-            </div>
-          </div>
+      },
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+    }
 
-          <!-- Stats Bar (FIX 5) -->
-          <div class="stats-bar max-w-2xl mx-auto flex justify-center gap-12 mt-12 pb-8">
-            <div class="stat-item">
-              <div class="stat-number" id="stat-deals">0</div>
-              <div class="stat-label">Active Deals</div>
-            </div>
-            <div class="stat-item border-l border-white/10 pl-12">
-              <div class="stat-number" id="stat-users">0</div>
-              <div class="stat-label">Happy Students</div>
-            </div>
-            <div class="stat-item border-l border-white/10 pl-12">
-              <div class="stat-number" id="stat-savings">₹1M+</div>
-              <div class="stat-label">Total Savings</div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- Trending Brands -->
-      <section class="py-12 bg-surface-container-low/50">
-        <div class="max-w-7xl mx-auto px-6">
-          <p
-            class="text-center text-label-sm font-bold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-10"
-           
-          >
-            Trusted by Global Icons
-          </p>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .editorial-gap {
+      margin-top: 2.5rem;
+    }
+  </style>
+</head>
+
+<body class="bg-surface font-body text-on-surface antialiased">
+  <!-- Top Navigation Bar -->
+  <header id="site-header"></header>
+  <main>
+    <!-- Hero Section -->
+    <section class="relative pt-20 pb-32 overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-tr from-primary/5 via-surface to-secondary/5 -z-10"></div>
+      <div
+        class="absolute top-0 right-0 w-[600px] h-[600px] bg-tertiary-fixed/10 blur-[120px] rounded-full -mr-48 -mt-48">
+      </div>
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <span
+          class="inline-block py-1 px-4 mb-6 rounded-full bg-primary-container/20 text-primary-dim text-sm font-bold tracking-wider uppercase">Exclusive
+          Membership</span>
+        <h1
+          class="text-6xl md:text-8xl font-headline font-extrabold tracking-tighter text-on-surface leading-[0.9] mb-8">
+          Exclusive Student <br />
+          <span class="text-primary">Deals in India</span>
+        </h1>
+        <p class="max-w-2xl mx-auto text-xl text-on-surface-variant leading-relaxed mb-12">
+          Access the most prestigious curated discounts from global brands,
+          exclusively for the next generation of Indian leaders.
+        </p>
+        <!-- Search Bar -->
+        <div class="max-w-2xl mx-auto relative group">
           <div
-            class="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-60 hover:opacity-100 transition-opacity"
-          >
-            <img
-              alt="Apple"
-              onclick="window.location.href = 'deals.html?search=apple'"
-              class="h-10 grayscale hover:grayscale-0 transition-all cursor-pointer"
-              data-alt="minimalist white apple logo on light gray background"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgvs-IaSKiUNA3rCITl34PHUpGTMQLJXA_u4r-wj5IYGlcv7qHTDLzTB_738spv4JvlmCEH1q20DwaHj1UUYOgiv0BYbaidsDnl56MIPglzkiL8g1c7l0So4E7o5BjFeAnx5wZneHTRLhdVFh9s8qPzLBvtPUu2b2gRhvp3FioHNQJEoi1tC6-ikvozxireV37Y33fZUIT4lLqTpklGkCxHKX6T5dH4Y4gGReZJTx7zz730Dk2Vx-M2m7nJflArm15pb3g0Ejv0y2v"
-             
-            />
-            <img
-              alt="Amazon"
-              onclick="window.location.href = 'deals.html?search=amazon'"
-              class="h-10 grayscale hover:grayscale-0 transition-all cursor-pointer"
-              data-alt="amazon logo showing the iconic arrow from a to z"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHS3zQ69iQKGeRChJPDSWlSmXYUpJGXHS7--RmpaNtKkdyJQWKeFYZChcMzMdNYCHK0m0pAQ-LPt-DdTpnZ78yptetDMEeh69gaHYbqT7jB7GuH3PWxezPEi_Z5Q7M5WpLA4SlSGRoSLAttpiq46AKz14q-RJml_09j378UBCAAFC9odHKL9qnNW6y-1Cidkl1QEsZa5t2xNGMF3DeDu8ffxca659uYLzn7wbCm8IappJ9pa_lwRqsTf76M2lm6HCu8Z7ueC6UjMpc"
-             
-            />
-            <img
-              alt="Myntra"
-              onclick="window.location.href = 'deals.html?search=myntra'"
-              class="h-10 grayscale hover:grayscale-0 transition-all cursor-pointer"
-              data-alt="vibrant myntra fashion logo with its colorful m mark"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNUUU0Wwr-c60ZoENSjFXIF3hlk7q-zaJA0OLfq4vqI0qujaES1qT6cgtvrN5U3Ri9eLK7KKT94A2nBq-JmzeQq8KopfOnqhWN2IKveweaoiZ5f9dXtEU4WVSaq2zXCqrRxH-OFP6NUNL1rR7LDr9m9Hudkzy3QdbBQNuinbBBMqhyj2_J6hgx34NCQESQOTJhz_OWH-SrwZ7pW6CFrmCO4TaWqs2Owv7XUF7bKRDH0OWG9QZgpDbktzNVWx6jiqcE8Xxtdce-g55M"
-             
-            />
-            <img
-              alt="Zomato"
-              onclick="window.location.href = 'deals.html?search=zomato'"
-              class="h-10 grayscale hover:grayscale-0 transition-all cursor-pointer"
-              data-alt="zomato logo with its characteristic red heart and bowl icon"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLbJc7XeSQJUweAizCgcWJTkd7CQs8TofCF1S5gGE9ZohXH7x4WrRz2MMSxqdwJiEC-xp76E1SP-eRJYTf3wBPamG_5YLHhIP1oAa9MF0UlljOpsTxhkxkcZpur8BaHfWmmo9_R3AIqZ6LJLQFW3_5141pinpNdOygyvklAv0KxAAPXXPrRK5r1fMzTkG8LL-dgSXsNFik8ogxNwkExs6X8qg6iD9x1ZmpQiLM1A_2aNBqmbyJn-sC-wEAHk9GVWAH2YXVYkeNxBwx"
-             
-            />
-            <img
-              alt="Nike"
-              onclick="window.location.href = 'deals.html?search=nike'"
-              class="h-10 grayscale hover:grayscale-0 transition-all cursor-pointer"
-              data-alt="classic nike swoosh symbol in solid black on light surface"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBm5cza3BPvJBi9JOkXnJK5bvtY_tlxZznzjinMymMqKHw61J-6dnm5Vi2w9Lqkt_xGkg78F90F1Qxht44HcpzWWdRQNg7aQeRZcbLaHGGNN5d3JaggxuwQtiUzpaDMmx-oJVnGNnjKskY6lSPwFjEtcycGGdJ84ltiOIR7S0jXbB7YJMT0xzOYznHqMG6b51eLBBq2figi9ADBGCs9usHlkSvcTe11OP_Ef6m_XNAkA-SdlDbmFwdmIz8lpI_I4mAkaZzmzMXzWi-S"
-             
-            />
+            class="absolute -inset-1 bg-gradient-to-r from-tertiary-container to-primary rounded-2xl blur opacity-20 group-focus-within:opacity-40 transition duration-1000">
           </div>
-        </div>
-      </section>
-      <!-- Featured Deals Carousel -->
-      <section class="py-24">
-        <div class="max-w-7xl mx-auto px-6">
-          <div class="flex justify-between items-end mb-12">
-            <div>
-              <h2
-                class="text-4xl font-headline font-bold tracking-tight"
-               
-              >
-                Curated Masterpieces
-              </h2>
-              <p class="text-on-surface-variant mt-2">
-                Selected weekly for maximum impact.
-              </p>
-            </div>
-            <button
-              onclick="window.location.href = 'deals.html'"
-              class="text-primary font-bold flex items-center gap-2 group"
-             
-            >
-              View all deals
-              <span
-                class="material-symbols-outlined transition-transform group-hover:translate-x-1"
-                data-icon="arrow_forward"
-               
-                >arrow_forward</span
-              >
+          <div
+            class="relative flex items-center bg-surface-container-lowest rounded-2xl shadow-xl shadow-primary/5 overflow-hidden">
+            <span class="material-symbols-outlined ml-6 text-on-surface-variant" data-icon="search">search</span>
+            <input id="home-search-input"
+              class="w-full py-6 px-4 bg-transparent border-none focus:ring-0 text-lg placeholder:text-on-surface-variant/50"
+              placeholder="Search brands, products, or categories..." type="text" />
+            <button id="home-search-btn"
+              class="mr-4 px-8 py-3 bg-inverse-surface text-surface rounded-xl font-bold hover:bg-primary transition-colors cursor-pointer z-10">
+              Find
             </button>
           </div>
-          <div
-            id="featured-deals-grid"
-            class="grid grid-cols-1 md:grid-cols-3 gap-8"
-          >
-            <div class="col-span-full py-12 text-center text-slate-500">
-              <span
-                class="material-symbols-outlined text-4xl mb-4 animate-spin text-primary"
-                >autorenew</span
-              >
-              <p>Loading curated masterpieces...</p>
-            </div>
+        </div>
+
+        <!-- Stats Bar (FIX 5) -->
+        <div class="stats-bar max-w-2xl mx-auto flex justify-center gap-12 mt-12 pb-8">
+          <div class="stat-item">
+            <div class="stat-number" id="stat-deals">0</div>
+            <div class="stat-label">Active Deals</div>
+          </div>
+          <div class="stat-item border-l border-white/10 pl-12">
+            <div class="stat-number" id="stat-users">0</div>
+            <div class="stat-label">Happy Students</div>
+          </div>
+          <div class="stat-item border-l border-white/10 pl-12">
+            <div class="stat-number" id="stat-savings">₹1M+</div>
+            <div class="stat-label">Total Savings</div>
           </div>
         </div>
-      </section>
-      <!-- Categories Grid -->
-      <section class="py-24 bg-surface-container-low">
-        <div class="max-w-7xl mx-auto px-6">
-          <h2
-            class="text-4xl font-headline font-bold text-center mb-16"
-           
-          >
-            The Student Portfolio
-          </h2>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <!-- Tech -->
-            <div
-              onclick="
+      </div>
+    </section>
+    <!-- Trending Brands -->
+    <section class="py-12 bg-surface-container-low/50">
+      <div class="max-w-7xl mx-auto px-6">
+        <p class="text-center text-[10px] font-extrabold uppercase tracking-[0.4em] text-on-surface-variant/40 mb-8">
+          Trusted by Global Icons
+        </p>
+        <div class="brand-marquee">
+          <div class="brand-marquee-track">
+            <!-- Original Set -->
+            <img alt="Apple" onclick="window.location.href = 'deals.html?search=apple'" class="brand-logo-item"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgvs-IaSKiUNA3rCITl34PHUpGTMQLJXA_u4r-wj5IYGlcv7qHTDLzTB_738spv4JvlmCEH1q20DwaHj1UUYOgiv0BYbaidsDnl56MIPglzkiL8g1c7l0So4E7o5BjFeAnx5wZneHTRLhdVFh9s8qPzLBvtPUu2b2gRhvp3FioHNQJEoi1tC6-ikvozxireV37Y33fZUIT4lLqTpklGkCxHKX6T5dH4Y4gGReZJTx7zz730Dk2Vx-M2m7nJflArm15pb3g0Ejv0y2v" />
+            <img alt="Amazon" onclick="window.location.href = 'deals.html?search=amazon'" class="brand-logo-item"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHS3zQ69iQKGeRChJPDSWlSmXYUpJGXHS7--RmpaNtKkdyJQWKeFYZChcMzMdNYCHK0m0pAQ-LPt-DdTpnZ78yptetDMEeh69gaHYbqT7jB7GuH3PWxezPEi_Z5Q7M5WpLA4SlSGRoSLAttpiq46AKz14q-RJml_09j378UBCAAFC9odHKL9qnNW6y-1Cidkl1QEsZa5t2xNGMF3DeDu8ffxca659uYLzn7wbCm8IappJ9pa_lwRqsTf76M2lm6HCu8Z7ueC6UjMpc" />
+            <img alt="Myntra" onclick="window.location.href = 'deals.html?search=myntra'" class="brand-logo-item"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNUUU0Wwr-c60ZoENSjFXIF3hlk7q-zaJA0OLfq4vqI0qujaES1qT6cgtvrN5U3Ri9eLK7KKT94A2nBq-JmzeQq8KopfOnqhWN2IKveweaoiZ5f9dXtEU4WVSaq2zXCqrRxH-OFP6NUNL1rR7LDr9m9Hudkzy3QdbBQNuinbBBMqhyj2_J6hgx34NCQESQOTJhz_OWH-SrwZ7pW6CFrmCO4TaWqs2Owv7XUF7bKRDH0OWG9QZgpDbktzNVWx6jiqcE8Xxtdce-g55M" />
+            <img alt="Zomato" onclick="window.location.href = 'deals.html?search=zomato'" class="brand-logo-item"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLbJc7XeSQJUweAizCgcWJTkd7CQs8TofCF1S5gGE9ZohXH7x4WrRz2MMSxqdwJiEC-xp76E1SP-eRJYTf3wBPamG_5YLHhIP1oAa9MF0UlljOpsTxhkxkcZpur8BaHfWmmo9_R3AIqZ6LJLQFW3_5141pinpNdOygyvklAv0KxAAPXXPrRK5r1fMzTkG8LL-dgSXsNFik8ogxNwkExs6X8qg6iD9x1ZmpQiLM1A_2aNBqmbyJn-sC-wEAHk9GVWAH2YXVYkeNxBwx" />
+            <img alt="Nike" onclick="window.location.href = 'deals.html?search=nike'" class="brand-logo-item"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBm5cza3BPvJBi9JOkXnJK5bvtY_tlxZznzjinMymMqKHw61J-6dnm5Vi2w9Lqkt_xGkg78F90F1Qxht44HcpzWWdRQNg7aQeRZcbLaHGGNN5d3JaggxuwQtiUzpaDMmx-oJVnGNnjKskY6lSPwFjEtcycGGdJ84ltiOIR7S0jXbB7YJMT0xzOYznHqMG6b51eLBBq2figi9ADBGCs9usHlkSvcTe11OP_Ef6m_XNAkA-SdlDbmFwdmIz8lpI_I4mAkaZzmzMXzWi-S" />
+            <!-- Duplicated Set for Smooth Loop -->
+            <img alt="Apple" onclick="window.location.href = 'deals.html?search=apple'" class="brand-logo-item"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgvs-IaSKiUNA3rCITl34PHUpGTMQLJXA_u4r-wj5IYGlcv7qHTDLzTB_738spv4JvlmCEH1q20DwaHj1UUYOgiv0BYbaidsDnl56MIPglzkiL8g1c7l0So4E7o5BjFeAnx5wZneHTRLhdVFh9s8qPzLBvtPUu2b2gRhvp3FioHNQJEoi1tC6-ikvozxireV37Y33fZUIT4lLqTpklGkCxHKX6T5dH4Y4gGReZJTx7zz730Dk2Vx-M2m7nJflArm15pb3g0Ejv0y2v" />
+            <img alt="Amazon" onclick="window.location.href = 'deals.html?search=amazon'" class="brand-logo-item"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHS3zQ69iQKGeRChJPDSWlSmXYUpJGXHS7--RmpaNtKkdyJQWKeFYZChcMzMdNYCHK0m0pAQ-LPt-DdTpnZ78yptetDMEeh69gaHYbqT7jB7GuH3PWxezPEi_Z5Q7M5WpLA4SlSGRoSLAttpiq46AKz14q-RJml_09j378UBCAAFC9odHKL9qnNW6y-1Cidkl1QEsZa5t2xNGMF3DeDu8ffxca659uYLzn7wbCm8IappJ9pa_lwRqsTf76M2lm6HCu8Z7ueC6UjMpc" />
+            <img alt="Myntra" onclick="window.location.href = 'deals.html?search=myntra'" class="brand-logo-item"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNUUU0Wwr-c60ZoENSjFXIF3hlk7q-zaJA0OLfq4vqI0qujaES1qT6cgtvrN5U3Ri9eLK7KKT94A2nBq-JmzeQq8KopfOnqhWN2IKveweaoiZ5f9dXtEU4WVSaq2zXCqrRxH-OFP6NUNL1rR7LDr9m9Hudkzy3QdbBQNuinbBBMqhyj2_J6hgx34NCQESQOTJhz_OWH-SrwZ7pW6CFrmCO4TaWqs2Owv7XUF7bKRDH0OWG9QZgpDbktzNVWx6jiqcE8Xxtdce-g55M" />
+            <img alt="Zomato" onclick="window.location.href = 'deals.html?search=zomato'" class="brand-logo-item"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLbJc7XeSQJUweAizCgcWJTkd7CQs8TofCF1S5gGE9ZohXH7x4WrRz2MMSxqdwJiEC-xp76E1SP-eRJYTf3wBPamG_5YLHhIP1oAa9MF0UlljOpsTxhkxkcZpur8BaHfWmmo9_R3AIqZ6LJLQFW3_5141pinpNdOygyvklAv0KxAAPXXPrRK5r1fMzTkG8LL-dgSXsNFik8ogxNwkExs6X8qg6iD9x1ZmpQiLM1A_2aNBqmbyJn-sC-wEAHk9GVWAH2YXVYkeNxBwx" />
+            <img alt="Nike" onclick="window.location.href = 'deals.html?search=nike'" class="brand-logo-item"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBm5cza3BPvJBi9JOkXnJK5bvtY_tlxZznzjinMymMqKHw61J-6dnm5Vi2w9Lqkt_xGkg78F90F1Qxht44HcpzWWdRQNg7aQeRZcbLaHGGNN5d3JaggxuwQtiUzpaDMmx-oJVnGNnjKskY6lSPwFjEtcycGGdJ84ltiOIR7S0jXbB7YJMT0xzOYznHqMG6b51eLBBq2figi9ADBGCs9usHlkSvcTe11OP_Ef6m_XNAkA-SdlDbmFwdmIz8lpI_I4mAkaZzmzMXzWi-S" />
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Featured Deals Carousel -->
+    <section class="py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex justify-between items-end mb-12">
+          <div>
+            <h2 class="text-4xl font-headline font-bold tracking-tight">
+              Curated Masterpieces
+            </h2>
+            <p class="text-on-surface-variant mt-2">
+              Selected weekly for maximum impact.
+            </p>
+          </div>
+          <button onclick="window.location.href = 'deals.html'"
+            class="text-primary font-bold flex items-center gap-2 group">
+            View all deals
+            <span class="material-symbols-outlined transition-transform group-hover:translate-x-1"
+              data-icon="arrow_forward">arrow_forward</span>
+          </button>
+        </div>
+        <div id="featured-deals-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="col-span-full py-12 text-center text-slate-500">
+            <span class="material-symbols-outlined text-4xl mb-4 animate-spin text-primary">autorenew</span>
+            <p>Loading curated masterpieces...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Categories Grid -->
+    <section class="py-24 bg-surface-container-low">
+      <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-headline font-bold text-center mb-16">
+          The Student Portfolio
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <!-- Tech -->
+          <div onclick="
                 window.location.href = 'categories.html?category=electronics'
               "
-              class="bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col items-center justify-center text-center gap-4 hover:bg-primary group transition-all duration-300 cursor-pointer"
-            >
-              <div
-                class="w-16 h-16 rounded-2xl bg-primary/10 group-hover:bg-white/20 flex items-center justify-center"
-              >
-                <span
-                  class="material-symbols-outlined text-primary group-hover:text-white text-3xl"
-                  data-icon="devices"
-                 
-                  >devices</span
-                >
-              </div>
-              <span class="font-bold text-lg group-hover:text-white"
-                >Tech &amp; Gadgets</span
-              >
+            class="bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col items-center justify-center text-center gap-4 hover:bg-primary group transition-all duration-300 cursor-pointer">
+            <div class="w-16 h-16 rounded-2xl bg-primary/10 group-hover:bg-white/20 flex items-center justify-center">
+              <span class="material-symbols-outlined text-primary group-hover:text-white text-3xl"
+                data-icon="devices">devices</span>
             </div>
-            <!-- Fashion -->
-            <div
-              onclick="
+            <span class="font-bold text-lg group-hover:text-white">Tech &amp; Gadgets</span>
+          </div>
+          <!-- Fashion -->
+          <div onclick="
                 window.location.href = 'categories.html?category=clothing'
               "
-              class="bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col items-center justify-center text-center gap-4 hover:bg-secondary group transition-all duration-300 cursor-pointer"
-            >
-              <div
-                class="w-16 h-16 rounded-2xl bg-secondary/10 group-hover:bg-white/20 flex items-center justify-center"
-              >
-                <span
-                  class="material-symbols-outlined text-secondary group-hover:text-white text-3xl"
-                  data-icon="apparel"
-                 
-                  >apparel</span
-                >
-              </div>
-              <span class="font-bold text-lg group-hover:text-white"
-                >Fashion</span
-              >
+            class="bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col items-center justify-center text-center gap-4 hover:bg-secondary group transition-all duration-300 cursor-pointer">
+            <div class="w-16 h-16 rounded-2xl bg-secondary/10 group-hover:bg-white/20 flex items-center justify-center">
+              <span class="material-symbols-outlined text-secondary group-hover:text-white text-3xl"
+                data-icon="apparel">apparel</span>
             </div>
-            <!-- Food -->
-            <div
-              onclick="window.location.href = 'categories.html?category=food'"
-              class="bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col items-center justify-center text-center gap-4 hover:bg-error group transition-all duration-300 cursor-pointer"
-            >
-              <div
-                class="w-16 h-16 rounded-2xl bg-error/10 group-hover:bg-white/20 flex items-center justify-center"
-              >
-                <span
-                  class="material-symbols-outlined text-error group-hover:text-white text-3xl"
-                  data-icon="restaurant"
-                 
-                  >restaurant</span
-                >
-              </div>
-              <span class="font-bold text-lg group-hover:text-white"
-                >Food &amp; Dining</span
-              >
+            <span class="font-bold text-lg group-hover:text-white">Fashion</span>
+          </div>
+          <!-- Food -->
+          <div onclick="window.location.href = 'categories.html?category=food'"
+            class="bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col items-center justify-center text-center gap-4 hover:bg-error group transition-all duration-300 cursor-pointer">
+            <div class="w-16 h-16 rounded-2xl bg-error/10 group-hover:bg-white/20 flex items-center justify-center">
+              <span class="material-symbols-outlined text-error group-hover:text-white text-3xl"
+                data-icon="restaurant">restaurant</span>
             </div>
-            <!-- Travel -->
-            <div
-              onclick="
+            <span class="font-bold text-lg group-hover:text-white">Food &amp; Dining</span>
+          </div>
+          <!-- Travel -->
+          <div onclick="
                 window.location.href = 'categories.html?category=services'
               "
-              class="bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col items-center justify-center text-center gap-4 hover:bg-tertiary group transition-all duration-300 cursor-pointer"
-            >
-              <div
-                class="w-16 h-16 rounded-2xl bg-tertiary/10 group-hover:bg-white/20 flex items-center justify-center"
-              >
-                <span
-                  class="material-symbols-outlined text-tertiary group-hover:text-white text-3xl"
-                  data-icon="flight_takeoff"
-                 
-                  >flight_takeoff</span
-                >
-              </div>
-              <span class="font-bold text-lg group-hover:text-white"
-                >Travel &amp; Services</span
-              >
+            class="bg-surface-container-lowest p-8 rounded-[2rem] flex flex-col items-center justify-center text-center gap-4 hover:bg-tertiary group transition-all duration-300 cursor-pointer">
+            <div class="w-16 h-16 rounded-2xl bg-tertiary/10 group-hover:bg-white/20 flex items-center justify-center">
+              <span class="material-symbols-outlined text-tertiary group-hover:text-white text-3xl"
+                data-icon="flight_takeoff">flight_takeoff</span>
             </div>
+            <span class="font-bold text-lg group-hover:text-white">Travel &amp; Services</span>
           </div>
         </div>
-      </section>
-      <!-- Social Proof -->
-      <section class="py-32 overflow-hidden relative">
-        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-          <h2
-            class="text-5xl font-headline font-extrabold tracking-tight mb-8"
-           
-          >
-            Join the movement.
-          </h2>
-          <p
-            class="text-2xl text-on-surface-variant font-medium mb-12 italic"
-           
-          >
-            "Over 1 million Indian students are already saving ₹2,000+ monthly
-            with Campus Loot."
-          </p>
-          <div class="flex justify-center -space-x-4 mb-8">
-            <img
-              class="w-16 h-16 rounded-full border-4 border-surface"
-              data-alt="headshot of a young man smiling with short hair and modern glasses"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi2DnaniP6D5XBkaZS6LW3UGJ8bAEG1ds4Eus_LO96oTfY6H1pkgve5JQOniFuiho2Cf04ZAWndjnxaa3sKRJAqESTfBgBZb7JuJxvsPQyHxlQ0BlU5HFNqG4gkwBPu7zwZLAttHIEgNjecyCQXYtvosEw1c3l_xzKKx33dpUAeV801_HPloub8B-S_poevvB6Rvx7YkZxR4KMYX1ritaTMWBLMe6TG3xSQenuTiS1Bh0nL0ucb5tD0G0Itx-4gx0JDu17CnUeVA2N"
-             
-            />
-            <img
-              class="w-16 h-16 rounded-full border-4 border-surface"
-              data-alt="headshot of a cheerful woman with long dark hair and a warm smile"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR-ssjMZWjobExij2gPSGksZH1Ll2FmJh9rtkQv9rQ4BLsAku8cLTSQ7Ru3gRG_AbhJuKxIJcIH5ui9D1dUiOlpX0xt5EM9bUOxLn8zzXtbwEBgF43svnMG49ITNrMi1sfM73FGTAwPdUfvRiZBNlJV27ceT3kDMlhrz6skJoTsX2cmvHtg8MRUEKemRnCPt-E1u6vHbsxkndqhIA_ZhBawQjNpdWOaiqkHiEmjvQvamdkbZnOKJfwVu21qTk5wbc3Q1ER_7IkqtRe"
-             
-            />
-            <img
-              class="w-16 h-16 rounded-full border-4 border-surface"
-              data-alt="headshot of a man with a beard and professional look"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ2dCLqBEUShV83j-nkZ0p9Tcr_tG4pUw7S-SiEluILdN24y6BUEmJ9ePQzW298RB3gfI094CSemQwBB6xv1T4uw0-kTNjiybGJgUBRiPrHMWkl-Kh_3LDZRnz264nQkeqPabB3OgO46y2hJTX482LjcDODfLK9XujSqiBrnwLx1d-xaD1xqqXDaDSPFWgQIBpZwivGjbZ5mQGORjDytgge7pUtXqRMp1HoschhYC8G4OP_6Y5PkJt9QADigzhHW3v5IqCn0VmzvFX"
-             
-            />
-            <div
-              class="w-16 h-16 rounded-full border-4 border-surface bg-primary text-on-primary flex items-center justify-center font-bold text-sm"
-             
-            >
-              +1M
-            </div>
-          </div>
-          <div class="flex items-center justify-center gap-8 opacity-40">
-            <div class="flex items-center gap-2">
-              <span
-                class="material-symbols-outlined"
-                data-icon="verified_user"
-               
-                >verified_user</span
-              >
-              <span class="font-bold">Safe &amp; Secure</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span
-                class="material-symbols-outlined"
-                data-icon="school"
-               
-                >school</span
-              >
-              <span class="font-bold">Student Verified</span>
-            </div>
-          </div>
-        </div>
-        <!-- Decorative blur -->
-        <div
-          class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-32 bg-primary/20 blur-[100px] rounded-full"
-        ></div>
-      </section>
-    </main>
-    <footer id="site-footer"></footer>
-    <!-- Side Navigation (Mobile/Tablet Only) -->
-    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 md:hidden">
-      <div
-        class="bg-white/90 backdrop-blur-xl border border-white/20 shadow-2xl rounded-full px-6 py-4 flex gap-8 items-center"
-      >
-        <span
-          class="material-symbols-outlined text-primary"
-          data-icon="dashboard"
-          style=""
-          >dashboard</span
-        >
-        <span
-          class="material-symbols-outlined text-slate-400"
-          data-icon="bookmark"
-          style=""
-          >bookmark</span
-        >
-        <span
-          class="material-symbols-outlined text-slate-400 text-3xl"
-          data-icon="add_circle"
-          data-weight="fill"
-          style=""
-          >add_circle</span
-        >
-        <span
-          class="material-symbols-outlined text-slate-400"
-          data-icon="settings"
-          style=""
-          >settings</span
-        >
-        <span
-          class="material-symbols-outlined text-slate-400"
-          data-icon="help_outline"
-          style=""
-          >help_outline</span
-        >
       </div>
+    </section>
+    <!-- Social Proof -->
+    <section class="py-32 overflow-hidden relative">
+      <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+        <h2 class="text-5xl font-headline font-extrabold tracking-tight mb-8">
+          Join the movement.
+        </h2>
+        <p class="text-2xl text-on-surface-variant font-medium mb-12 italic">
+          "Over 1 million Indian students are already saving ₹2,000+ monthly
+          with Campus Loot."
+        </p>
+        <div class="flex justify-center -space-x-4 mb-8">
+          <img class="w-16 h-16 rounded-full border-4 border-surface"
+            data-alt="headshot of a young man smiling with short hair and modern glasses"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi2DnaniP6D5XBkaZS6LW3UGJ8bAEG1ds4Eus_LO96oTfY6H1pkgve5JQOniFuiho2Cf04ZAWndjnxaa3sKRJAqESTfBgBZb7JuJxvsPQyHxlQ0BlU5HFNqG4gkwBPu7zwZLAttHIEgNjecyCQXYtvosEw1c3l_xzKKx33dpUAeV801_HPloub8B-S_poevvB6Rvx7YkZxR4KMYX1ritaTMWBLMe6TG3xSQenuTiS1Bh0nL0ucb5tD0G0Itx-4gx0JDu17CnUeVA2N" />
+          <img class="w-16 h-16 rounded-full border-4 border-surface"
+            data-alt="headshot of a cheerful woman with long dark hair and a warm smile"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR-ssjMZWjobExij2gPSGksZH1Ll2FmJh9rtkQv9rQ4BLsAku8cLTSQ7Ru3gRG_AbhJuKxIJcIH5ui9D1dUiOlpX0xt5EM9bUOxLn8zzXtbwEBgF43svnMG49ITNrMi1sfM73FGTAwPdUfvRiZBNlJV27ceT3kDMlhrz6skJoTsX2cmvHtg8MRUEKemRnCPt-E1u6vHbsxkndqhIA_ZhBawQjNpdWOaiqkHiEmjvQvamdkbZnOKJfwVu21qTk5wbc3Q1ER_7IkqtRe" />
+          <img class="w-16 h-16 rounded-full border-4 border-surface"
+            data-alt="headshot of a man with a beard and professional look"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ2dCLqBEUShV83j-nkZ0p9Tcr_tG4pUw7S-SiEluILdN24y6BUEmJ9ePQzW298RB3gfI094CSemQwBB6xv1T4uw0-kTNjiybGJgUBRiPrHMWkl-Kh_3LDZRnz264nQkeqPabB3OgO46y2hJTX482LjcDODfLK9XujSqiBrnwLx1d-xaD1xqqXDaDSPFWgQIBpZwivGjbZ5mQGORjDytgge7pUtXqRMp1HoschhYC8G4OP_6Y5PkJt9QADigzhHW3v5IqCn0VmzvFX" />
+          <div
+            class="w-16 h-16 rounded-full border-4 border-surface bg-primary text-on-primary flex items-center justify-center font-bold text-sm">
+            +1M
+          </div>
+        </div>
+        <div class="flex items-center justify-center gap-8 opacity-40">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+            <span class="font-bold">Safe &amp; Secure</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined" data-icon="school">school</span>
+            <span class="font-bold">Student Verified</span>
+          </div>
+        </div>
+      </div>
+      <!-- Decorative blur -->
+      <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-32 bg-primary/20 blur-[100px] rounded-full">
+      </div>
+    </section>
+  </main>
+  <footer id="site-footer"></footer>
+  <!-- Side Navigation (Mobile/Tablet Only) -->
+  <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 md:hidden">
+    <div
+      class="bg-white/90 backdrop-blur-xl border border-white/20 shadow-2xl rounded-full px-6 py-4 flex gap-8 items-center">
+      <span class="material-symbols-outlined text-primary" data-icon="dashboard">dashboard</span>
+      <span class="material-symbols-outlined text-slate-400" data-icon="bookmark">bookmark</span>
+      <span class="material-symbols-outlined text-slate-400 text-3xl" data-icon="add_circle"
+        data-weight="fill">add_circle</span>
+      <span class="material-symbols-outlined text-slate-400" data-icon="settings">settings</span>
+      <span class="material-symbols-outlined text-slate-400" data-icon="help_outline">help_outline</span>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-    <script src="js/supabase.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/components.js"></script>
-    <script src="js/deals.js"></script>
-    <script>
-      (async function initHomePage() {
-        // Initialize header/footer
-        renderHeader('home');
-        renderFooter();
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/deals.js"></script>
+  <script>
+    (async function initHomePage() {
+      // Initialize header/footer
+      renderHeader('home');
+      renderFooter();
 
-        // Local search logic
-        const homeSearch = document.getElementById("home-search-input");
-        const homeSearchBtn = document.getElementById("home-search-btn");
+      // Local search logic
+      const homeSearch = document.getElementById("home-search-input");
+      const homeSearchBtn = document.getElementById("home-search-btn");
 
-        if (homeSearch && homeSearchBtn) {
-          homeSearchBtn.onclick = () => {
-            const val = homeSearch.value.trim();
-            if (val) window.location.href = `deals.html?search=${encodeURIComponent(val)}`;
-          };
-          homeSearch.onkeypress = (e) => {
-            if (e.key === "Enter" && homeSearch.value.trim()) {
-              window.location.href = `deals.html?search=${encodeURIComponent(homeSearch.value.trim())}`;
-            }
-          };
-        }
-
-        // Global search (from header component)
-        const navSearch = document.getElementById("nav-search-input");
-        if (navSearch) {
-          navSearch.onkeypress = (e) => {
-            if (e.key === "Enter" && navSearch.value.trim()) {
-              window.location.href = `deals.html?search=${encodeURIComponent(navSearch.value.trim())}`;
-            }
-          };
-        }
-
-        // Load Featured Deals
-        const featuredGrid = document.getElementById("featured-deals-grid");
-        if (featuredGrid) {
-          try {
-            const featuredDeals = await fetchFeaturedDeals();
-            if (featuredDeals && featuredDeals.length > 0) {
-              featuredGrid.innerHTML = "";
-              featuredDeals.forEach((deal) => {
-                featuredGrid.appendChild(renderDealCard(deal));
-              });
-            } else {
-              featuredGrid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><p>No featured deals curated at the moment. Explore to see all deals.</p></div>`;
-            }
-          } catch (err) {
-            console.error("Failed to load featured deals:", err);
-            featuredGrid.innerHTML = `<div class="col-span-full py-12 text-center text-error"><p>Unable to load masterpieces at this time.</p></div>`;
+      if (homeSearch && homeSearchBtn) {
+        homeSearchBtn.onclick = () => {
+          const val = homeSearch.value.trim();
+          if (val) window.location.href = `deals.html?search=${encodeURIComponent(val)}`;
+        };
+        homeSearch.onkeypress = (e) => {
+          if (e.key === "Enter" && homeSearch.value.trim()) {
+            window.location.href = `deals.html?search=${encodeURIComponent(homeSearch.value.trim())}`;
           }
-        }
+        };
+      }
 
-        // Load Stats (FIX 5)
-        async function loadStats() {
-          try {
-            const stats = await fetchStats();
-            const dealsEl = document.getElementById('stat-deals');
-            const usersEl = document.getElementById('stat-users');
-            if (dealsEl) dealsEl.textContent = (stats.dealsCount || 0).toLocaleString();
-            if (usersEl) usersEl.textContent = (stats.usersCount || 0).toLocaleString();
-          } catch (err) {
-            console.error("Failed to load public stats:", err);
-            // Fallback to static numbers is already in HTML
+      // Global search (from header component)
+      const navSearch = document.getElementById("nav-search-input");
+      if (navSearch) {
+        navSearch.onkeypress = (e) => {
+          if (e.key === "Enter" && navSearch.value.trim()) {
+            window.location.href = `deals.html?search=${encodeURIComponent(navSearch.value.trim())}`;
           }
+        };
+      }
+
+      // Load Featured Deals
+      const featuredGrid = document.getElementById("featured-deals-grid");
+      if (featuredGrid) {
+        try {
+          const featuredDeals = await fetchFeaturedDeals();
+          if (featuredDeals && featuredDeals.length > 0) {
+            featuredGrid.innerHTML = "";
+            featuredDeals.forEach((deal) => {
+              featuredGrid.appendChild(renderDealCard(deal));
+            });
+          } else {
+            featuredGrid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><p>No featured deals curated at the moment. Explore to see all deals.</p></div>`;
+          }
+        } catch (err) {
+          console.error("Failed to load featured deals:", err);
+          featuredGrid.innerHTML = `<div class="col-span-full py-12 text-center text-error"><p>Unable to load masterpieces at this time.</p></div>`;
         }
-        await loadStats();
-      })();
-    </script>
-  </body>
+      }
+
+      // Load Stats (FIX 5)
+      async function loadStats() {
+        try {
+          const stats = await fetchStats();
+          const dealsEl = document.getElementById('stat-deals');
+          const usersEl = document.getElementById('stat-users');
+          if (dealsEl) dealsEl.textContent = (stats.dealsCount || 0).toLocaleString();
+          if (usersEl) usersEl.textContent = (stats.usersCount || 0).toLocaleString();
+        } catch (err) {
+          console.error("Failed to load public stats:", err);
+          // Fallback to static numbers is already in HTML
+        }
+      }
+      await loadStats();
+    })();
+  </script>
+</body>
+
 </html>
