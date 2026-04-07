@@ -68,7 +68,7 @@ function renderDealCard(deal, options = {}) {
   const isSaved = savedDeals.has(deal.id);
 
   const card = document.createElement('article');
-  card.className = 'group relative bg-white border border-slate-100 rounded-2xl p-5 hover:border-indigo-600/30 transition-all duration-300 cursor-pointer overflow-hidden';
+  card.className = 'deal-card group relative bg-white border border-slate-100 rounded-2xl p-5 hover:border-indigo-600/30 transition-all duration-300 cursor-pointer overflow-hidden';
   card.dataset.dealId = deal.id;
   card.dataset.category = deal.category;
   card.addEventListener('click', (e) => {
@@ -107,8 +107,8 @@ function renderDealCard(deal, options = {}) {
   const hasBanner = !!deal.image_url;
   const imageDiv = document.createElement('div');
   imageDiv.className = hasBanner
-    ? 'aspect-[16/9] md:aspect-[4/3] rounded-xl bg-slate-50 mb-6 overflow-hidden flex items-center justify-center group-hover:opacity-90 transition-opacity'
-    : 'aspect-square rounded-xl bg-slate-50 mb-6 overflow-hidden flex items-center justify-center p-8 group-hover:opacity-90 transition-opacity';
+    ? 'deal-card-image aspect-[16/9] md:aspect-[4/3] rounded-xl bg-slate-50 mb-6 overflow-hidden flex items-center justify-center group-hover:opacity-90 transition-opacity'
+    : 'deal-card-image aspect-square rounded-xl bg-slate-50 mb-6 overflow-hidden flex items-center justify-center p-8 group-hover:opacity-90 transition-opacity';
 
   mountDealImage(imageDiv, deal, {
     placeholderClass: 'text-6xl text-on-surface-variant font-black opacity-30 select-none',
@@ -383,24 +383,24 @@ function renderHeader(activePage = '') {
   const header = document.getElementById('site-header');
   if (!header) return;
 
-  header.className = 'w-full z-50 bg-white border-b border-slate-100';
+  header.className = 'header w-full z-50';
   header.innerHTML = `
-    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-2 group">
+    <div class="header-inner">
+      <a href="index.html" class="logo group">
         <span class="material-symbols-outlined text-indigo-600 text-3xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
         <span class="text-xl font-bold tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">Campus<span class="text-indigo-600">Loot</span></span>
       </a>
-      <nav class="hidden md:flex items-center gap-8" id="nav-links">
-        <a href="deals.html" class="text-sm font-medium ${activePage === 'deals' || activePage === 'home' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-900'} transition-colors">Explore</a>
-        <a href="categories.html" class="text-sm font-medium ${activePage === 'categories' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-900'} transition-colors">Categories</a>
-        <a href="trending.html" class="text-sm font-medium ${activePage === 'trending' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-900'} transition-colors">Trending</a>
+      <nav class="nav-links hidden md:flex" id="nav-links">
+        <a href="deals.html" class="text-sm font-medium ${activePage === 'deals' || activePage === 'home' ? 'active' : ''} transition-colors">Explore</a>
+        <a href="categories.html" class="text-sm font-medium ${activePage === 'categories' ? 'active' : ''} transition-colors">Categories</a>
+        <a href="trending.html" class="text-sm font-medium ${activePage === 'trending' ? 'active' : ''} transition-colors">Trending</a>
       </nav>
-      <div class="hidden md:flex items-center gap-4" id="nav-auth"></div>
-      <button class="md:hidden p-2 text-slate-500 hover:text-slate-900" id="hamburger-btn" aria-label="Toggle menu">
+      <div class="nav-auth hidden md:flex" id="nav-auth"></div>
+      <button class="hamburger md:hidden" id="hamburger-btn" aria-label="Toggle menu">
         <span class="material-symbols-outlined">menu</span>
       </button>
     </div>
-    <div class="hidden md:hidden bg-white border-b border-slate-100" id="mobile-nav">
+    <div class="hidden md:hidden bg-white/95 backdrop-blur-xl border-b border-slate-100" id="mobile-nav">
       <div class="flex flex-col p-6 gap-4">
         <a href="deals.html" class="text-slate-500 hover:text-indigo-600 font-medium">Explore</a>
         <a href="categories.html" class="text-slate-500 hover:text-indigo-600 font-medium">Categories</a>

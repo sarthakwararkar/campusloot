@@ -8,7 +8,7 @@ def scrape_evergreen_software(supabase, existing):
     deals = [
         {"title": "GitHub Student Developer Pack", "brand": "GitHub", "url": "https://education.github.com/pack"},
         {"title": "JetBrains All Products Pack", "brand": "JetBrains", "url": "https://www.jetbrains.com/community/education/"},
-        {"title": "Notion Personal Pro", "brand": "Notion", "url": "https://www.notion.so/students"},
+        {"title": "Notion Personal Pro", "brand": "Notion", "url": "https://www.notion.so/product/notion-for-education"},
         {"title": "Figma Education", "brand": "Figma", "url": "https://www.figma.com/education/"},
         {"title": "Canva Pro for Education", "brand": "Canva", "url": "https://www.canva.com/education/"},
     ]
