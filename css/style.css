@@ -1664,3 +1664,25 @@ select.form-input {
     grid-template-columns: 1fr;
   }
 }
+
+/* Marquee Animation */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+  gap: 3rem;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}

@@ -387,15 +387,13 @@ function renderHeader(activePage = '') {
   header.innerHTML = `
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2 group">
-        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-          <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
-        </div>
-        <span class="text-xl font-bold tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">CampusLoot</span>
+        <span class="material-symbols-outlined text-indigo-600 text-3xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+        <span class="text-xl font-bold tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">Campus<span class="text-indigo-600">Loot</span></span>
       </a>
       <nav class="hidden md:flex items-center gap-8" id="nav-links">
         <a href="deals.html" class="text-sm font-medium ${activePage === 'deals' || activePage === 'home' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-900'} transition-colors">Explore</a>
         <a href="categories.html" class="text-sm font-medium ${activePage === 'categories' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-900'} transition-colors">Categories</a>
-        <a href="trending.html" class="text-sm font-medium ${activePage === 'trending' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-900'} transition-colors">About</a>
+        <a href="trending.html" class="text-sm font-medium ${activePage === 'trending' ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-900'} transition-colors">Trending</a>
       </nav>
       <div class="hidden md:flex items-center gap-4" id="nav-auth"></div>
       <button class="md:hidden p-2 text-slate-500 hover:text-slate-900" id="hamburger-btn" aria-label="Toggle menu">
@@ -406,7 +404,7 @@ function renderHeader(activePage = '') {
       <div class="flex flex-col p-6 gap-4">
         <a href="deals.html" class="text-slate-500 hover:text-indigo-600 font-medium">Explore</a>
         <a href="categories.html" class="text-slate-500 hover:text-indigo-600 font-medium">Categories</a>
-        <a href="trending.html" class="text-slate-500 hover:text-indigo-600 font-medium">About</a>
+        <a href="trending.html" class="text-slate-500 hover:text-indigo-600 font-medium">Trending</a>
         <div id="mobile-auth" class="pt-4 border-t border-slate-100 flex flex-col gap-2"></div>
       </div>
     </div>
