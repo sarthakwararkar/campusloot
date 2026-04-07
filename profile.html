@@ -46,38 +46,38 @@
   <link rel="icon" href="/favicon.ico" />
 
 </head>
-<body>
+  <body class="bg-black text-white selection:bg-indigo-500/30 overflow-x-hidden">
   <header id="site-header"></header>
 
   <main class="container" style="padding-top: var(--space-xl); padding-bottom: var(--space-3xl);">
     <!-- Profile Header -->
-    <section class="profile-hero">
-      <div class="profile-avatar" id="profile-avatar">?</div>
+    <section class="profile-hero bg-white/12 backdrop-blur-2xl rounded-3xl p-10 border border-white/20 shadow-2xl mb-12">
+      <div class="profile-avatar bg-indigo-500 text-white shadow-lg" id="profile-avatar">?</div>
       <div class="profile-info">
-        <h1 id="profile-name" class="profile-name">Loading...</h1>
-        <p id="profile-college-city" class="profile-subtitle">—</p>
+        <h1 id="profile-name" class="profile-name text-white">Loading...</h1>
+        <p id="profile-college-city" class="profile-subtitle text-slate-400">—</p>
         <div class="profile-stats">
           <div class="profile-stat">
-            <span id="profile-stats-saved" class="profile-stat-number">0</span>
-            <span class="profile-stat-label">Deals Saved</span>
+            <span id="profile-stats-saved" class="profile-stat-number text-indigo-400">0</span>
+            <span class="profile-stat-label text-slate-400">Deals Saved</span>
           </div>
           <div class="profile-stat">
-            <span id="profile-stats-subs" class="profile-stat-number">0</span>
-            <span class="profile-stat-label">Submissions</span>
+            <span id="profile-stats-subs" class="profile-stat-number text-indigo-400">0</span>
+            <span class="profile-stat-label text-slate-400">Submissions</span>
           </div>
           <div class="profile-stat">
-            <span id="profile-stats-since" class="profile-stat-number">—</span>
-            <span class="profile-stat-label">Member Since</span>
+            <span id="profile-stats-since" class="profile-stat-number text-indigo-400">—</span>
+            <span class="profile-stat-label text-slate-400">Member Since</span>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Tab Navigation -->
-    <div class="profile-tabs">
-      <button class="profile-tab active" data-tab="saved">📌 Saved Deals</button>
-      <button class="profile-tab" data-tab="submissions">📝 My Submissions</button>
-      <button class="profile-tab" data-tab="settings">⚙️ Settings</button>
+    <div class="profile-tabs flex gap-4 mb-8">
+      <button class="profile-tab px-6 py-3 rounded-xl bg-white/10 text-slate-300 font-bold hover:bg-white/20 transition-all border border-white/10 active-tab" data-tab="saved">📌 Saved Deals</button>
+      <button class="profile-tab px-6 py-3 rounded-xl bg-white/5 text-slate-400 font-bold hover:bg-white/10 transition-all border border-white/5" data-tab="submissions">📝 My Submissions</button>
+      <button class="profile-tab px-6 py-3 rounded-xl bg-white/5 text-slate-400 font-bold hover:bg-white/10 transition-all border border-white/5" data-tab="settings">⚙️ Settings</button>
     </div>
 
     <!-- Tab: Saved Deals -->

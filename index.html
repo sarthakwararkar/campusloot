@@ -162,8 +162,8 @@
 
 </head>
 
-<body class="bg-surface font-body text-on-surface antialiased">
-  <!-- Top Navigation Bar -->
+<body class="bg-black font-body text-white antialiased">
+  <!-- Star Background Canvas (Injected via JS) -->
   <header id="site-header"></header>
   <main>
     <!-- Hero Section -->
@@ -171,16 +171,17 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
         <div>
           <span
-            class="inline-block px-3 py-1 mb-6 text-xs font-bold tracking-wider text-indigo-600 uppercase bg-indigo-50 rounded-full border border-indigo-100">
+            class="inline-block px-4 py-1.5 mb-6 text-[10px] font-extrabold uppercase tracking-[0.2em] text-indigo-400 bg-indigo-500/10 rounded-full border border-indigo-500/20 backdrop-blur-sm">
             Exclusive Student Offers
           </span>
-          <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6">
-            Exclusive Student<br>Deals in India
+          <h1 class="text-6xl md:text-8xl font-black text-white leading-[1.1] tracking-tight mb-8">
+            Exclusive <span
+              class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-white">Student</span><br>
+            Deals in India
           </h1>
-          <p class="text-lg text-slate-500 mb-10 max-w-lg">
-            A curated collection for the next generation of leaders. Access
-            bespoke offers on technology, lifestyle, and academic essentials
-            tailored for the modern scholar.
+          <p class="text-xl md:text-2xl text-slate-300 leading-relaxed max-w-2xl mb-12 font-medium">
+            A curated collection for the next generation of leaders. Access bespoke offers on technology, lifestyle, and
+            academic essentials tailored for the modern scholar.
           </p>
           <div class="flex items-center gap-4">
             <button
@@ -188,26 +189,26 @@
               Start Exploring
             </button>
             <button
-              class="px-8 py-3 bg-white text-indigo-600 font-bold rounded-xl border border-indigo-100 shadow-sm hover:bg-indigo-50 transition-colors">
+              class="px-8 py-3 bg-white/5 backdrop-blur-sm text-white font-bold rounded-xl border border-white/10 shadow-lg hover:bg-white/10 transition-all active:scale-95">
               Partner Institutions
             </button>
           </div>
         </div>
         <div class="relative">
           <div
-            class="aspect-[4/3] w-full rounded-[2rem] overflow-hidden bg-slate-100 p-2 shadow-2xl border border-slate-100">
-            <div class="w-full h-full bg-cover bg-center rounded-[1.5rem]"
+            class="aspect-[4/3] w-full rounded-[2rem] overflow-hidden bg-slate-800 p-2 shadow-2xl border border-slate-700">
+            <div class="w-full h-full bg-cover bg-center rounded-[1.5rem] opacity-80"
               style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop');">
             </div>
           </div>
           <div
-            class="absolute -bottom-6 left-1/2 -translate-x-1/2 md:left-12 md:translate-x-0 bg-white/90 backdrop-blur border border-slate-100 shadow-lg rounded-2xl px-6 py-4 flex items-center gap-4">
+            class="absolute -bottom-6 left-1/2 -translate-x-1/2 md:left-12 md:translate-x-0 bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl px-6 py-4 flex items-center gap-4">
             <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
               <span class="material-symbols-outlined text-indigo-600">verified</span>
             </div>
             <div>
-              <p class="font-bold text-slate-900 text-sm">University Confirmed</p>
-              <p class="text-xs text-slate-500">Over 100+ institutions verified.</p>
+              <p class="font-bold text-sm text-white">University Confirmed</p>
+              <p class="text-xs text-slate-400">Over 100+ institutions verified.</p>
             </div>
           </div>
         </div>
@@ -216,10 +217,10 @@
 
     <!-- Search Section -->
     <section class="max-w-4xl mx-auto px-6 py-12 relative z-20">
-      <div class="bg-white border border-slate-200 rounded-2xl p-2 shadow-sm flex items-center">
+      <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl flex items-center">
         <span class="material-symbols-outlined text-slate-400 ml-4">search</span>
         <input id="home-search-input" type="text" placeholder="Search for brands, categories, or universities"
-          class="flex-1 bg-transparent border-none focus:ring-0 px-4 py-3 placeholder:text-slate-400">
+          class="flex-1 bg-transparent border-none focus:ring-0 px-4 py-3 placeholder:text-slate-400 text-white">
         <button id="home-search-btn"
           class="bg-indigo-600 text-white font-bold px-8 py-3 rounded-xl hover:bg-indigo-700 transition-colors">
           Search Deals
@@ -228,7 +229,7 @@
     </section>
 
     <!-- Trending Brands -->
-    <section class="py-12 bg-slate-50/50">
+    <section class="py-16 bg-white/5 border-y border-white/5">
       <div class="max-w-7xl mx-auto px-6">
         <p class="text-center text-[10px] font-extrabold uppercase tracking-[0.4em] text-slate-400 mb-8">
           Trusted by Global Icons
@@ -275,15 +276,15 @@
     <section class="max-w-7xl mx-auto px-6 py-16">
       <div class="flex justify-between items-end mb-10">
         <div>
-          <h2 class="text-3xl font-extrabold tracking-tight text-slate-900">
+          <h2 class="text-3xl font-extrabold tracking-tight text-white">
             Curated Deals
           </h2>
-          <p class="text-slate-500 mt-2 text-sm">
+          <p class="text-slate-400 mt-2 text-sm">
             The best offers specifically selected for their academic and professional value.
           </p>
         </div>
         <button onclick="window.location.href = 'deals.html'"
-          class="text-indigo-600 font-bold flex items-center gap-2 group text-sm hover:text-indigo-700 transition-colors">
+          class="text-indigo-400 font-bold flex items-center gap-2 group text-sm hover:text-indigo-300 transition-colors">
           View All collections
           <span
             class="material-symbols-outlined transition-transform group-hover:translate-x-1 text-sm">arrow_forward</span>
@@ -298,59 +299,59 @@
     </section>
 
     <!-- Categories Grid -->
-    <section class="bg-slate-50 py-20 border-y border-slate-100">
+    <section class="bg-slate-900 py-20 border-y border-slate-800">
       <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-2xl font-extrabold text-center mb-2 text-slate-900">
+        <h2 class="text-2xl font-extrabold text-center mb-2 text-white">
           Browse by Category
         </h2>
-        <p class="text-center text-slate-500 text-sm mb-12">
+        <p class="text-center text-slate-400 text-sm mb-12">
           Navigate through our meticulously arranged collections to find exactly what you need.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
           <!-- Tech -->
           <div onclick="window.location.href = 'categories.html?category=electronics'"
-            class="bg-white border border-slate-100 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-600/30 group transition-all duration-300 cursor-pointer shadow-sm">
+            class="bg-white/5 backdrop-blur-lg border border-white/10 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-400/50 group transition-all duration-300 cursor-pointer shadow-lg hover:bg-white/10">
             <span
               class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 text-2xl transition-colors">devices</span>
             <span
-              class="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">Electronics</span>
+              class="font-bold text-xs text-slate-400 group-hover:text-indigo-400 transition-colors">Electronics</span>
           </div>
           <!-- Software -->
           <div onclick="window.location.href = 'categories.html?category=software'"
-            class="bg-white border border-slate-100 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-600/30 group transition-all duration-300 cursor-pointer shadow-sm">
+            class="bg-white/5 backdrop-blur-lg border border-white/10 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-400/50 group transition-all duration-300 cursor-pointer shadow-lg hover:bg-white/10">
             <span
               class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 text-2xl transition-colors">code</span>
-            <span class="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">Software</span>
+            <span class="font-bold text-xs text-slate-400 group-hover:text-indigo-400 transition-colors">Software</span>
           </div>
           <!-- Fashion -->
           <div onclick="window.location.href = 'categories.html?category=clothing'"
-            class="bg-white border border-slate-100 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-600/30 group transition-all duration-300 cursor-pointer shadow-sm">
+            class="bg-white/5 backdrop-blur-lg border border-white/10 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-400/50 group transition-all duration-300 cursor-pointer shadow-lg hover:bg-white/10">
             <span
               class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 text-2xl transition-colors">apparel</span>
-            <span class="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">Fashion</span>
+            <span class="font-bold text-xs text-white group-hover:text-indigo-400 transition-colors">Fashion</span>
           </div>
           <!-- Education -->
           <div onclick="window.location.href = 'categories.html?category=courses'"
-            class="bg-white border border-slate-100 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-600/30 group transition-all duration-300 cursor-pointer shadow-sm">
+            class="bg-white/5 backdrop-blur-lg border border-white/10 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-400/50 group transition-all duration-300 cursor-pointer shadow-lg hover:bg-white/10">
             <span
               class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 text-2xl transition-colors">school</span>
             <span
-              class="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">Education</span>
+              class="font-bold text-xs text-white group-hover:text-indigo-400 transition-colors">Education</span>
           </div>
           <!-- Food -->
           <div onclick="window.location.href = 'categories.html?category=food'"
-            class="bg-white border border-slate-100 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-600/30 group transition-all duration-300 cursor-pointer shadow-sm">
+            class="bg-white/5 backdrop-blur-lg border border-white/10 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-400/50 group transition-all duration-300 cursor-pointer shadow-lg hover:bg-white/10">
             <span
               class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 text-2xl transition-colors">restaurant</span>
-            <span class="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">Food &
-              Dining</span>
+            <span class="font-bold text-xs text-white group-hover:text-indigo-400 transition-colors">Food &
+              Drinks</span>
           </div>
           <!-- Sports -->
           <div onclick="window.location.href = 'categories.html?category=other'"
-            class="bg-white border border-slate-100 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-600/30 group transition-all duration-300 cursor-pointer shadow-sm">
+            class="bg-white/5 backdrop-blur-lg border border-white/10 w-32 h-32 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-indigo-400/50 group transition-all duration-300 cursor-pointer shadow-lg hover:bg-white/10">
             <span
               class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 text-2xl transition-colors">sports_tennis</span>
-            <span class="font-bold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">Sports</span>
+            <span class="font-bold text-xs text-white group-hover:text-indigo-400 transition-colors">Sports</span>
           </div>
         </div>
       </div>
@@ -361,28 +362,30 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
         <div class="grid grid-cols-2 gap-y-12 gap-x-8">
           <div>
-            <div class="text-3xl font-extrabold text-indigo-600 mb-1" id="stat-deals">500+</div>
-            <div class="text-xs text-slate-500 uppercase tracking-widest font-bold">Active Deals</div>
+            <div class="text-3xl font-extrabold text-indigo-400 mb-1" id="stat-deals">500+</div>
+            <div class="text-xs text-slate-400 uppercase tracking-widest font-bold">Active Deals</div>
           </div>
           <div>
-            <div class="text-3xl font-extrabold text-indigo-600 mb-1" id="stat-users">1M+</div>
-            <div class="text-xs text-slate-500 uppercase tracking-widest font-bold">Happy Students</div>
+            <div class="text-3xl font-extrabold text-indigo-400 mb-1" id="stat-users">1M+</div>
+            <div class="text-xs text-slate-400 uppercase tracking-widest font-bold">Happy Students</div>
           </div>
           <div>
-            <div class="text-3xl font-extrabold text-indigo-600 mb-1" id="stat-savings">₹40Cr+</div>
-            <div class="text-xs text-slate-500 uppercase tracking-widest font-bold">Total Savings</div>
+            <div class="text-3xl font-extrabold text-indigo-400 mb-1" id="stat-savings">₹40Cr+</div>
+            <div class="text-xs text-slate-400 uppercase tracking-widest font-bold">Total Savings</div>
           </div>
           <div>
-            <div class="text-3xl font-extrabold text-indigo-600 mb-1">100+</div>
-            <div class="text-xs text-slate-500 uppercase tracking-widest font-bold">Universities</div>
+            <div class="text-3xl font-extrabold text-indigo-400 mb-1">100+</div>
+            <div class="text-xs text-slate-400 uppercase tracking-widest font-bold">Universities</div>
           </div>
         </div>
 
         <div>
-          <h2 class="text-3xl font-extrabold text-slate-900 mb-6">
-            Built on Integrity,<br>Defined by Quality.
-          </h2>
-          <p class="text-slate-500 text-sm leading-relaxed mb-8">
+          <h2 class="text-4xl font-black text-white mb-4">Featured Deals</h2>
+        <div class="h-1.5 w-24 bg-indigo-500 rounded-full mb-6"></div>
+        <p class="text-slate-300 font-medium max-w-xl">
+          The most claimed offers this week, curated by our student community.
+        </p>
+          <p class="text-slate-400 text-sm leading-relaxed mb-8">
             CampusLoot isn't just about saving money; it's about elevating your collegiate experience. Every offer is
             vetted for quality and relevance to the modern student.
           </p>
@@ -425,6 +428,7 @@
   <script src="js/auth.js"></script>
   <script src="js/components.js"></script>
   <script src="js/deals.js"></script>
+  <script src="js/star-background.js"></script>
   <script>
     (async function initHomePage() {
       // Initialize header/footer

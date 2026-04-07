@@ -148,9 +148,7 @@
   <link rel="icon" href="/favicon.ico" />
 
 </head>
-  <body
-    class="bg-surface text-on-surface font-body selection:bg-secondary-container"
-  >
+  <body class="bg-black text-white selection:bg-indigo-500/30 overflow-x-hidden font-body">
     <!-- TopNavBar -->
     <header id="site-header"></header>
     <main class="max-w-7xl mx-auto px-6 py-12 md:py-20">
@@ -162,7 +160,7 @@
             >Partner Contribution</span
           >
           <h1
-            class="text-5xl md:text-6xl font-headline font-extrabold text-on-surface leading-[1.1] tracking-tight mb-6"
+            class="text-5xl md:text-6xl font-headline font-extrabold text-white leading-[1.1] tracking-tight mb-6"
           >
             Curate the Next
             <span
@@ -171,16 +169,16 @@
             >
           </h1>
           <p
-            class="text-lg text-on-surface-variant leading-relaxed mb-8 max-w-md"
+            class="text-lg text-slate-400 leading-relaxed mb-8 max-w-md"
           >
             Help the student community by submitting high-value deals. Your
             contributions maintain the editorial quality of Campus Loot.
           </p>
           <div
-            class="flex items-center gap-4 p-6 rounded-2xl bg-surface-container-low"
+            class="flex items-center gap-4 p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl"
           >
             <div
-              class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-primary editorial-shadow"
+              class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-400/20"
             >
               <span
                 class="material-symbols-outlined"
@@ -189,8 +187,8 @@
               >
             </div>
             <div>
-              <h4 class="font-bold text-on-surface">Verified Submission</h4>
-              <p class="text-sm text-on-surface-variant">
+              <h4 class="font-bold text-white">Verified Submission</h4>
+              <p class="text-sm text-slate-400">
                 Every deal is reviewed by our editorial team within 24 hours.
               </p>
             </div>
@@ -199,31 +197,31 @@
         <!-- Submission Form Panel -->
         <div class="lg:col-span-7">
           <div
-            class="bg-surface-container-lowest rounded-[2.5rem] p-8 md:p-12 editorial-shadow border border-white/50"
+            class="bg-white/12 backdrop-blur-2xl rounded-[2.5rem] p-8 md:p-12 border border-white/20 shadow-2xl transition-all duration-300 hover:border-indigo-400/50"
           >
             <form id="submit-form" class="space-y-8">
               <!-- Image Upload Zone -->
               <div class="space-y-3">
                 <label
-                  class="block text-sm font-semibold tracking-wide text-on-surface-variant px-1 uppercase"
+                  class="block text-sm font-semibold tracking-wide text-slate-400 px-1 uppercase"
                   >Deal Visual</label
                 >
                 <div class="relative group">
                   <div
-                    class="w-full h-64 border-2 border-dashed border-outline-variant/30 rounded-3xl bg-surface-container-low/50 flex flex-col items-center justify-center gap-4 transition-all hover:border-primary/50 hover:bg-white group-hover:scale-[1.01] overflow-hidden cursor-pointer"
+                    class="w-full h-64 border-2 border-dashed border-white/10 rounded-3xl bg-white/5 flex flex-col items-center justify-center gap-4 transition-all hover:border-indigo-400/50 hover:bg-white/10 group-hover:scale-[1.01] overflow-hidden cursor-pointer"
                   >
                     <div
-                      class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-primary editorial-shadow mb-2 group-hover:bg-primary group-hover:text-white transition-colors"
+                      class="w-16 h-16 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-400/20 mb-2 group-hover:bg-indigo-500 group-hover:text-white transition-colors"
                     >
                       <span class="material-symbols-outlined text-3xl"
                         >cloud_upload</span
                       >
                     </div>
                     <div class="text-center">
-                      <p class="font-bold text-on-surface">
+                      <p class="font-bold text-white">
                         Drop brand imagery here
                       </p>
-                      <p class="text-sm text-on-surface-variant">
+                      <p class="text-sm text-slate-400">
                         High resolution PNG or JPG (Max 5MB)
                       </p>
                     </div>
@@ -238,12 +236,12 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="space-y-3 md:col-span-2">
                   <label
-                    class="block text-sm font-semibold tracking-wide text-on-surface-variant px-1 uppercase"
+                    class="block text-sm font-semibold tracking-wide text-slate-400 px-1 uppercase"
                     >Deal Title *</label
                   >
                   <input
                     id="deal-title"
-                    class="w-full h-14 bg-surface-container-highest px-6 rounded-xl border-none focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-outline-variant font-medium transition-all"
+                    class="w-full h-14 bg-white/5 px-6 rounded-xl border border-white/10 focus:ring-2 focus:ring-indigo-500/50 text-white placeholder:text-slate-600 font-medium transition-all outline-none"
                     placeholder="e.g. GitHub Student Pack — Free for students"
                     type="text"
                     required
@@ -252,12 +250,12 @@
                 <!-- Brand Name -->
                 <div class="space-y-3">
                   <label
-                    class="block text-sm font-semibold tracking-wide text-on-surface-variant px-1 uppercase"
+                    class="block text-sm font-semibold tracking-wide text-slate-400 px-1 uppercase"
                     >Brand Name</label
                   >
                   <input
                     id="deal-brand"
-                    class="w-full h-14 bg-surface-container-highest px-6 rounded-xl border-none focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-outline-variant font-medium transition-all"
+                    class="w-full h-14 bg-white/5 px-6 rounded-xl border border-white/10 focus:ring-2 focus:ring-indigo-500/50 text-white placeholder:text-slate-600 font-medium transition-all outline-none"
                     placeholder="e.g. Nike, Apple, Zomato"
                     type="text"
                     required
@@ -266,13 +264,13 @@
                 <!-- Category Dropdown -->
                 <div class="space-y-3">
                   <label
-                    class="block text-sm font-semibold tracking-wide text-on-surface-variant px-1 uppercase"
+                    class="block text-sm font-semibold tracking-wide text-slate-400 px-1 uppercase"
                     >Category</label
                   >
                   <div class="relative">
                     <select
                       id="deal-category"
-                      class="w-full h-14 bg-surface-container-highest px-6 rounded-xl border-none focus:ring-2 focus:ring-primary/20 text-on-surface font-medium appearance-none cursor-pointer"
+                      class="w-full h-14 bg-white/5 px-6 rounded-xl border border-white/10 focus:ring-2 focus:ring-indigo-500/50 text-white font-medium appearance-none cursor-pointer outline-none"
                       required
                     >
                       <option disabled="" selected="" value="">
@@ -295,12 +293,12 @@
                 <!-- Discount % -->
                 <div class="space-y-3">
                   <label
-                    class="block text-sm font-semibold tracking-wide text-on-surface-variant px-1 uppercase"
+                    class="block text-sm font-semibold tracking-wide text-slate-400 px-1 uppercase"
                     >Discount (%)</label
                   >
                   <div class="relative">
                     <input
-                      class="w-full h-14 bg-surface-container-highest px-6 rounded-xl border-none focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-outline-variant font-medium transition-all"
+                      class="w-full h-14 bg-white/5 px-6 rounded-xl border border-white/10 focus:ring-2 focus:ring-indigo-500/50 text-white placeholder:text-slate-600 font-medium transition-all outline-none"
                       placeholder="40"
                       type="number"
                     />
@@ -314,12 +312,12 @@
                 <!-- Direct Link -->
                 <div class="space-y-3">
                   <label
-                    class="block text-sm font-semibold tracking-wide text-on-surface-variant px-1 uppercase"
+                    class="block text-sm font-semibold tracking-wide text-slate-400 px-1 uppercase"
                     >Direct Link</label
                   >
                   <input
                     id="deal-url"
-                    class="w-full h-14 bg-surface-container-highest px-6 rounded-xl border-none focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-outline-variant font-medium transition-all"
+                    class="w-full h-14 bg-white/5 px-6 rounded-xl border border-white/10 focus:ring-2 focus:ring-indigo-500/50 text-white placeholder:text-slate-600 font-medium transition-all outline-none"
                     placeholder="https://brand.com/deal"
                     type="url"
                     required
@@ -329,12 +327,12 @@
               <!-- Deal Description -->
               <div class="space-y-3">
                 <label
-                  class="block text-sm font-semibold tracking-wide text-on-surface-variant px-1 uppercase"
+                  class="block text-sm font-semibold tracking-wide text-slate-400 px-1 uppercase"
                   >Deal Description</label
                 >
                 <textarea
                   id="deal-description"
-                  class="w-full bg-surface-container-highest p-6 rounded-xl border-none focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-outline-variant font-medium transition-all resize-none"
+                  class="w-full bg-white/5 p-6 rounded-xl border border-white/10 focus:ring-2 focus:ring-indigo-500/50 text-white placeholder:text-slate-600 font-medium transition-all resize-none outline-none"
                   placeholder="Briefly explain the terms, eligibility, and what's included in this offer..."
                   rows="4"
                   required
@@ -352,8 +350,8 @@
                     >send</span
                   >
                 </button>
-                <button
-                  class="w-full md:w-auto px-8 h-16 rounded-full border-2 border-outline-variant/20 text-on-surface-variant font-bold hover:bg-surface-container transition-all"
+                 <button
+                  class="w-full md:w-auto px-8 h-16 rounded-full border-2 border-white/10 text-slate-400 font-bold hover:bg-white/5 transition-all"
                   type="reset"
                 >
                   Save Draft
@@ -432,6 +430,7 @@
     <script src="js/utils.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/deals.js"></script>
+    <script src="js/star-background.js"></script>
     <script src="js/components.js"></script>
     <script type="module">
       import { generateDealImage, base64ToBlob } from './js/gemini.js';

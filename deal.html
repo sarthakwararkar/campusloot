@@ -89,7 +89,7 @@
   <link rel="icon" href="/favicon.ico" />
 
 </head>
-  <body class="bg-surface text-on-surface">
+  <body class="bg-black text-white selection:bg-indigo-500/30 overflow-x-hidden">
     <!-- TopNavBar -->
     <header id="site-header"></header>
 
@@ -103,18 +103,18 @@
         
         <!-- Deal Content (Hidden initially) -->
         <div id="deal-content" class="hidden">
-          <nav class="flex items-center gap-2 text-sm font-medium text-on-surface-variant mb-8">
-            <a href="index.html" class="hover:text-primary transition-colors">Home</a>
+          <nav class="flex items-center gap-2 text-sm font-medium text-slate-400 mb-8">
+            <a href="index.html" class="hover:text-indigo-400 transition-colors">Home</a>
             <span class="material-symbols-outlined text-sm">chevron_right</span>
-            <a href="deals.html" class="hover:text-primary transition-colors">Explore</a>
+            <a href="deals.html" class="hover:text-indigo-400 transition-colors">Explore</a>
             <span class="material-symbols-outlined text-sm">chevron_right</span>
-            <span id="breadcrumb-title" class="text-on-surface font-bold">Deal Details</span>
+            <span id="breadcrumb-title" class="text-white font-bold">Deal Details</span>
           </nav>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
             <!-- Left: Media -->
             <div class="space-y-6">
-              <div id="deal-image-wrap" class="aspect-square bg-white rounded-[2.5rem] border shadow-2xl shadow-primary/5 flex items-center justify-center p-12 overflow-hidden group">
+              <div id="deal-image-wrap" class="aspect-square bg-white/10 backdrop-blur-2xl rounded-[2.5rem] border border-white/20 shadow-2xl flex items-center justify-center p-12 overflow-hidden group">
                 <!-- Image mounted here -->
               </div>
             </div>
@@ -126,18 +126,18 @@
                 <span id="deal-category-badge">Category</span>
               </div>
 
-              <h1 id="deal-title" class="text-5xl font-headline font-extrabold tracking-tight text-on-surface mb-4 leading-tight">Loading...</h1>
-              <p id="deal-brand" class="text-2xl font-bold text-on-surface-variant mb-8"></p>
+              <h1 id="deal-title" class="text-5xl font-headline font-extrabold tracking-tight text-white mb-4 leading-tight">Loading...</h1>
+              <p id="deal-brand" class="text-2xl font-bold text-slate-400 mb-8"></p>
 
-              <div class="p-8 bg-surface-container-low rounded-[2rem] border border-white/40 mb-10">
+              <div class="p-8 bg-white/5 backdrop-blur-xl rounded-[2rem] border border-white/10 mb-10">
                 <div class="flex items-end justify-between mb-8">
                   <div>
-                    <p class="text-sm font-bold uppercase tracking-widest text-on-surface-variant/60 mb-2">Deal Price</p>
-                    <h2 id="deal-price" class="text-5xl font-black text-primary">₹0</h2>
+                    <p class="text-sm font-bold uppercase tracking-widest text-slate-500 mb-2">Deal Price</p>
+                    <h2 id="deal-price" class="text-5xl font-black text-indigo-400">₹0</h2>
                   </div>
                   <div class="text-right">
-                    <p class="text-sm font-bold uppercase tracking-widest text-on-surface-variant/60 mb-2">Saves</p>
-                    <p id="deal-saves" class="text-2xl font-bold text-on-surface">0+</p>
+                    <p class="text-sm font-bold uppercase tracking-widest text-slate-500 mb-2">Saves</p>
+                    <p id="deal-saves" class="text-2xl font-bold text-white">0+</p>
                   </div>
                 </div>
 
@@ -148,8 +148,8 @@
               </div>
 
               <div class="space-y-6">
-                <h3 class="text-xl font-bold text-on-surface">About this deal</h3>
-                <p id="deal-description" class="text-on-surface-variant leading-relaxed text-lg">Loading description...</p>
+                <h3 class="text-xl font-bold text-white">About this deal</h3>
+                <p id="deal-description" class="text-slate-400 leading-relaxed text-lg">Loading description...</p>
               </div>
             </div>
           </div>
@@ -165,6 +165,7 @@
     <script src="js/auth.js"></script>
     <script src="js/components.js"></script>
     <script src="js/deals.js"></script>
+    <script src="js/star-background.js"></script>
     <script>
       (async function initDealPage() {
         // Initialize header/footer
@@ -210,7 +211,7 @@
 
           const imageWrap = document.getElementById('deal-image-wrap');
           mountDealImage(imageWrap, deal, { 
-              placeholderClass: 'text-9xl text-on-surface-variant font-black opacity-30 select-none',
+              placeholderClass: 'text-9xl text-slate-500 font-black opacity-30 select-none',
               imgClass: 'w-64 h-64 object-contain transition-transform duration-700'
           });
 

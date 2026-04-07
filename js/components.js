@@ -68,7 +68,7 @@ function renderDealCard(deal, options = {}) {
   const isSaved = savedDeals.has(deal.id);
 
   const card = document.createElement('article');
-  card.className = 'deal-card group relative bg-white border border-slate-100 rounded-2xl p-5 hover:border-indigo-600/30 transition-all duration-300 cursor-pointer overflow-hidden';
+  card.className = 'deal-card group relative bg-white/12 backdrop-blur-2xl border border-white/20 rounded-2xl p-5 hover:border-indigo-400/50 transition-all duration-500 cursor-pointer overflow-hidden shadow-2xl';
   card.dataset.dealId = deal.id;
   card.dataset.category = deal.category;
   card.addEventListener('click', (e) => {
@@ -122,7 +122,7 @@ function renderDealCard(deal, options = {}) {
   const titleRow = document.createElement('div');
   titleRow.className = 'flex items-center gap-2';
   const priceSpan = document.createElement('span');
-  priceSpan.className = 'text-indigo-600 font-bold text-2xl';
+  priceSpan.className = 'text-indigo-400 font-bold text-2xl drop-shadow-[0_0_10px_rgba(129,140,248,0.3)]';
   priceSpan.textContent = formatPrice(deal.deal_price || deal.discount_text || 'Free');
   titleRow.appendChild(priceSpan);
 
@@ -135,12 +135,12 @@ function renderDealCard(deal, options = {}) {
   bodyDiv.appendChild(titleRow);
 
   const brandObj = document.createElement('h3');
-  brandObj.className = 'font-semibold text-lg text-slate-900 line-clamp-1';
+  brandObj.className = 'font-semibold text-lg text-white/90 line-clamp-1';
   brandObj.textContent = deal.brand_name || 'Brand';
   bodyDiv.appendChild(brandObj);
 
   const descObj = document.createElement('p');
-  descObj.className = 'text-sm text-slate-500 line-clamp-1';
+  descObj.className = 'text-sm text-white/50 line-clamp-1';
   descObj.textContent = deal.title || deal.description || '';
   bodyDiv.appendChild(descObj);
 
@@ -159,7 +159,7 @@ function renderDealCard(deal, options = {}) {
   }
 
   const claimBtn = document.createElement('button');
-  claimBtn.className = 'w-full py-3 mt-2 bg-slate-50 text-indigo-600 font-bold rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition-colors flex items-center justify-center gap-2 text-sm';
+  claimBtn.className = 'w-full py-3 mt-2 bg-white/5 text-indigo-400 font-bold rounded-xl group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2 text-sm border border-white/5 group-hover:border-indigo-400 shadow-inner';
   claimBtn.innerHTML = `View Deal <span class="material-symbols-outlined text-lg">arrow_forward</span>`;
   claimBtn.onclick = (e) => {
     e.stopPropagation();
@@ -387,8 +387,10 @@ function renderHeader(activePage = '') {
   header.innerHTML = `
     <div class="header-inner">
       <a href="index.html" class="logo group">
-        <span class="material-symbols-outlined text-indigo-600 text-3xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
-        <span class="text-xl font-bold tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">Campus<span class="text-indigo-600">Loot</span></span>
+        <div class="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 group-hover:scale-110 transition-transform duration-500">
+          <span class="material-symbols-outlined text-indigo-400 text-2xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-white group-hover:text-indigo-400 transition-colors">Campus<span class="text-indigo-400">Loot</span></span>
       </a>
       <nav class="nav-links hidden md:flex" id="nav-links">
         <a href="deals.html" class="text-sm font-medium ${activePage === 'deals' || activePage === 'home' ? 'active' : ''} transition-colors">Explore</a>
@@ -396,16 +398,16 @@ function renderHeader(activePage = '') {
         <a href="trending.html" class="text-sm font-medium ${activePage === 'trending' ? 'active' : ''} transition-colors">Trending</a>
       </nav>
       <div class="nav-auth hidden md:flex" id="nav-auth"></div>
-      <button class="hamburger md:hidden" id="hamburger-btn" aria-label="Toggle menu">
+      <button class="hamburger md:hidden text-white" id="hamburger-btn" aria-label="Toggle menu">
         <span class="material-symbols-outlined">menu</span>
       </button>
     </div>
-    <div class="hidden md:hidden bg-white/95 backdrop-blur-xl border-b border-slate-100" id="mobile-nav">
+    <div class="hidden md:hidden bg-black/95 backdrop-blur-2xl border-b border-white/5" id="mobile-nav">
       <div class="flex flex-col p-6 gap-4">
-        <a href="deals.html" class="text-slate-500 hover:text-indigo-600 font-medium">Explore</a>
-        <a href="categories.html" class="text-slate-500 hover:text-indigo-600 font-medium">Categories</a>
-        <a href="trending.html" class="text-slate-500 hover:text-indigo-600 font-medium">Trending</a>
-        <div id="mobile-auth" class="pt-4 border-t border-slate-100 flex flex-col gap-2"></div>
+        <a href="deals.html" class="text-slate-400 hover:text-white font-medium">Explore</a>
+        <a href="categories.html" class="text-slate-400 hover:text-white font-medium">Categories</a>
+        <a href="trending.html" class="text-slate-400 hover:text-white font-medium">Trending</a>
+        <div id="mobile-auth" class="pt-4 border-t border-white/5 flex flex-col gap-2"></div>
       </div>
     </div>
   `;
@@ -449,19 +451,19 @@ async function updateAuthNav() {
     if (isAdmin) {
       const adminLink = document.createElement('a');
       adminLink.href = 'admin.html';
-      adminLink.className = 'text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors';
+      adminLink.className = 'text-sm font-medium text-slate-400 hover:text-white transition-colors';
       adminLink.textContent = 'Admin';
       navAuth.appendChild(adminLink);
     }
 
     const profileLink = document.createElement('a');
     profileLink.href = 'profile.html';
-    profileLink.className = 'text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors';
+    profileLink.className = 'text-sm font-medium text-slate-400 hover:text-white transition-colors';
     profileLink.textContent = name;
     navAuth.appendChild(profileLink);
 
     const logoutBtn = document.createElement('button');
-    logoutBtn.className = 'px-5 py-2 text-sm font-bold text-slate-600 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors';
+    logoutBtn.className = 'px-5 py-2 text-sm font-bold text-slate-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors';
     logoutBtn.textContent = 'Logout';
     logoutBtn.addEventListener('click', async () => {
       await signOut();
@@ -496,13 +498,13 @@ async function updateAuthNav() {
     navAuth.innerHTML = '';
     const loginBtn = document.createElement('a');
     loginBtn.href = 'login.html';
-    loginBtn.className = 'text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors';
+    loginBtn.className = 'text-sm font-medium text-slate-400 hover:text-white transition-colors';
     loginBtn.textContent = 'Login';
     navAuth.appendChild(loginBtn);
 
     const joinBtn = document.createElement('a');
     joinBtn.href = 'login.html';
-    joinBtn.className = 'px-5 py-2 text-sm font-bold text-white bg-indigo-600 rounded-full hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-600/20';
+    joinBtn.className = 'px-5 py-2 text-sm font-bold text-white bg-indigo-600 rounded-full hover:bg-indigo-700 transition-all active:scale-95 shadow-lg shadow-indigo-600/20';
     joinBtn.textContent = 'Join';
     navAuth.appendChild(joinBtn);
 
@@ -523,24 +525,24 @@ function renderFooter() {
   const footer = document.getElementById('site-footer');
   if (!footer) return;
 
-  footer.className = 'w-full bg-white border-t border-slate-100 py-12';
+  footer.className = 'w-full bg-black/80 backdrop-blur-2xl border-t border-white/5 py-16 relative z-10';
   footer.innerHTML = `
     <div class="max-w-7xl mx-auto px-6">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
         <a href="index.html" class="flex items-center gap-2 group">
-          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-            <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
+          <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/30">
+            <span class="material-symbols-outlined text-white text-xl" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
           </div>
-          <span class="text-xl font-bold tracking-tight text-slate-900">CampusLoot</span>
+          <span class="text-2xl font-bold tracking-tight text-white">Campus<span class="text-indigo-400">Loot</span></span>
         </a>
-        <div class="flex items-center gap-6">
-          <a href="privacy.html" class="text-sm font-medium text-slate-400 hover:text-slate-900 transition-colors">Privacy Policy</a>
-          <a href="terms.html" class="text-sm font-medium text-slate-400 hover:text-slate-900 transition-colors">Terms of Service</a>
-          <a href="#" class="text-sm font-medium text-slate-400 hover:text-slate-900 transition-colors">Partner with Us</a>
-          <a href="#" class="text-sm font-medium text-slate-400 hover:text-slate-900 transition-colors">Contact</a>
+        <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+          <a href="privacy.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Privacy Policy</a>
+          <a href="terms.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Terms of Service</a>
+          <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Partner with Us</a>
+          <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Contact</a>
         </div>
       </div>
-      <div class="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-slate-100 text-sm text-slate-400">
+      <div class="flex flex-col md:flex-row items-center justify-between pt-10 border-t border-white/5 text-sm text-slate-500">
         <p>© ${new Date().getFullYear()} CampusLoot. Empowering the next generation of leaders.</p>
         <p>Student verified India wide.</p>
       </div>

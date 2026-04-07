@@ -56,23 +56,37 @@
   <link rel="icon" href="/favicon.ico" />
 
 </head>
-  <body>
+  <body class="bg-black text-white">
+    <!-- Star Background Canvas (Injected via JS) -->
     <header id="site-header"></header>
-
-    <div class="page-404">
-      <h1>404</h1>
-      <p>Oops! This page doesn't exist. Maybe the deal expired? 😅</p>
-      <a href="index.html" class="btn btn-primary btn-lg">← Back to Home</a>
-    </div>
-
-    <script src="js/supabase.js"></script>
-    <script src="js/utils.js"></script>
+    <main class="relative z-10 flex flex-col items-center justify-center min-h-[80vh] px-6 pt-32 pb-20 text-center">
+      <div class="space-y-6 max-w-2xl">
+        <div class="relative inline-block">
+          <h1 class="text-[120px] md:text-[180px] font-black leading-none bg-gradient-to-b from-indigo-500 to-indigo-800 bg-clip-text text-transparent opacity-20">404</h1>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="material-symbols-outlined text-6xl md:text-8xl text-indigo-400 animate-bounce">rocket_launch</span>
+          </div>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Houston, we have a problem.</h2>
+        <p class="text-slate-400 text-lg">The page you're looking for seems to have drifted into another galaxy.</p>
+        <div class="pt-8">
+          <a href="index.html" class="inline-flex items-center gap-2 px-8 py-4 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 transition-all active:scale-95 shadow-lg shadow-indigo-600/20">
+            <span class="material-symbols-outlined">home</span>
+            Return to Base
+          </a>
+        </div>
+      </div>
+    </main>
+    <footer id="site-footer"></footer>
     <script src="js/auth.js"></script>
-    <script src="js/deals.js"></script>
     <script src="js/components.js"></script>
+    <script src="js/star-background.js"></script>
     <script>
-      renderHeader("");
-      renderFooter();
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHeader();
+            renderFooter();
+            initStarBackground();
+        });
     </script>
   
   <!-- Cookie Consent Banner -->

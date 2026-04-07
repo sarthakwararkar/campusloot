@@ -52,36 +52,47 @@
 
 </head>
 
-<body class="bg-surface font-body text-on-surface antialiased">
+<body class="bg-black font-body text-white selection:bg-indigo-500/30 overflow-x-hidden">
+    <!-- Star Background Canvas (Injected via JS) -->
     <header id="site-header"></header>
-    <main class="max-w-4xl mx-auto px-6 py-24">
-        <h1 class="text-4xl md:text-5xl font-headline font-extrabold mb-8 text-on-surface">Terms of Service</h1>
-        <div class="prose prose-slate max-w-none text-on-surface-variant space-y-6">
-            <p>Last updated: April 2026</p>
+    <main class="relative z-10 max-w-4xl mx-auto px-6 py-20">
+        <div class="bg-white/5 backdrop-blur-2xl rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-8 tracking-tight">Terms of Service</h1>
+            <div class="prose prose-invert max-w-none text-slate-300 space-y-6">
+                <p>Last updated: April 2026</p>
 
-            <h2 class="text-2xl font-bold text-on-surface">1. Acceptance of Terms</h2>
-            <p>By accessing or using CampusLoot, you agree to be bound by these Terms. If you disagree with any part of
-                the terms, then you may not access the Service.</p>
+                <h2 class="text-2xl font-bold text-white">1. Acceptance of Terms</h2>
+                <p>By accessing or using CampusLoot, you agree to be bound by these Terms. If you disagree with any part of
+                    the terms, then you may not access the Service.</p>
 
-            <h2 class="text-2xl font-bold text-on-surface">2. Eligibility</h2>
-            <p>To access student-specific deals, you must be a currently enrolled student at a recognized higher
-                education institution in India.</p>
+                <h2 class="text-2xl font-bold text-white">2. Eligibility</h2>
+                <p>To access student-specific deals, you must be a currently enrolled student at a recognized higher
+                    education institution in India.</p>
 
-            <h2 class="text-2xl font-bold text-on-surface">3. Code of Conduct</h2>
-            <p>You agree not to misuse the platform, including attempting to bypass student verification, scraping deals
-                for competitors, or submitting falsified deal information.</p>
+                <h2 class="text-2xl font-bold text-white">3. Code of Conduct</h2>
+                <p>You agree not to misuse the platform, including attempting to bypass student verification, scraping deals
+                    for competitors, or submitting falsified deal information.</p>
 
-            <h2 class="text-2xl font-bold text-on-surface">4. Modifications</h2>
-            <p>We reserve the right to modify or replace these Terms at any time. What constitutes a material change
-                will be determined at our sole discretion.</p>
+                <h2 class="text-2xl font-bold text-white">4. Modifications</h2>
+                <p>We reserve the right to modify or replace these Terms at any time. What constitutes a material change
+                    will be determined at our sole discretion.</p>
 
-            <h2 class="text-2xl font-bold text-on-surface">5. Contact Us</h2>
-            <p>Please send any concerns or questions regarding these terms to terms@campusloot.com.</p>
+                <h2 class="text-2xl font-bold text-white">5. Contact Us</h2>
+                <p>Please send any concerns or questions regarding these terms to terms@campusloot.com.</p>
+            </div>
         </div>
     </main>
     <footer id="site-footer"></footer>
+    <script src="js/auth.js"></script>
     <script src="js/components.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/star-background.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHeader();
+            renderFooter();
+            initStarBackground();
+        });
+    </script>
 
   <!-- Cookie Consent Banner -->
   <script>

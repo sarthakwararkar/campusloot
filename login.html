@@ -148,9 +148,18 @@
   <meta name="twitter:description" content="Access your student deals and save your favorite discounts." />
   <meta name="twitter:image" content="/og-image.png" />
   <link rel="icon" href="/favicon.ico" />
-
+  <style>
+    /* Premium Autofill Fix */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus {
+      -webkit-text-fill-color: white !important;
+      -webkit-box-shadow: 0 0 0px 1000px #000000 inset !important;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+  </style>
 </head>
-  <body class="bg-surface font-body text-on-surface antialiased">
+  <body class="bg-black font-body text-white antialiased overflow-x-hidden">
     <main class="min-h-screen flex flex-col md:flex-row">
       <!-- Left Side: Editorial Lifestyle Imagery -->
       <section
@@ -165,9 +174,9 @@
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSAI1F87vn4flZm-irI_H6SxjxPds5H9_NH8cik17LJpz8ngTx9OvSombBIk5KaKK6WkXofTmCVIrTgWNdpkJ7FnaCCT_oEdEwxxOl3NZ2vFHuO0wBfFqi3hZoU7UqXEYSC-xz5l8j1m9P_f2yOyZqoFSavj1m24iLEZKjGcPJBIZbxCpe-L6OLgEbs6xLnlP8q2064pcrb3b4sVh426z18fJfEUArlA91L7dmIeRIaVAKEF8YR8NTZJhgqvurcHMdIaK3BbM0gMad"
           />
           <div
-            class="absolute inset-0 bg-gradient-to-br from-primary/80 via-secondary/70 to-tertiary/40"
+            class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/70 to-indigo-950/40"
           ></div>
-          <div class="absolute inset-0 mesh-gradient"></div>
+          <div class="absolute inset-0 mesh-gradient opacity-30"></div>
         </div>
         <!-- Content Overlay -->
         <div class="relative z-10 px-12 lg:px-24 max-w-2xl">
@@ -221,7 +230,7 @@
       </section>
       <!-- Right Side: Authentication Form -->
       <section
-        class="w-full md:w-1/2 lg:w-[45%] bg-surface flex flex-col justify-center px-6 py-12 lg:px-20 relative"
+        class="w-full md:w-1/2 lg:w-[45%] bg-black flex flex-col justify-center px-6 py-12 lg:px-20 relative"
       >
         <!-- Mobile Brand Header -->
         <div class="md:hidden absolute top-8 left-6">
@@ -235,18 +244,18 @@
           <div>
             <h2
               id="form-header-title"
-              class="font-headline text-3xl font-bold text-on-surface tracking-tight mb-2"
+              class="font-headline text-3xl font-bold text-white tracking-tight mb-2"
             >
               Welcome Back
             </h2>
-            <p id="form-header-desc" class="text-on-surface-variant font-body">
+            <p id="form-header-desc" class="text-slate-400 font-body">
               Sign in to access your exclusive student membership.
             </p>
           </div>
           <!-- Google Sign In -->
           <button
             id="google-btn"
-            class="w-full flex items-center justify-center gap-3 bg-surface-container-lowest py-4 px-6 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant/10 hover:bg-surface-bright transition-all active:scale-[0.98] duration-200 group"
+            class="w-full flex items-center justify-center gap-3 bg-white/5 py-4 px-6 rounded-xl shadow-2xl border border-white/10 hover:bg-white/10 transition-all active:scale-[0.98] duration-200 group"
           >
             <svg class="w-5 h-5" viewbox="0 0 24 24">
               <path
@@ -266,18 +275,18 @@
                 fill="#EA4335"
               ></path>
             </svg>
-            <span class="font-body font-semibold text-on-surface"
+            <span class="font-body font-semibold text-white"
               >Continue with Google</span
             >
           </button>
           <!-- Divider -->
           <div class="relative flex items-center">
-            <div class="flex-grow border-t border-outline-variant/20"></div>
+            <div class="flex-grow border-t border-white/10"></div>
             <span
-              class="flex-shrink mx-4 text-outline font-label text-xs uppercase tracking-widest"
+              class="flex-shrink mx-4 text-slate-500 font-label text-xs uppercase tracking-widest"
               >or use email</span
             >
-            <div class="flex-grow border-t border-outline-variant/20"></div>
+            <div class="flex-grow border-t border-white/10"></div>
           </div>
           <!-- Auth Form -->
           <div
@@ -287,12 +296,12 @@
           <form id="login-form" class="space-y-6">
             <div class="space-y-2">
               <label
-                class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1"
+                class="block font-label text-xs font-semibold uppercase tracking-wider text-slate-400 ml-1"
                 for="login-email"
                 >University Email</label
               >
               <input
-                class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                class="w-full bg-white/12 border border-white/20 rounded-xl py-4 px-5 text-white placeholder:text-slate-600 focus:ring-2 focus:ring-indigo-500/50 transition-all outline-none backdrop-blur-sm"
                 id="login-email"
                 placeholder="name@university.edu.in"
                 type="email"
@@ -302,19 +311,19 @@
             <div class="space-y-2">
               <div class="flex justify-between items-center px-1">
                 <label
-                  class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant"
+                  class="block font-label text-xs font-semibold uppercase tracking-wider text-slate-400"
                   for="login-password"
                   >Password</label
                 >
                 <a
                   id="forgot-password-link"
-                  class="text-xs font-semibold text-primary hover:text-secondary transition-colors"
+                  class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
                   href="forgot-password.html"
                   >Forgot?</a
                 >
               </div>
               <input
-                class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                class="w-full bg-white/12 border border-white/20 rounded-xl py-4 px-5 text-white placeholder:text-slate-600 focus:ring-2 focus:ring-indigo-500/50 transition-all outline-none backdrop-blur-sm"
                 id="login-password"
                 placeholder="••••••••"
                 type="password"
@@ -323,7 +332,7 @@
             </div>
             <button
               id="login-btn"
-              class="w-full bg-gradient-to-r from-primary to-secondary text-white font-body font-bold py-4 rounded-full shadow-[0_10px_30px_rgba(74,64,224,0.2)] hover:shadow-[0_15px_35px_rgba(74,64,224,0.3)] hover:-translate-y-0.5 transition-all active:scale-95 duration-200"
+              class="w-full bg-gradient-to-r from-indigo-600 to-cyan-600 text-white font-body font-bold py-4 rounded-full shadow-[0_10px_30px_rgba(74,64,224,0.2)] hover:shadow-[0_15px_35px_rgba(74,64,224,0.3)] hover:-translate-y-0.5 transition-all active:scale-95 duration-200"
               type="submit"
             >
               Login to Campus Loot
@@ -332,17 +341,17 @@
 
           <div
             id="signup-error"
-            class="hidden text-error bg-error/10 p-3 rounded-lg text-sm font-semibold mb-4 text-center"
+            class="hidden text-red-400 bg-red-950/30 p-3 rounded-lg text-sm font-semibold mb-4 text-center"
           ></div>
           <form id="signup-form" class="space-y-6 hidden">
             <div class="space-y-2">
               <label
-                class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1"
+                class="block font-label text-xs font-semibold uppercase tracking-wider text-slate-400 ml-1"
                 for="signup-name"
                 >Full Name</label
               >
               <input
-                class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                class="w-full bg-white/12 border border-white/20 rounded-xl py-4 px-5 text-white placeholder:text-slate-600 focus:ring-2 focus:ring-indigo-500/50 transition-all outline-none backdrop-blur-sm"
                 id="signup-name"
                 placeholder="John Doe"
                 type="text"
@@ -351,12 +360,12 @@
             </div>
             <div class="space-y-2">
               <label
-                class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1"
+                class="block font-label text-xs font-semibold uppercase tracking-wider text-slate-400 ml-1"
                 for="signup-email"
                 >University Email</label
               >
               <input
-                class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                class="w-full bg-white/12 border border-white/20 rounded-xl py-4 px-5 text-white placeholder:text-slate-600 focus:ring-2 focus:ring-indigo-500/50 transition-all outline-none backdrop-blur-sm"
                 id="signup-email"
                 placeholder="name@university.edu.in"
                 type="email"
@@ -366,23 +375,23 @@
             <div class="space-y-2">
               <div class="flex justify-between items-center px-1">
                 <label
-                  class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant"
+                  class="block font-label text-xs font-semibold uppercase tracking-wider text-slate-400"
                   for="signup-password"
                   >Password</label
                 >
               </div>
               <input
-                class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                class="w-full bg-white/12 border border-white/20 rounded-xl py-4 px-5 text-white placeholder:text-slate-600 focus:ring-2 focus:ring-indigo-500/50 transition-all outline-none backdrop-blur-sm"
                 id="signup-password"
                 placeholder="Min 8 chars, letter + number"
                 type="password"
                 required
               />
               <div id="password-validation" class="mt-2 pl-2 space-y-1">
-                <div id="v-length" class="text-[10px] flex items-center gap-1 text-on-surface-variant/50 transition-colors">
+                <div id="v-length" class="text-[10px] flex items-center gap-1 text-slate-500 transition-colors">
                   <span class="material-symbols-outlined text-[10px]">circle</span> 8+ characters
                 </div>
-                <div id="v-number" class="text-[10px] flex items-center gap-1 text-on-surface-variant/50 transition-colors">
+                <div id="v-number" class="text-[10px] flex items-center gap-1 text-slate-500 transition-colors">
                   <span class="material-symbols-outlined text-[10px]">circle</span> Must contain a number
                 </div>
               </div>
@@ -390,25 +399,26 @@
             <div class="grid grid-cols-2 gap-4">
               <div class="space-y-2">
                 <label
-                  class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1"
+                  class="block font-label text-xs font-semibold uppercase tracking-wider text-slate-400 ml-1"
                   for="signup-college"
                   >College</label
                 >
                 <input
-                  class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                  class="w-full bg-white/12 border border-white/20 rounded-xl py-4 px-5 text-white placeholder:text-slate-600 focus:ring-2 focus:ring-indigo-500/50 transition-all outline-none backdrop-blur-sm"
                   id="signup-college"
                   placeholder="IIT Bombay"
                   type="text"
+                  required
                 />
               </div>
               <div class="space-y-2">
                 <label
-                  class="block font-label text-xs font-semibold uppercase tracking-wider text-on-surface-variant ml-1"
+                  class="block font-label text-xs font-semibold uppercase tracking-wider text-slate-400 ml-1"
                   for="signup-city"
                   >City</label
                 >
                 <input
-                  class="w-full bg-surface-container-highest border-none rounded-xl py-4 px-5 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                  class="w-full bg-slate-900 border border-slate-800 rounded-xl py-4 px-5 text-white placeholder:text-slate-600 focus:ring-2 focus:ring-indigo-500/50 transition-all outline-none"
                   id="signup-city"
                   placeholder="Mumbai"
                   type="text"
@@ -417,7 +427,7 @@
             </div>
             <button
               id="signup-btn"
-              class="w-full bg-gradient-to-r from-primary to-secondary text-white font-body font-bold py-4 rounded-full shadow-[0_10px_30px_rgba(74,64,224,0.2)] hover:shadow-[0_15px_35px_rgba(74,64,224,0.3)] hover:-translate-y-0.5 transition-all active:scale-95 duration-200"
+              class="w-full bg-gradient-to-r from-indigo-600 to-cyan-600 text-white font-body font-bold py-4 rounded-full shadow-[0_10px_30px_rgba(74,64,224,0.2)] hover:shadow-[0_15px_35px_rgba(74,64,224,0.3)] hover:-translate-y-0.5 transition-all active:scale-95 duration-200"
               type="submit"
             >
               Create Account
@@ -427,15 +437,15 @@
 
           <!-- Verification Hint -->
           <div
-            class="bg-tertiary/5 p-5 rounded-2xl flex gap-4 border border-tertiary/10"
+            class="bg-indigo-950/20 p-5 rounded-2xl flex gap-4 border border-indigo-900/50 backdrop-blur-xl"
           >
             <span
-              class="material-symbols-outlined text-tertiary shrink-0"
+              class="material-symbols-outlined text-indigo-400 shrink-0"
               data-icon="verified_user"
               >verified_user</span
             >
             <p
-              class="text-sm text-on-tertiary-container font-body leading-relaxed"
+              class="text-sm text-slate-300 font-body leading-relaxed"
             >
               <span class="font-bold">Student Verification:</span> To unlock all
               premium deals, please ensure you use your university issued email
@@ -444,11 +454,11 @@
           </div>
           <!-- Footer Links -->
           <div class="text-center pt-4">
-            <p class="text-on-surface-variant font-body">
+            <p class="text-slate-400 font-body">
               <span id="toggle-text">Don't have an account?</span>
               <a
                 id="toggle-link"
-                class="text-primary font-bold hover:underline decoration-primary/30 underline-offset-4 transition-all cursor-pointer"
+                class="text-indigo-400 font-bold hover:underline decoration-indigo-400/30 underline-offset-4 transition-all cursor-pointer"
                 href="#"
                 >Sign up for free</a
               >
@@ -457,16 +467,16 @@
         </div>
         <!-- Absolute Bottom Links -->
         <div
-          class="absolute bottom-8 left-0 right-0 px-6 lg:px-20 flex justify-between items-center opacity-60"
+          class="absolute bottom-8 left-0 right-0 px-6 lg:px-20 flex justify-between items-center opacity-40 hover:opacity-100 transition-opacity"
         >
           <div class="flex gap-6">
             <a
-              class="text-[10px] font-label font-semibold uppercase tracking-widest hover:text-primary transition-colors"
+              class="text-[10px] font-label font-semibold uppercase tracking-widest hover:text-indigo-400 transition-colors"
               href="#"
               >Privacy</a
             >
             <a
-              class="text-[10px] font-label font-semibold uppercase tracking-widest hover:text-primary transition-colors"
+              class="text-[10px] font-label font-semibold uppercase tracking-widest hover:text-indigo-400 transition-colors"
               href="#"
               >Terms</a
             >
@@ -484,7 +494,8 @@
       </section>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-    <script src="js/supabase.js"></script>
+    <script src="js/star-background.js"></script>
+    <script src="js/components.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/auth.js"></script>
     <script>

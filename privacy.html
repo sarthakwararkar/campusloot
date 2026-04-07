@@ -52,33 +52,44 @@
 
 </head>
 
-<body class="bg-surface font-body text-on-surface antialiased">
+<body class="bg-black font-body text-white selection:bg-indigo-500/30 overflow-x-hidden">
+    <!-- Star Background Canvas (Injected via JS) -->
     <header id="site-header"></header>
-    <main class="max-w-4xl mx-auto px-6 py-24">
-        <h1 class="text-4xl md:text-5xl font-headline font-extrabold mb-8 text-on-surface">Privacy Policy</h1>
-        <div class="prose prose-slate max-w-none text-on-surface-variant space-y-6">
-            <p>Last updated: April 2026</p>
+    <main class="relative z-10 max-w-4xl mx-auto px-6 py-20">
+        <div class="bg-white/5 backdrop-blur-2xl rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-8 tracking-tight">Privacy Policy</h1>
+            <div class="prose prose-invert max-w-none space-y-6">
+                <p>Last updated: April 2026</p>
 
-            <h2 class="text-2xl font-bold text-on-surface">1. Information We Collect</h2>
-            <p>We collect information you provide directly to us, such as when you create or modify your account,
-                contact customer support, or otherwise communicate with us. This info includes name, email, and
-                university domain status.</p>
+                <h2 class="text-2xl font-bold text-white">1. Information We Collect</h2>
+                <p>We collect information you provide directly to us, such as when you create or modify your account,
+                    contact customer support, or otherwise communicate with us. This info includes name, email, and
+                    university domain status.</p>
 
-            <h2 class="text-2xl font-bold text-on-surface">2. How We Use Your Data</h2>
-            <p>We use the data we collect to provide, maintain, and improve our services, including to personalize and
-                improve your experience on CampusLoot, providing relevant student deals and offers.</p>
+                <h2 class="text-2xl font-bold text-white">2. How We Use Your Data</h2>
+                <p>We use the data we collect to provide, maintain, and improve our services, including to personalize and
+                    improve your experience on CampusLoot, providing relevant student deals and offers.</p>
 
-            <h2 class="text-2xl font-bold text-on-surface">3. Third-party Disclosures</h2>
-            <p>We may share your information with vendors, consultants, and other service providers who need access to
-                such information to carry out work on our behalf. We do not sell your personal data.</p>
+                <h2 class="text-2xl font-bold text-white">3. Third-party Disclosures</h2>
+                <p>We may share your information with vendors, consultants, and other service providers who need access to
+                    such information to carry out work on our behalf. We do not sell your personal data.</p>
 
-            <h2 class="text-2xl font-bold text-on-surface">4. Contact Us</h2>
-            <p>If you have any questions about this Privacy Policy, please contact us at privacy@campusloot.com.</p>
+                <h2 class="text-2xl font-bold text-white">4. Contact Us</h2>
+                <p>If you have any questions about this Privacy Policy, please contact us at privacy@campusloot.com.</p>
+            </div>
         </div>
     </main>
     <footer id="site-footer"></footer>
+    <script src="js/auth.js"></script>
     <script src="js/components.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/star-background.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHeader();
+            renderFooter();
+            initStarBackground();
+        });
+    </script>
 
   <!-- Cookie Consent Banner -->
   <script>

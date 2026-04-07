@@ -148,18 +148,16 @@
   <link rel="icon" href="/favicon.ico" />
 
 </head>
-  <body class="bg-surface text-on-surface">
+<body class="bg-black text-white">
+    <!-- Star Background Canvas (Injected via JS) -->
     <header id="site-header"></header>
     <main class="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row gap-12">
       <!-- Persistent Glassmorphic Filter Sidebar -->
       <aside class="w-full md:w-64 flex-shrink-0">
-        <div
-          class="sticky top-28 bg-white/70 backdrop-blur-xl rounded-2xl p-6 shadow-sm space-y-8 border border-white/20"
-        >
+        <div class="sticky top-28 bg-white/12 backdrop-blur-2xl rounded-2xl p-6 shadow-2xl space-y-8 border border-white/20 transition-all duration-300 hover:border-indigo-400/50">
           <div>
             <h3
-              class="font-headline font-bold text-lg mb-4 text-on-surface"
-             
+              class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-indigo-400 mb-4"
             >
               Categories
             </h3>
@@ -170,116 +168,67 @@
               >
                 <input
                   checked=""
-                  class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary-container"
+                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
                   type="checkbox"
                 />
-                <span
-                  class="text-sm font-medium text-on-surface-variant group-hover:text-primary transition-colors"
-                 
-                  >Fashion &amp; Lifestyle</span
+                <span class="text-sm font-medium text-slate-300 group-hover:text-indigo-400 transition-colors"
+                  >All Categories</span
                 >
               </label>
-              <label
-                class="flex items-center gap-3 cursor-pointer group"
-               
-              >
+              <label class="flex items-center gap-3 cursor-pointer group">
                 <input
-                  class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary-container"
+                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
                   type="checkbox"
                 />
-                <span
-                  class="text-sm font-medium text-on-surface-variant group-hover:text-primary transition-colors"
-                 
-                  >Tech &amp; Gadgets</span
-                >
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">Tech &amp; Gadgets</span>
               </label>
-              <label
-                class="flex items-center gap-3 cursor-pointer group"
-               
-              >
+              <label class="flex items-center gap-3 cursor-pointer group">
                 <input
-                  class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary-container"
+                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
                   type="checkbox"
                 />
-                <span
-                  class="text-sm font-medium text-on-surface-variant group-hover:text-primary transition-colors"
-                 
-                  >Food &amp; Dining</span
-                >
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">Food &amp; Dining</span>
               </label>
-              <label
-                class="flex items-center gap-3 cursor-pointer group"
-               
-              >
+              <label class="flex items-center gap-3 cursor-pointer group">
                 <input
-                  class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary-container"
+                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
                   type="checkbox"
                 />
-                <span
-                  class="text-sm font-medium text-on-surface-variant group-hover:text-primary transition-colors"
-                 
-                  >Travel &amp; Stays</span
-                >
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">Travel &amp; Stays</span>
               </label>
             </div>
           </div>
           <div>
             <h3
-              class="font-headline font-bold text-lg mb-4 text-on-surface"
-             
+              class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-indigo-400 mb-4"
             >
-              Discount Range
+              Price Range
             </h3>
             <div class="flex flex-wrap gap-2">
-              <button
-                class="px-4 py-2 rounded-full text-xs font-bold bg-tertiary text-on-tertiary"
-               
-              >
-                All Deals
-              </button>
-              <button
-                class="px-4 py-2 rounded-full text-xs font-bold bg-surface-container-high text-on-surface-variant hover:bg-tertiary/10 transition-colors"
-               
-              >
-                20%+
-              </button>
-              <button
-                class="px-4 py-2 rounded-full text-xs font-bold bg-surface-container-high text-on-surface-variant hover:bg-tertiary/10 transition-colors"
-               
-              >
-                50%+
-              </button>
-              <button
-                class="px-4 py-2 rounded-full text-xs font-bold bg-surface-container-high text-on-surface-variant hover:bg-tertiary/10 transition-colors"
-               
-              >
-                BOGO
-              </button>
+              <button class="px-4 py-2 rounded-full text-xs font-bold bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-600/30 transition-all">All Deals</button>
+              <button class="px-4 py-2 rounded-full text-xs font-bold bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 transition-all">20%+</button>
+              <button class="px-4 py-2 rounded-full text-xs font-bold bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 transition-all">50%+</button>
+              <button class="px-4 py-2 rounded-full text-xs font-bold bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 transition-all">BOGO</button>
             </div>
           </div>
           <div>
             <h3
-              class="font-headline font-bold text-lg mb-4 text-on-surface"
-             
+              class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-indigo-400 mb-4"
             >
               Brand Search
             </h3>
-            <div class="relative">
+            <div class="relative group">
               <input
-                class="w-full bg-surface-container-low border-none rounded-xl py-3 pl-4 pr-10 text-sm focus:ring-2 focus:ring-primary-container"
+                class="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-4 pr-10 text-sm focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all placeholder:text-slate-600 text-white"
                 placeholder="e.g. Nike, Apple..."
                 type="text"
               />
-              <span
-                class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant scale-90"
-               
-                >search</span
-              >
+              <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 scale-90 group-focus-within:text-indigo-400 transition-colors">search</span>
             </div>
           </div>
-          <div class="pt-4 border-t border-outline-variant/10">
+          <div class="pt-4 border-t border-white/10">
             <button
-              class="w-full py-3 rounded-xl bg-surface-container-highest text-on-surface font-bold text-sm hover:bg-surface-variant transition-colors"
+              class="w-full py-3 rounded-xl bg-white/5 text-white font-bold text-sm hover:bg-white/10 transition-colors border border-white/5"
              
             >
               Clear Filters
@@ -293,17 +242,11 @@
           class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6"
         >
           <div>
-            <span
-              class="text-primary font-bold tracking-widest text-xs uppercase mb-2 block"
-             
-              >Curated Just for You</span
-            >
-            <h1
-              class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface"
-             
-            >
-              Latest Deals.
-            </h1>
+            <h1 class="text-4xl font-black text-white mb-2">Latest Deals.</h1>
+            <p class="text-slate-400 font-medium mb-12 flex items-center gap-2">
+              <span class="w-8 h-1 bg-indigo-500 rounded-full"></span>
+              Premium offers for the modern scholar
+            </p>
           </div>
           <div
             class="flex items-center gap-4 text-sm font-medium text-on-surface-variant"
@@ -346,6 +289,7 @@
     <script src="js/auth.js"></script>
     <script src="js/components.js"></script>
     <script src="js/deals.js"></script>
+    <script src="js/star-background.js"></script>
     <script>
       (async function initDealsPage() {
         // Initialize header/footer
