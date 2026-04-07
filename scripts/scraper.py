@@ -169,8 +169,8 @@ def scrape_static_deals(existing: dict):
             "brand_name": "Notion",
             "description": "Full Notion Personal Pro plan free with .edu or verified student email.",
             "category": "software",
-            "source_url": "https://www.notion.so/students",
-            "deal_url": "https://www.notion.so/students",
+            "source_url": "https://www.notion.so/product/notion-for-education",
+            "deal_url": "https://www.notion.so/product/notion-for-education",
             "is_verified": True,
         },
         {
@@ -187,8 +187,8 @@ def scrape_static_deals(existing: dict):
             "brand_name": "Amazon",
             "description": "Youth Offer: 50% cashback on Prime membership setup for 18-24 year olds.",
             "category": "other",
-            "source_url": "https://www.amazon.in/b?node=10096591031",
-            "deal_url": "https://www.amazon.in/b?node=10096591031",
+            "source_url": "https://www.amazon.in/prime/promo/landing",
+            "deal_url": "https://www.amazon.in/prime/promo/landing",
             "is_verified": True,
         },
         {

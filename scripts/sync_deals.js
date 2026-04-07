@@ -30,7 +30,7 @@ async function insertDealsToSupabase(deals) {
   const existingData = await existingRes.json();
   const existingUrls = new Set(existingData.map(d => d.deal_url));
   const newDeals = deals.filter(d => !existingUrls.has(d.deal_url));
-  
+
   if (newDeals.length === 0) {
     console.log('✅ No new deals to insert.');
     return;
@@ -230,7 +230,7 @@ const MASSIVE_EVERGREEN_LIST = [
   {
     title: 'Ajio Student Offer: Fashion Discounts',
     description: 'Special coupon codes for students on top brands like Nike, Adidas, and Puma.',
-    deal_url: 'https://www.ajio.com/',
+    deal_url: 'https://www.myunidays.com/IN/en-GB/partners/ajio/view',
     brand_name: 'Ajio',
     discount_text: 'Special Codes',
     category: 'local',
@@ -252,7 +252,7 @@ const MASSIVE_EVERGREEN_LIST = [
   {
     title: 'Swiggy HDFC Student Card Offer',
     description: 'Extra discounts on food delivery and grocery (Instamart) for students.',
-    deal_url: 'https://www.swiggy.com/',
+    deal_url: 'https://www.swiggy.com/swiggy-one',
     brand_name: 'Swiggy',
     discount_text: 'Bank Offers',
     category: 'food',
@@ -262,7 +262,7 @@ const MASSIVE_EVERGREEN_LIST = [
   {
     title: 'Dominos Student Offer',
     description: 'Get amazing discounts and buy-one-get-one offers on your favorite pizzas.',
-    deal_url: 'https://www.dominos.co.in/',
+    deal_url: 'https://www.dominos.co.in/menu/offers',
     brand_name: 'Dominos',
     discount_text: 'Pizza Deals',
     category: 'food',
@@ -304,7 +304,7 @@ const MASSIVE_EVERGREEN_LIST = [
   {
     title: 'BookMyShow Student Offer',
     description: 'Get discounts on movie tickets and events when you verify your student ID.',
-    deal_url: 'https://www.bookmyshow.com/',
+    deal_url: 'https://in.bookmyshow.com/offers',
     brand_name: 'BookMyShow',
     discount_text: 'Show Discounts',
     category: 'local',
@@ -348,7 +348,7 @@ const MASSIVE_EVERGREEN_LIST = [
   {
     title: 'Udemy Student Discount',
     description: 'Get thousands of online courses on a wide range of topics at significant discounts.',
-    deal_url: 'https://www.udemy.com/',
+    deal_url: 'https://www.udemy.com/deals/student-discount/',
     brand_name: 'Udemy',
     discount_text: 'Up to 90% OFF',
     category: 'courses',
