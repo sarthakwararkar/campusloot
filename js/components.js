@@ -107,8 +107,8 @@ function renderDealCard(deal, options = {}) {
   const hasBanner = !!deal.image_url;
   const imageDiv = document.createElement('div');
   imageDiv.className = hasBanner
-    ? 'deal-card-image aspect-[16/9] md:aspect-[4/3] rounded-xl bg-slate-50 mb-6 overflow-hidden flex items-center justify-center group-hover:opacity-90 transition-opacity'
-    : 'deal-card-image aspect-square rounded-xl bg-slate-50 mb-6 overflow-hidden flex items-center justify-center p-8 group-hover:opacity-90 transition-opacity';
+    ? 'deal-card-image aspect-[16/9] md:aspect-[4/3] rounded-xl bg-slate-50 mb-6 overflow-hidden flex items-center justify-center transition-opacity'
+    : 'deal-card-image aspect-square rounded-xl bg-slate-50 mb-6 overflow-hidden flex items-center justify-center p-8 transition-opacity';
 
   mountDealImage(imageDiv, deal, {
     placeholderClass: 'text-6xl text-on-surface-variant font-black opacity-30 select-none',
