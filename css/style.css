@@ -146,6 +146,17 @@ select {
   font-family: var(--font-family);
   font-size: var(--fs-base);
   outline: none;
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+/* Global Autofill Fix */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: white !important;
+  -webkit-box-shadow: 0 0 0px 1000px #0a0a0a inset !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 ul,
@@ -465,7 +476,7 @@ h6 {
   flex: 1;
   padding: 16px 28px;
   border: none;
-  background: transparent;
+  background: #0a0a0a;
   font-size: var(--fs-base);
   color: var(--white);
   font-weight: 500;
