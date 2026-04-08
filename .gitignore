@@ -1,6 +1,14 @@
 node_modules/
 .DS_Store
 .env
-
-.vercel
 .env*.local
+.vercel
+__pycache__/
+*.pyc
+*.pyo
+scripts/debug_*.html
+scripts/error_log.txt
+stitch_temp/
+*.tmp
+.idea/
+.vscode/

@@ -1,14 +1,29 @@
-const GEMINI_API_KEY = 'AIzaSyDB7by5UV9gdhE3epzhmejAKOVGoxctmCg';
-const GEMINI_IMAGE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_API_KEY}`;
+/**
+ * gemini.js — Gemini AI Image Generation
+ * API key is now loaded from environment/config, NOT hardcoded.
+ * For production, move this to a Supabase Edge Function.
+ */
+
+// Load API key from a non-committed config or environment
+// In production, this should be a server-side Edge Function call
+const GEMINI_API_KEY = window.__CAMPUSLOOT_CONFIG__?.GEMINI_API_KEY || '';
+const GEMINI_IMAGE_URL = GEMINI_API_KEY 
+  ? `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_API_KEY}`
+  : '';
 
 /**
- * Generate a promotional banner image using Gemini length 2.5 Flash
+ * Generate a promotional banner image using Gemini 2.5 Flash
  * @param {string} title 
  * @param {string} brand 
  * @param {string} category 
  * @returns {Promise<string|null>} Base64 encoded image string or null
  */
 export async function generateDealImage(title, brand, category) {
+  if (!GEMINI_API_KEY) {
+    console.warn('[Gemini] API key not configured. Skipping image generation.');
+    return null;
+  }
+
   const categoryStyles = {
     software: 'dark tech aesthetic, circuit board patterns, neon blue and purple tones, premium software vibe',
     food:     'warm and vibrant, cinematic food photography lighting, appetizing colors, orange and red, restaurant mood',

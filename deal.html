@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="light" lang="en">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
@@ -49,33 +49,7 @@
       body { font-family: "Inter", sans-serif; }
       .font-headline { font-family: "Plus Jakarta Sans", sans-serif; }
     </style>
-    
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  <title>Verified Student Deal | CampusLoot</title>
+    <title>Verified Student Deal | CampusLoot</title>
 
   <meta name="description" content="Get exclusive verified student discounts and deals on your favorite brands with CampusLoot." />
   <meta property="og:title" content="Verified Student Deal | CampusLoot" />
@@ -87,6 +61,7 @@
   <meta name="twitter:description" content="Get exclusive verified student discounts and deals on your favorite brands with CampusLoot." />
   <meta name="twitter:image" content="/og-image.png" />
   <link rel="icon" href="/favicon.ico" />
+  <link rel="canonical" href="https://campusloot.com/deal.html" />
 
 </head>
   <body class="bg-black text-white selection:bg-indigo-500/30 overflow-x-hidden">
@@ -151,10 +126,28 @@
                 <h3 class="text-xl font-bold text-white">About this deal</h3>
                 <p id="deal-description" class="text-slate-400 leading-relaxed text-lg">Loading description...</p>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
+              <!-- Expiry Countdown -->
+              <div id="deal-expiry" class="hidden mt-6 flex items-center gap-2 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                <span class="material-symbols-outlined text-amber-400">timer</span>
+                <span id="deal-expiry-text" class="text-amber-400 font-bold text-sm"></span>
+              </div>
+
+              <!-- Social Share -->
+              <div class="mt-8 pt-6 border-t border-white/5">
+                <p class="text-slate-400 text-sm font-bold uppercase tracking-widest mb-4">Share this deal</p>
+                <div class="flex gap-3" id="share-buttons">
+                  <button id="share-whatsapp" class="w-12 h-12 rounded-xl bg-[#25D366]/10 text-[#25D366] flex items-center justify-center hover:bg-[#25D366]/20 transition-colors" title="Share on WhatsApp">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  </button>
+                  <button id="share-twitter" class="w-12 h-12 rounded-xl bg-[#1DA1F2]/10 text-[#1DA1F2] flex items-center justify-center hover:bg-[#1DA1F2]/20 transition-colors" title="Share on Twitter">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                  </button>
+                  <button id="share-copy" class="w-12 h-12 rounded-xl bg-white/5 text-slate-400 flex items-center justify-center hover:bg-white/10 transition-colors" title="Copy link">
+                    <span class="material-symbols-outlined">link</span>
+                  </button>
+                </div>
+              </div>
     </main>
 
     <footer id="site-footer"></footer>
@@ -165,7 +158,9 @@
     <script src="js/auth.js"></script>
     <script src="js/components.js"></script>
     <script src="js/deals.js"></script>
+    <script src="js/analytics.js"></script>
     <script src="js/star-background.js"></script>
+    <script src="js/cookie-consent.js"></script>
     <script>
       (async function initDealPage() {
         // Initialize header/footer
@@ -209,6 +204,40 @@
           document.getElementById('deal-saves').textContent = `${(deal.saves_count || 0).toLocaleString()}+`;
           document.getElementById('deal-description').textContent = deal.description || 'No description available.';
 
+          // Inject JSON-LD structured data for SEO
+          const jsonLd = {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": deal.title || 'Student Deal',
+            "description": deal.description || '',
+            "brand": { "@type": "Brand", "name": deal.brand_name || 'Unknown' },
+            "category": deal.category || 'Other',
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "INR",
+              "price": deal.deal_price || "0",
+              "availability": "https://schema.org/InStock",
+              "url": window.location.href
+            }
+          };
+          if (deal.expires_at) {
+            jsonLd.offers.priceValidUntil = deal.expires_at.split('T')[0];
+          }
+          if (deal.image_url) {
+            jsonLd.image = deal.image_url;
+          }
+          const ldScript = document.createElement('script');
+          ldScript.type = 'application/ld+json';
+          ldScript.textContent = JSON.stringify(jsonLd);
+          document.head.appendChild(ldScript);
+
+          // Update OG meta tags dynamically for better social sharing
+          document.querySelector('meta[property="og:title"]')?.setAttribute('content', `${deal.title} | CampusLoot`);
+          document.querySelector('meta[property="og:description"]')?.setAttribute('content', deal.description || '');
+          if (deal.image_url) {
+            document.querySelector('meta[property="og:image"]')?.setAttribute('content', deal.image_url);
+          }
+
           const imageWrap = document.getElementById('deal-image-wrap');
           mountDealImage(imageWrap, deal, { 
               placeholderClass: 'text-9xl text-slate-500 font-black opacity-30 select-none',
@@ -216,14 +245,55 @@
           });
 
           const claimBtn = document.getElementById('claim-btn');
-          claimBtn.onclick = () => {
+          claimBtn.onclick = async () => {
               const url = deal.affiliate_url || deal.deal_url;
               if (url && url !== '#') {
+                  // Track the click for affiliate revenue analytics
+                  if (typeof trackDealClick === 'function') {
+                    trackDealClick(deal.id, url, 'detail');
+                  }
+                  // Increment click counter via RPC
+                  try { await supabase.rpc('increment_clicks', { deal_id: deal.id }); } catch(e) {}
                   window.open(url, '_blank', 'noopener,noreferrer');
               } else {
                   showToast('This deal is currently offline', 'error');
               }
           };
+
+          // Social Share buttons
+          const pageUrl = window.location.href;
+          const shareText = `Check out this deal: ${deal.title} on CampusLoot!`;
+          document.getElementById('share-whatsapp').onclick = () => {
+            window.open(`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + pageUrl)}`, '_blank');
+          };
+          document.getElementById('share-twitter').onclick = () => {
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(pageUrl)}`, '_blank');
+          };
+          document.getElementById('share-copy').onclick = () => {
+            navigator.clipboard.writeText(pageUrl).then(() => showToast('Link copied!', 'success'));
+          };
+
+          // Expiry countdown
+          if (deal.expires_at) {
+            const expiryDate = new Date(deal.expires_at);
+            const now = new Date();
+            const daysLeft = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
+            const expiryEl = document.getElementById('deal-expiry');
+            const expiryText = document.getElementById('deal-expiry-text');
+            if (daysLeft <= 0) {
+              expiryEl.classList.remove('hidden');
+              expiryEl.classList.replace('bg-amber-500/10', 'bg-red-500/10');
+              expiryEl.classList.replace('border-amber-500/20', 'border-red-500/20');
+              expiryText.classList.replace('text-amber-400', 'text-red-400');
+              expiryText.textContent = 'This deal has expired';
+            } else if (daysLeft <= 7) {
+              expiryEl.classList.remove('hidden');
+              expiryText.textContent = daysLeft === 1 ? 'Expires tomorrow!' : `Expires in ${daysLeft} days`;
+            }
+          }
+
+          // Track page view
+          if (typeof trackPageView === 'function') trackPageView('Deal - ' + (deal.brand_name || deal.title));
 
           incrementView(dealId).catch(console.error);
           loader.classList.add('hidden');
@@ -235,27 +305,7 @@
       })();
     </script>
   
-  <!-- Cookie Consent Banner -->
-  <script>
-    (function() {
-      if (!localStorage.getItem('cookieConsent')) {
-        var banner = document.createElement('div');
-        banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;color:#fff;padding:15px;text-align:center;font-family:sans-serif;z-index:9999;display:flex;justify-content:center;align-items:center;gap:15px;flex-wrap:wrap;border-top:1px solid #333;box-shadow:0 -5px 15px rgba(0,0,0,0.2);';
-        banner.innerHTML = '<span style="font-size:14px;">We use cookies to improve your experience. See our <a href="privacy.html" style="color:#4a40e0;text-decoration:underline;">Privacy Policy</a>.</span> ' +
-          '<div style="display:flex;gap:10px;"><button id="acceptCookies" style="background:#4a40e0;color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-weight:bold;font-size:14px;">Accept</button> ' +
-          '<button id="declineCookies" style="background:transparent;color:#ccc;border:1px solid #ccc;padding:8px 16px;border-radius:4px;cursor:pointer;font-size:14px;">Decline</button></div>';
-        document.body.appendChild(banner);
-        document.getElementById('acceptCookies').onclick = function() {
-          localStorage.setItem('cookieConsent', 'accepted');
-          banner.style.display = 'none';
-        };
-        document.getElementById('declineCookies').onclick = function() {
-          localStorage.setItem('cookieConsent', 'declined');
-          banner.style.display = 'none';
-        };
-      }
-    })();
-  </script>
+  <!-- Cookie consent loaded via js/cookie-consent.js -->
 
 </body>
 </html>

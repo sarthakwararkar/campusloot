@@ -132,6 +132,14 @@ function renderDealCard(deal, options = {}) {
     verifiedBadge.textContent = 'Featured';
     titleRow.appendChild(verifiedBadge);
   }
+
+  // Sponsored badge
+  if (deal.is_sponsored) {
+    const sponsoredBadge = document.createElement('span');
+    sponsoredBadge.className = 'bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide';
+    sponsoredBadge.textContent = 'Sponsored';
+    titleRow.appendChild(sponsoredBadge);
+  }
   bodyDiv.appendChild(titleRow);
 
   const brandObj = document.createElement('h3');
@@ -143,6 +151,44 @@ function renderDealCard(deal, options = {}) {
   descObj.className = 'text-sm text-white/50 line-clamp-1';
   descObj.textContent = deal.title || deal.description || '';
   bodyDiv.appendChild(descObj);
+
+  // Expiry countdown badge
+  if (deal.expires_at) {
+    const expiryDate = new Date(deal.expires_at);
+    const now = new Date();
+    const daysLeft = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
+    if (daysLeft > 0 && daysLeft <= 3) {
+      const expiryBadge = document.createElement('span');
+      expiryBadge.className = 'text-xs text-amber-400 font-bold mt-1 flex items-center gap-1';
+      expiryBadge.innerHTML = `<span class="material-symbols-outlined text-sm">timer</span> ${daysLeft === 1 ? 'Expires tomorrow' : 'Expires in ' + daysLeft + ' days'}`;
+      bodyDiv.appendChild(expiryBadge);
+    } else if (daysLeft <= 0) {
+      const expiredBadge = document.createElement('span');
+      expiredBadge.className = 'text-xs text-red-400 font-bold mt-1 flex items-center gap-1';
+      expiredBadge.innerHTML = `<span class="material-symbols-outlined text-sm">event_busy</span> Expired`;
+      bodyDiv.appendChild(expiredBadge);
+    }
+  }
+
+  // Coupon code copy button
+  if (deal.coupon_code) {
+    const couponDiv = document.createElement('div');
+    couponDiv.className = 'flex items-center gap-2 mt-2 bg-emerald-900/20 border border-emerald-500/20 rounded-lg px-3 py-1.5';
+    const codeSpan = document.createElement('span');
+    codeSpan.className = 'text-emerald-400 font-mono font-bold text-sm flex-1';
+    codeSpan.textContent = deal.coupon_code;
+    couponDiv.appendChild(codeSpan);
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'text-emerald-400/60 hover:text-emerald-300 transition-colors';
+    copyBtn.innerHTML = '<span class="material-symbols-outlined text-sm">content_copy</span>';
+    copyBtn.title = 'Copy code';
+    copyBtn.onclick = (e) => {
+      e.stopPropagation();
+      navigator.clipboard.writeText(deal.coupon_code).then(() => showToast('Coupon code copied!', 'success'));
+    };
+    couponDiv.appendChild(copyBtn);
+    bodyDiv.appendChild(couponDiv);
+  }
 
   card.appendChild(bodyDiv);
 
@@ -538,8 +584,8 @@ function renderFooter() {
         <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
           <a href="privacy.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Privacy Policy</a>
           <a href="terms.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Terms of Service</a>
-          <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Partner with Us</a>
-          <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Contact</a>
+          <a href="advertise.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Partner with Us</a>
+          <a href="contact.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Contact</a>
         </div>
       </div>
       <div class="flex flex-col md:flex-row items-center justify-between pt-10 border-t border-white/5 text-sm text-slate-500">

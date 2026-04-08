@@ -1,0 +1,21 @@
+{
+  "name": "CampusLoot",
+  "short_name": "CampusLoot",
+  "description": "Best student deals & discounts in India. Save on tech, food, courses, and more.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait-primary",
+  "categories": ["shopping", "education", "lifestyle"],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ],
+  "screenshots": [],
+  "related_applications": [],
+  "scope": "/"
+}
