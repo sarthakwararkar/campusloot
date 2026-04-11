@@ -1,13 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 
-const htmlFiles = fs.readdirSync('.').filter(f => f.endsWith('.html'));
-const allFiles = fs.readdirSync('.', { recursive: true }).map(f => f.replace(/\\/g, '/'));
+const rootDir = path.join(__dirname, '..');
+const htmlFiles = fs.readdirSync(rootDir).filter(f => f.endsWith('.html'));
+const allFiles = fs.readdirSync(rootDir, { recursive: true }).map(f => f.replace(/\\/g, '/'));
 
 let brokenLinks = [];
 
 for (const file of htmlFiles) {
-    const content = fs.readFileSync(file, 'utf8');
+    const filePath = path.join(rootDir, file);
+    const content = fs.readFileSync(filePath, 'utf8');
     const hrefs = content.match(/href="([^"]*)"/g);
     if (!hrefs) continue;
 

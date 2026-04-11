@@ -1,7 +1,7 @@
-const fs = require('fs');
+const path = require('path');
 
 // ==== Format Categories.html ====
-let catHtml = fs.readFileSync('categories.html', 'utf8');
+let catHtml = fs.readFileSync(path.join(__dirname, '..', 'categories.html'), 'utf8');
 catHtml = catHtml.replace('<title>Explore Deals | UniDeals India</title>', '<title>Categories | UniDeals India</title>');
 catHtml = catHtml.replace('>Latest Deals.</h1>', '>Category Deals.</h1>');
 
@@ -14,10 +14,10 @@ const catRegexStr = `class="text-slate-600 dark:text-slate-400 hover:text-indigo
 const catNewStr = `class="text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 pb-1 font-['Plus_Jakarta_Sans'] font-bold tracking-tight transition-all" href="categories.html"`;
 catHtml = catHtml.replace(catRegexStr, catNewStr);
 
-fs.writeFileSync('categories.html', catHtml);
+fs.writeFileSync(path.join(__dirname, '..', 'categories.html'), catHtml);
 
 // ==== Format Trending.html ====
-let trendHtml = fs.readFileSync('trending.html', 'utf8');
+let trendHtml = fs.readFileSync(path.join(__dirname, '..', 'trending.html'), 'utf8');
 trendHtml = trendHtml.replace('<title>Explore Deals | UniDeals India</title>', '<title>Trending Deals | UniDeals India</title>');
 trendHtml = trendHtml.replace('>Latest Deals.</h1>', '>Trending Now.</h1>');
 
@@ -34,6 +34,6 @@ trendHtml = trendHtml.replace(
     "await loadDeals({ sort: 'most-saved', category: currentCategory, search: currentSearch });"
 );
 
-fs.writeFileSync('trending.html', trendHtml);
+fs.writeFileSync(path.join(__dirname, '..', 'trending.html'), trendHtml);
 
 console.log('Categories and Trending pages configured.');

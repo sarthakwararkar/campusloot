@@ -11,7 +11,7 @@ const urls = {
     'stitch_profile.html': 'https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY0ZGZmZjVlYWFhZjEwOTI1YzJkMDc5MGNkMjRhEgsSBxCR-NH27RYYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDQ4ODE1ODczNjk3MzY0MTk5OA&filename=&opi=89354086'
 };
 
-const dir = path.join(__dirname, 'stitch_temp');
+const dir = path.join(__dirname, '..', 'temp', 'stitch_temp');
 if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 
 function downloadFile(url, dest) {

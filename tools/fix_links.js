@@ -1,9 +1,10 @@
-const fs = require('fs');
+const path = require('path');
 const files = ['index.html', 'login.html', 'deals.html', 'deal.html', 'submit.html', 'profile.html'];
 
 for (const file of files) {
-    if (!fs.existsSync(file)) continue;
-    let content = fs.readFileSync(file, 'utf8');
+    const filePath = path.join(__dirname, '..', file);
+    if (!fs.existsSync(filePath)) continue;
+    let content = fs.readFileSync(filePath, 'utf8');
     
     // Fix CampusLoot logo to link to index.html
     // The logo is mostly structured as:
@@ -28,6 +29,6 @@ for (const file of files) {
     // Ensure Submit points to submit.html
     content = content.replace(/href="[^"]*"([^>]*)>Submit<\/a>/g, 'href="submit.html"$1>Submit</a>');
 
-    fs.writeFileSync(file, content);
+    fs.writeFileSync(filePath, content);
 }
 console.log('Fixed navigation links');
