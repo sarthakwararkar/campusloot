@@ -125,146 +125,90 @@
     <main class="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row gap-12">
       <!-- Persistent Glassmorphic Filter Sidebar -->
       <aside class="w-full md:w-64 flex-shrink-0">
-        <div
-          class="sticky top-28 bg-white/12 backdrop-blur-2xl rounded-2xl p-6 border border-white/20 shadow-2xl transition-all duration-300 hover:border-indigo-400/50 space-y-8"
-        >
+        <div class="sticky top-28 bg-white/12 backdrop-blur-2xl rounded-2xl p-6 border border-white/20 shadow-2xl transition-all duration-300 hover:border-indigo-400/50 space-y-8">
           <div>
-            <h3
-              class="font-headline font-bold text-lg mb-4 text-white"
-            >
-              Categories
-            </h3>
+            <h3 class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-indigo-400 mb-4">Categories</h3>
             <div class="space-y-2">
-              <label
-                class="flex items-center gap-3 cursor-pointer group"
-               
-              >
-                <input
-                  checked=""
-                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
-                  type="checkbox"
-                />
-                <span
-                  class="text-sm font-medium text-slate-300 group-hover:text-indigo-400 transition-colors"
-                  >Fashion &amp; Lifestyle</span
-                >
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input checked="" data-category="all" class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer" type="checkbox" />
+                <span class="text-sm font-medium text-slate-300 group-hover:text-indigo-400 transition-colors">🔥 All Categories</span>
               </label>
               <label class="flex items-center gap-3 cursor-pointer group">
-                <input
-                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
-                  type="checkbox"
-                />
-                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">Tech &amp; Gadgets</span>
+                <input data-category="food" class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer" type="checkbox" />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">🍕 Food & Dining</span>
               </label>
               <label class="flex items-center gap-3 cursor-pointer group">
-                <input
-                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
-                  type="checkbox"
-                />
-                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">Food &amp; Dining</span>
+                <input data-category="clothing" class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer" type="checkbox" />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">👕 Fashion</span>
               </label>
               <label class="flex items-center gap-3 cursor-pointer group">
-                <input
-                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
-                  type="checkbox"
-                />
-                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">Travel &amp; Stays</span>
+                <input data-category="electronics" class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer" type="checkbox" />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">📱 Electronics</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input data-category="ott" class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer" type="checkbox" />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">🎬 Entertainment</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input data-category="software" class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer" type="checkbox" />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">💻 Software</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input data-category="courses" class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer" type="checkbox" />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">📚 Courses</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input data-category="services" class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer" type="checkbox" />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">🛠️ Services</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input data-category="other" class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer" type="checkbox" />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">🎁 Other</span>
               </label>
             </div>
           </div>
           <div>
-            <h3
-              class="font-headline font-bold text-lg mb-4 text-white"
-             
-            >
-              Discount Range
-            </h3>
-            <div class="flex flex-wrap gap-2">
-              <button class="px-4 py-2 rounded-full text-xs font-bold bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-600/30 transition-all">All Deals</button>
-              <button class="px-4 py-2 rounded-full text-xs font-bold bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 transition-all">20%+</button>
-              <button class="px-4 py-2 rounded-full text-xs font-bold bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 transition-all">50%+</button>
-              <button class="px-4 py-2 rounded-full text-xs font-bold bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 transition-all">BOGO</button>
-            </div>
-          </div>
-          <div>
-            <h3
-              class="font-headline font-bold text-lg mb-4 text-white"
-            >
-              Brand Search
-            </h3>
-            <div class="relative">
+            <h3 class="font-headline font-bold text-lg mb-4 text-white">Brand Search</h3>
             <div class="relative group">
-              <input
-                class="w-full bg-[#0a0a0a] border border-white/10 rounded-xl py-3 pl-4 pr-10 text-sm text-white placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all"
-                placeholder="e.g. Nike, Apple..."
-                type="text"
-              />
+              <input class="w-full bg-[#0a0a0a] border border-white/10 rounded-xl py-3 pl-4 pr-10 text-sm text-white placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-500/50 outline-none transition-all" placeholder="e.g. Nike, Apple..." type="text" />
               <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 scale-90 group-focus-within:text-indigo-400 transition-colors">search</span>
             </div>
           </div>
           <div class="pt-4 border-t border-white/10">
-            <button
-              class="w-full py-3 rounded-xl bg-white/5 text-slate-300 font-bold text-sm hover:bg-white/10 transition-colors border border-white/10"
-            >
-              Clear Filters
-            </button>
+            <button class="w-full py-3 rounded-xl bg-white/5 text-slate-300 font-bold text-sm hover:bg-white/10 transition-colors border border-white/10" onclick="location.reload()">Clear Filters</button>
           </div>
         </div>
       </aside>
       <!-- Deal Cards Grid -->
       <section class="flex-grow">
-        <header
-          class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6"
-        >
+        <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <span
-              class="text-primary font-bold tracking-widest text-xs uppercase mb-2 block"
-             
-              >Curated Just for You</span
-            >
-            <h1
-              class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-white"
-            >
-              Category Deals.
-            </h1>
+            <span class="text-primary font-bold tracking-widest text-xs uppercase mb-2 block">Curated Just for You</span>
+            <h1 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-white">Category Deals.</h1>
           </div>
-          <div
-            class="flex items-center gap-4 text-sm font-medium text-slate-400"
-          >
+          <div class="flex items-center gap-4 text-sm font-medium text-slate-400">
             <span id="deals-count">Showing 0 deals</span>
-            <select
-              class="bg-transparent border-none focus:ring-0 text-primary font-bold cursor-pointer"
-            >
-              <option>Sort by: Newest</option>
-              <option>Sort by: Discount %</option>
-              <option>Sort by: Popularity</option>
+            <select class="bg-transparent border-none focus:ring-0 text-primary font-bold cursor-pointer">
+              <option value="best-deals">Sort by: Best Deals</option>
+              <option value="newest">Sort by: Newest</option>
+              <option value="most-saved">Sort by: Popularity</option>
             </select>
           </div>
         </header>
-        <div
-          id="deals-grid"
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        ></div>
+        <div id="deals-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         <div id="deals-loader" class="hidden flex justify-center py-12 w-full">
-          <div
-            class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"
-          ></div>
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
         <!-- Pagination/Load More -->
         <div class="mt-20 flex flex-col items-center gap-6">
-          <button
-            id="load-more-btn"
-            class="px-12 py-5 bg-white/10 text-white font-bold rounded-2xl shadow-xl hover:bg-white/20 hover:scale-105 active:scale-95 transition-all duration-300 border border-white/20 backdrop-blur-lg"
-          >
-            Load More Deals
-          </button>
+          <button id="load-more-btn" class="px-12 py-5 bg-white/10 text-white font-bold rounded-2xl shadow-xl hover:bg-white/20 hover:scale-105 active:scale-95 transition-all duration-300 border border-white/20 backdrop-blur-lg">Load More Deals</button>
           <div id="pagination-container" class="pagination-container"></div>
         </div>
       </section>
     </main>
     <footer id="site-footer"></footer>
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="js/supabase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/supabase.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/components.js"></script>
@@ -273,7 +217,6 @@
     <script src="js/star-background.js"></script>
     <script>
       (async function initCategoriesPage() {
-        // Initialize header/footer
         renderHeader('categories');
         renderFooter();
 
@@ -282,10 +225,11 @@
         const countEl = document.getElementById("deals-count");
         const loadMoreBtn = document.getElementById("load-more-btn");
         const navSearch = document.getElementById("nav-search-input");
+        const sortSelect = document.querySelector('select');
 
         let currentPage = 1;
         let currentCategory = 'all';
-        let currentSort = 'newest';
+        let currentSort = 'best-deals';
         let currentSearch = '';
         let totalDeals = 0;
         let dealsLoadedCount = 0;
@@ -294,21 +238,14 @@
         if (user) savedSet = await getSavedDealIds(user.id);
 
         async function loadDeals(page = 1, append = false) {
-          if (!append) {
-            grid.innerHTML = "";
-            dealsLoadedCount = 0;
-          }
+          if (!append) { grid.innerHTML = ""; dealsLoadedCount = 0; }
           loader.classList.remove("hidden");
           if (loadMoreBtn) loadMoreBtn.disabled = true;
 
-          const filters = {
-            category: currentCategory,
-            sort: currentSort,
-            search: currentSearch,
-            page: page
-          };
-          if (countEl) countEl.textContent = `Loading deals for page ${page}...`;
-          const { deals, total } = await fetchDeals(filters);
+          const { deals, total } = await fetchDeals({
+            category: currentCategory, sort: currentSort,
+            search: currentSearch, page: page
+          });
           loader.classList.add("hidden");
           if (loadMoreBtn) loadMoreBtn.disabled = false;
 
@@ -320,94 +257,79 @@
           totalDeals = total;
           dealsLoadedCount += deals.length;
           currentPage = page;
-
           if (countEl) countEl.textContent = `Showing ${dealsLoadedCount} of ${totalDeals} deals`;
 
           if (deals.length === 0 && !append) {
             grid.innerHTML = '<p class="col-span-full text-center py-8 text-on-surface-variant">No deals found matching your criteria.</p>';
           } else {
-            deals.forEach((deal) => {
-              grid.appendChild(renderDealCard(deal, { savedDeals: savedSet }));
-            });
+            deals.forEach((deal) => grid.appendChild(renderDealCard(deal, { savedDeals: savedSet })));
           }
-
           updatePagination();
           updateLoadMoreVisibility();
         }
 
         function updatePagination() {
-          renderPagination(
-            'pagination-container',
-            currentPage,
-            totalDeals,
-            12,
-            (newPage) => {
-              window.scrollTo({ top: 300, behavior: 'smooth' });
-              loadDeals(newPage, false);
-            }
-          );
+          renderPagination('pagination-container', currentPage, totalDeals, 12, (newPage) => {
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+            loadDeals(newPage, false);
+          });
         }
 
         function updateLoadMoreVisibility() {
           if (!loadMoreBtn) return;
-          if (dealsLoadedCount >= totalDeals) {
-            loadMoreBtn.classList.add('hidden');
-          } else {
-            loadMoreBtn.classList.remove('hidden');
-          }
+          loadMoreBtn.classList.toggle('hidden', dealsLoadedCount >= totalDeals);
         }
 
-        if (loadMoreBtn) {
-          loadMoreBtn.onclick = () => loadDeals(currentPage + 1, true);
-        }
+        if (loadMoreBtn) loadMoreBtn.onclick = () => loadDeals(currentPage + 1, true);
 
-        // Sidebar Category Filters
-        const categoryCheckboxes = document.querySelectorAll('aside input[type="checkbox"]');
-        categoryCheckboxes.forEach((cb, idx) => {
+        // Category filters using data-category
+        const categoryCheckboxes = document.querySelectorAll('aside input[type="checkbox"][data-category]');
+        categoryCheckboxes.forEach((cb) => {
           cb.onchange = () => {
-            // Very simple mapping for the static sidebar in HTML
-            const categories = ['Fashion & Lifestyle', 'Tech & Gadgets', 'Food & Dining', 'Travel & Stays'];
             if (cb.checked) {
-              currentCategory = categories[idx] || 'all';
-              // Uncheck others for simplicity (single selection)
+              currentCategory = cb.dataset.category || 'all';
               categoryCheckboxes.forEach(other => { if (other !== cb) other.checked = false; });
             } else {
               currentCategory = 'all';
+              const allCb = document.querySelector('aside input[data-category="all"]');
+              if (allCb) allCb.checked = true;
             }
             loadDeals(1, false);
           };
         });
 
-        // Brand Search In Sidebar
+        if (sortSelect) {
+          sortSelect.onchange = () => { currentSort = sortSelect.value || 'best-deals'; loadDeals(1, false); };
+        }
+
         const brandInput = document.querySelector('aside input[placeholder="e.g. Nike, Apple..."]');
         if (brandInput) {
-           brandInput.oninput = debounce(() => {
-             currentSearch = brandInput.value.trim();
-             loadDeals(1, false);
-           }, 500);
+           brandInput.oninput = debounce(() => { currentSearch = brandInput.value.trim(); loadDeals(1, false); }, 500);
         }
 
         function debounce(func, timeout = 300) {
           let timer;
-          return (...args) => {
-            clearTimeout(timer);
-            timer = setTimeout(() => { func.apply(this, args); }, timeout);
-          };
+          return (...args) => { clearTimeout(timer); timer = setTimeout(() => func.apply(this, args), timeout); };
         }
 
         // Initial Load
         const urlParams = new URLSearchParams(window.location.search);
         currentCategory = urlParams.get("category") || "all";
         currentSearch = urlParams.get("search") || "";
+
+        // Pre-check the matching category checkbox
+        if (currentCategory !== 'all') {
+          const allCb = document.querySelector('aside input[data-category="all"]');
+          const matchCb = document.querySelector(`aside input[data-category="${currentCategory}"]`);
+          if (allCb) allCb.checked = false;
+          if (matchCb) matchCb.checked = true;
+        }
+
         loadDeals(1, false);
 
-        // Header Search
         if (navSearch) {
           navSearch.onkeypress = (e) => {
-            if (e.key === 'Enter') {
-              currentSearch = navSearch.value.trim();
-              loadDeals(1, false);
-            }
+            if (e.key === 'Enter') { currentSearch = navSearch.value.trim(); loadDeals(1, false); }
           };
         }
       })();
@@ -416,4 +338,3 @@
 
 </body>
 </html>
-

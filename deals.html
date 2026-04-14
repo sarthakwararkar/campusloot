@@ -133,39 +133,78 @@
               Categories
             </h3>
             <div class="space-y-2">
-              <label
-                class="flex items-center gap-3 cursor-pointer group"
-               
-              >
+              <label class="flex items-center gap-3 cursor-pointer group">
                 <input
                   checked=""
+                  data-category="all"
                   class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
                   type="checkbox"
                 />
-                <span class="text-sm font-medium text-slate-300 group-hover:text-indigo-400 transition-colors"
-                  >All Categories</span
-                >
+                <span class="text-sm font-medium text-slate-300 group-hover:text-indigo-400 transition-colors">🔥 All Categories</span>
               </label>
               <label class="flex items-center gap-3 cursor-pointer group">
                 <input
+                  data-category="food"
                   class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
                   type="checkbox"
                 />
-                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">Tech &amp; Gadgets</span>
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">🍕 Food & Dining</span>
               </label>
               <label class="flex items-center gap-3 cursor-pointer group">
                 <input
+                  data-category="clothing"
                   class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
                   type="checkbox"
                 />
-                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">Food &amp; Dining</span>
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">👕 Fashion</span>
               </label>
               <label class="flex items-center gap-3 cursor-pointer group">
                 <input
+                  data-category="electronics"
                   class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
                   type="checkbox"
                 />
-                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">Travel &amp; Stays</span>
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">📱 Electronics</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input
+                  data-category="ott"
+                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
+                  type="checkbox"
+                />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">🎬 Entertainment</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input
+                  data-category="software"
+                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
+                  type="checkbox"
+                />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">💻 Software</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input
+                  data-category="courses"
+                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
+                  type="checkbox"
+                />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">📚 Courses</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input
+                  data-category="services"
+                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
+                  type="checkbox"
+                />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">🛠️ Services</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input
+                  data-category="other"
+                  class="w-5 h-5 rounded border-white/10 bg-white/5 text-indigo-500 focus:ring-indigo-500/30 transition-all cursor-pointer"
+                  type="checkbox"
+                />
+                <span class="text-sm font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">🎁 Other</span>
               </label>
             </div>
           </div>
@@ -226,9 +265,9 @@
             <select
               class="bg-transparent border-none focus:ring-0 text-primary font-bold cursor-pointer"
             >
-              <option>Sort by: Newest</option>
-              <option>Sort by: Discount %</option>
-              <option>Sort by: Popularity</option>
+              <option value="best-deals">Sort by: Best Deals</option>
+              <option value="newest">Sort by: Newest</option>
+              <option value="most-saved">Sort by: Popularity</option>
             </select>
           </div>
         </header>
@@ -278,7 +317,7 @@
 
         let currentPage = 1;
         let currentCategory = 'all';
-        let currentSort = 'newest';
+        let currentSort = 'best-deals';
         let currentSearch = '';
         let totalDeals = 0;
         let dealsLoadedCount = 0;
@@ -369,16 +408,19 @@
           loadMoreBtn.onclick = () => loadDeals(currentPage + 1, true);
         }
 
-        const categoryCheckboxes = document.querySelectorAll('aside input[type="checkbox"]');
-        categoryCheckboxes.forEach((cb, idx) => {
+        // Category filters using data-category
+        const categoryCheckboxes = document.querySelectorAll('aside input[type="checkbox"][data-category]');
+        categoryCheckboxes.forEach((cb) => {
           cb.onchange = () => {
-            // Mapping UI categories to database categories
-            const categories = ['other', 'software', 'food', 'local']; 
             if (cb.checked) {
-              currentCategory = categories[idx] || 'all';
+              currentCategory = cb.dataset.category || 'all';
+              // Uncheck others (single selection)
               categoryCheckboxes.forEach(other => { if (other !== cb) other.checked = false; });
             } else {
+              // If unchecked, default to 'all'
               currentCategory = 'all';
+              const allCb = document.querySelector('aside input[data-category="all"]');
+              if (allCb) allCb.checked = true;
             }
             loadDeals(1, false);
           };
@@ -395,10 +437,7 @@
 
         if (sortSelect) {
           sortSelect.onchange = () => {
-            const val = sortSelect.value.toLowerCase();
-            if (val.includes('newest')) currentSort = 'newest';
-            else if (val.includes('discount')) currentSort = 'discount';
-            else if (val.includes('popularity')) currentSort = 'most-saved';
+            currentSort = sortSelect.value || 'best-deals';
             loadDeals(1, false);
           };
         }

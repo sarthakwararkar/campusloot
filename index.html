@@ -425,22 +425,22 @@
         };
       }
 
-      // Load Featured Deals
+      // Load Top Deals (diverse casual deals from new algorithm)
       const featuredGrid = document.getElementById("featured-deals-grid");
       if (featuredGrid) {
         try {
-          const featuredDeals = await fetchFeaturedDeals();
-          if (featuredDeals && featuredDeals.length > 0) {
+          const topDeals = await fetchCasualDeals(6);
+          if (topDeals && topDeals.length > 0) {
             featuredGrid.innerHTML = "";
-            featuredDeals.forEach((deal) => {
+            topDeals.forEach((deal) => {
               featuredGrid.appendChild(renderDealCard(deal));
             });
           } else {
-            featuredGrid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><p>No featured deals curated at the moment. Explore to see all deals.</p></div>`;
+            featuredGrid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><p>No deals available at the moment. Check back soon!</p></div>`;
           }
         } catch (err) {
-          console.error("Failed to load featured deals:", err);
-          featuredGrid.innerHTML = `<div class="col-span-full py-12 text-center text-error"><p>Unable to load masterpieces at this time.</p></div>`;
+          console.error("Failed to load top deals:", err);
+          featuredGrid.innerHTML = `<div class="col-span-full py-12 text-center text-error"><p>Unable to load deals at this time.</p></div>`;
         }
       }
 

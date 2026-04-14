@@ -39,6 +39,12 @@ async function fetchDeals(filters = {}) {
     case 'expiring':
       query = query.not('expires_at', 'is', null).order('expires_at', { ascending: true });
       break;
+    case 'best-deals':
+      // Composite: high saves + high views + recent first
+      query = query.order('saves_count', { ascending: false })
+                   .order('views_count', { ascending: false })
+                   .order('created_at', { ascending: false });
+      break;
     case 'newest':
     default:
       query = query.order('created_at', { ascending: false });
@@ -81,6 +87,84 @@ async function fetchFeaturedDeals() {
   }
 
   return data || [];
+}
+
+/**
+ * Casual-priority category weights (higher = shown first on homepage)
+ */
+const CASUAL_CATEGORIES = ['food', 'clothing', 'ott', 'electronics', 'services', 'other', 'courses', 'software', 'local'];
+
+/**
+ * Fetch diverse casual deals for homepage.
+ * Pulls top deals prioritizing casual categories (food, fashion, OTT, electronics)
+ * and ensures category diversity (max 2 per category).
+ * Falls back to featured deals if not enough casual deals exist.
+ * @param {number} limit - total deals to return (default 6)
+ * @returns {Promise<Array>}
+ */
+async function fetchCasualDeals(limit = 6) {
+  try {
+    // Fetch a larger pool sorted by engagement
+    const { data, error } = await supabase
+      .from('deals')
+      .select('*')
+      .eq('is_active', true)
+      .eq('is_verified', true)
+      .order('saves_count', { ascending: false })
+      .order('views_count', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(80);
+
+    if (error || !data || data.length === 0) {
+      console.warn('fetchCasualDeals: falling back to featured deals');
+      return await fetchFeaturedDeals();
+    }
+
+    // Score each deal: casual category bonus + engagement + recency
+    const now = Date.now();
+    const scored = data.map(deal => {
+      const catIdx = CASUAL_CATEGORIES.indexOf(deal.category);
+      // Lower index = more casual = higher bonus (food=50, clothing=45, ott=40...)
+      const casualBonus = catIdx >= 0 ? (CASUAL_CATEGORIES.length - catIdx) * 5 : 0;
+      const saves = (deal.saves_count || 0) * 3;
+      const views = (deal.views_count || 0) * 0.5;
+      const ageMs = now - new Date(deal.created_at).getTime();
+      const ageDays = ageMs / (1000 * 60 * 60 * 24);
+      const recencyBonus = ageDays < 7 ? 15 : ageDays < 30 ? 5 : 0;
+      const featuredBonus = deal.is_featured ? 10 : 0;
+      return { ...deal, _score: casualBonus + saves + views + recencyBonus + featuredBonus };
+    });
+
+    // Sort by score descending
+    scored.sort((a, b) => b._score - a._score);
+
+    // Pick diverse results: max 2 per category
+    const result = [];
+    const catCount = {};
+    for (const deal of scored) {
+      if (result.length >= limit) break;
+      const cat = deal.category || 'other';
+      catCount[cat] = (catCount[cat] || 0) + 1;
+      if (catCount[cat] <= 2) {
+        result.push(deal);
+      }
+    }
+
+    // If we didn't fill enough, add more without category limit
+    if (result.length < limit) {
+      for (const deal of scored) {
+        if (result.length >= limit) break;
+        if (!result.find(d => d.id === deal.id)) {
+          result.push(deal);
+        }
+      }
+    }
+
+    return result;
+  } catch (err) {
+    console.error('CRASH in fetchCasualDeals:', err);
+    return await fetchFeaturedDeals();
+  }
 }
 
 /**
