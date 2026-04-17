@@ -78,22 +78,45 @@ async function signIn(email, password) {
 }
 
 /**
- * Sign in with Google OAuth (placeholder — needs OAuth setup)
+ * Sign in with Google OAuth
  */
 async function signInWithGoogle() {
   try {
+    // Show loading state on the Google button
+    const googleBtn = document.getElementById('google-btn');
+    if (googleBtn) {
+      googleBtn.disabled = true;
+      googleBtn.querySelector('span').textContent = 'Redirecting to Google...';
+    }
+
     const { data, error } = await supabaseClient.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin + '/index.html'
+        redirectTo: window.location.origin + '/index.html',
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent'
+        }
       }
     });
 
     if (error) {
-      showToast('Google login is not yet configured. Please use email login.', 'error');
+      console.error('[Auth] Google OAuth error:', error.message);
+      if (typeof showToast === 'function') {
+        showToast('Google sign-in failed: ' + error.message, 'error');
+      }
+      // Reset button
+      if (googleBtn) {
+        googleBtn.disabled = false;
+        googleBtn.querySelector('span').textContent = 'Continue with Google';
+      }
     }
+    // If successful, Supabase redirects the browser — no further action needed here
   } catch (err) {
-    showToast('Google login is not yet configured. Please use email login.', 'error');
+    console.error('[Auth] Google OAuth exception:', err);
+    if (typeof showToast === 'function') {
+      showToast('Something went wrong with Google sign-in. Please try again.', 'error');
+    }
   }
 }
 
@@ -181,11 +204,42 @@ function onAuthChange(callback) {
 }
 
 // Listen for auth state changes (handles OAuth redirect callbacks)
-supabaseClient.auth.onAuthStateChange((event, session) => {
+supabaseClient.auth.onAuthStateChange(async (event, session) => {
   if (event === 'SIGNED_IN' && session) {
+    // For OAuth users (Google), auto-create profile if it doesn't exist
+    try {
+      const user = session.user;
+      const provider = user.app_metadata?.provider;
+
+      if (provider === 'google') {
+        // Check if profile already exists
+        const { data: existingProfile } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('id', user.id)
+          .single();
+
+        if (!existingProfile) {
+          // Create profile from Google metadata
+          const meta = user.user_metadata || {};
+          await supabase.from('profiles').insert({
+            id: user.id,
+            email: user.email,
+            full_name: meta.full_name || meta.name || '',
+            avatar_url: meta.avatar_url || meta.picture || '',
+            college_name: '',
+            city: ''
+          });
+          console.log('[Auth] Created profile for Google user:', user.email);
+        }
+      }
+    } catch (profileErr) {
+      console.warn('[Auth] Profile sync error (non-fatal):', profileErr);
+    }
+
     // If on login page, redirect to index
     if (window.location.pathname.includes('login.html')) {
-        window.location.href = 'index.html';
+      window.location.href = 'index.html';
     }
   }
 });
