@@ -4,33 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/components.css">
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet"
+  />
 
   <title>My Profile | CampusLoot</title>
 
@@ -45,92 +29,155 @@
   <meta name="twitter:image" content="/assets/images/og-image.png" />
   <link rel="icon" href="/assets/metadata/favicon.ico" />
 
+  <style>
+    /* Premium Autofill Fix for dark mode */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+      -webkit-text-fill-color: white !important;
+      -webkit-box-shadow: 0 0 0px 1000px rgba(255,255,255,0.05) inset !important;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+    /* Avatar hover overlay */
+    .avatar-wrapper { position: relative; cursor: pointer; }
+    .avatar-wrapper:hover .avatar-overlay { opacity: 1; }
+    .avatar-overlay {
+      position: absolute; inset: 0; border-radius: 50%;
+      background: rgba(0,0,0,0.5); display: flex; align-items: center;
+      justify-content: center; opacity: 0; transition: opacity 0.2s;
+    }
+    /* Form inputs for dark bg */
+    .dark-form-input {
+      width: 100%; padding: 14px 18px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px; color: white; font-size: 0.95rem;
+      transition: all 0.2s; outline: none;
+    }
+    .dark-form-input:focus {
+      border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    }
+    .dark-form-input::placeholder { color: rgba(255,255,255,0.3); }
+  </style>
 </head>
   <body class="bg-black text-white selection:bg-indigo-500/30 overflow-x-hidden">
   <header id="site-header"></header>
 
-  <main class="container" style="padding-top: var(--space-xl); padding-bottom: var(--space-3xl);">
+  <main class="max-w-5xl mx-auto px-6 pt-28 pb-20">
     <!-- Profile Header -->
-    <section class="profile-hero bg-white/12 backdrop-blur-2xl rounded-3xl p-10 border border-white/20 shadow-2xl mb-12">
-      <div class="profile-avatar bg-indigo-500 text-white shadow-lg" id="profile-avatar">?</div>
-      <div class="profile-info">
-        <h1 id="profile-name" class="profile-name text-white">Loading...</h1>
-        <p id="profile-college-city" class="profile-subtitle text-slate-400">—</p>
-        <div class="profile-stats">
-          <div class="profile-stat">
-            <span id="profile-stats-saved" class="profile-stat-number text-indigo-400">0</span>
-            <span class="profile-stat-label text-slate-400">Deals Saved</span>
+    <section class="bg-white/5 backdrop-blur-2xl rounded-3xl p-8 md:p-10 border border-white/10 shadow-2xl mb-10">
+      <div class="flex flex-col md:flex-row items-center gap-8">
+        <!-- Avatar with upload -->
+        <div class="avatar-wrapper group" id="avatar-wrapper" title="Click to change profile picture">
+          <div class="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-4xl font-black shadow-lg shadow-indigo-500/20" id="profile-avatar">
+            ?
           </div>
-          <div class="profile-stat">
-            <span id="profile-stats-subs" class="profile-stat-number text-indigo-400">0</span>
-            <span class="profile-stat-label text-slate-400">Submissions</span>
+          <div class="avatar-overlay rounded-full">
+            <span class="material-symbols-outlined text-white text-2xl">photo_camera</span>
           </div>
-          <div class="profile-stat">
-            <span id="profile-stats-since" class="profile-stat-number text-indigo-400">—</span>
-            <span class="profile-stat-label text-slate-400">Member Since</span>
+          <input type="file" id="avatar-input" accept="image/*" class="hidden" />
+        </div>
+
+        <!-- Profile Info -->
+        <div class="flex-1 text-center md:text-left">
+          <h1 id="profile-name" class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-1">Loading...</h1>
+          <p id="profile-email" class="text-slate-400 text-sm mb-1"></p>
+          <p id="profile-college-city" class="text-slate-500 text-sm">—</p>
+          <div class="flex gap-8 mt-5 justify-center md:justify-start">
+            <div class="text-center">
+              <span id="profile-stats-saved" class="block text-xl font-bold text-indigo-400">0</span>
+              <span class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Saved</span>
+            </div>
+            <div class="text-center">
+              <span id="profile-stats-subs" class="block text-xl font-bold text-indigo-400">0</span>
+              <span class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Submissions</span>
+            </div>
+            <div class="text-center">
+              <span id="profile-stats-since" class="block text-xl font-bold text-indigo-400">—</span>
+              <span class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Member Since</span>
+            </div>
           </div>
         </div>
+
+        <!-- Logout Button -->
+        <button id="logout-btn" class="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-slate-400 text-sm font-semibold hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 transition-all">
+          <span class="material-symbols-outlined text-lg">logout</span>
+          Sign Out
+        </button>
       </div>
     </section>
 
     <!-- Tab Navigation -->
-    <div class="profile-tabs flex gap-4 mb-8">
-      <button class="profile-tab px-6 py-3 rounded-xl bg-white/10 text-slate-300 font-bold hover:bg-white/20 transition-all border border-white/10 active-tab" data-tab="saved">📌 Saved Deals</button>
-      <button class="profile-tab px-6 py-3 rounded-xl bg-white/5 text-slate-400 font-bold hover:bg-white/10 transition-all border border-white/5" data-tab="submissions">📝 My Submissions</button>
-      <button class="profile-tab px-6 py-3 rounded-xl bg-white/5 text-slate-400 font-bold hover:bg-white/10 transition-all border border-white/5" data-tab="settings">⚙️ Settings</button>
+    <div class="flex gap-3 mb-8 border-b border-white/10 pb-3 overflow-x-auto">
+      <button class="profile-tab px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap bg-indigo-600 text-white" data-tab="saved">📌 Saved Deals</button>
+      <button class="profile-tab px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap bg-white/5 text-slate-400 hover:bg-white/10" data-tab="submissions">📝 My Submissions</button>
+      <button class="profile-tab px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap bg-white/5 text-slate-400 hover:bg-white/10" data-tab="settings">⚙️ Settings</button>
     </div>
 
     <!-- Tab: Saved Deals -->
     <section id="tab-saved" class="tab-content">
-      <div id="saved-deals-grid" class="deals-grid"></div>
+      <div id="saved-deals-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
     <!-- Tab: Submissions -->
     <section id="tab-submissions" class="tab-content" style="display:none;">
-      <div id="submissions-container" class="profile-card">
-        <div class="loader-container"><div class="loader"></div></div>
+      <div id="submissions-container" class="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
+        <div class="flex items-center justify-center py-12">
+          <div class="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
       </div>
     </section>
 
     <!-- Tab: Settings -->
     <section id="tab-settings" class="tab-content" style="display:none;">
-      <div class="profile-card" style="max-width: 640px;">
-        <h3 style="margin-bottom: var(--space-lg); font-size: var(--fs-xl);">Edit Profile</h3>
-        <form id="profile-form">
-          <div class="form-group">
-            <label class="form-label" for="edit-name">Full Name</label>
-            <input class="form-input" type="text" id="edit-name" placeholder="Your name">
+      <div class="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10 max-w-2xl">
+        <h3 class="text-xl font-bold text-white mb-6">Edit Profile</h3>
+        <form id="profile-form" class="space-y-5">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" for="edit-name">Full Name</label>
+            <input class="dark-form-input" type="text" id="edit-name" placeholder="Your name">
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="edit-college">College</label>
-              <input class="form-input" type="text" id="edit-college" placeholder="IIT Bombay">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" for="edit-college">College</label>
+              <input class="dark-form-input" type="text" id="edit-college" placeholder="IIT Bombay">
             </div>
-            <div class="form-group">
-              <label class="form-label" for="edit-city">City</label>
-              <input class="form-input" type="text" id="edit-city" placeholder="Mumbai">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" for="edit-city">City</label>
+              <input class="dark-form-input" type="text" id="edit-city" placeholder="Mumbai">
             </div>
           </div>
-          <button type="submit" id="save-profile-btn" class="btn btn-primary">Save Changes</button>
+          <button type="submit" id="save-profile-btn" class="px-8 py-3 bg-gradient-to-r from-indigo-600 to-cyan-600 text-white font-bold rounded-full hover:shadow-lg hover:shadow-indigo-500/20 hover:-translate-y-0.5 transition-all active:scale-95">
+            Save Changes
+          </button>
         </form>
 
-        <hr style="border: none; border-top: var(--border-light); margin: var(--space-xl) 0;">
+        <hr class="border-white/10 my-8">
 
-        <h3 style="margin-bottom: var(--space-lg); font-size: var(--fs-xl);">Change Password</h3>
-        <form id="password-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="new-password">New Password</label>
-              <input class="form-input" type="password" id="new-password" placeholder="Min 8 chars">
+        <h3 class="text-xl font-bold text-white mb-6">Change Password</h3>
+        <form id="password-form" class="space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" for="new-password">New Password</label>
+              <input class="dark-form-input" type="password" id="new-password" placeholder="Min 8 chars">
             </div>
-            <div class="form-group">
-              <label class="form-label" for="confirm-password">Confirm Password</label>
-              <input class="form-input" type="password" id="confirm-password" placeholder="Repeat password">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" for="confirm-password">Confirm Password</label>
+              <input class="dark-form-input" type="password" id="confirm-password" placeholder="Repeat password">
             </div>
           </div>
-          <div id="password-error" class="form-error" style="display:none;"></div>
-          <button type="submit" id="change-password-btn" class="btn btn-outline">Change Password</button>
+          <div id="password-error" class="text-red-400 text-sm font-semibold" style="display:none;"></div>
+          <button type="submit" id="change-password-btn" class="px-8 py-3 bg-white/5 border border-white/10 text-white font-bold rounded-full hover:bg-white/10 transition-all active:scale-95">
+            Change Password
+          </button>
         </form>
+
+        <hr class="border-white/10 my-8">
+
+        <h3 class="text-xl font-bold text-white mb-4">Danger Zone</h3>
+        <button id="logout-btn-mobile" class="flex items-center gap-2 px-6 py-3 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 font-bold hover:bg-red-500/20 transition-all">
+          <span class="material-symbols-outlined text-lg">logout</span>
+          Sign Out
+        </button>
       </div>
     </section>
   </main>
@@ -143,6 +190,8 @@
   <script src="js/auth.js"></script>
   <script src="js/deals.js"></script>
   <script src="js/components.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/star-background.js"></script>
   <script>
     (async function initProfilePage() {
       renderHeader('profile');
@@ -153,16 +202,76 @@
 
       const profile = await getCurrentProfile();
 
-      // Avatar — initials
-      const name = profile?.full_name || user.email.split('@')[0];
-      const initials = name.charAt(0).toUpperCase();
+      // ---- Avatar ----
       const avatarEl = document.getElementById('profile-avatar');
-      avatarEl.textContent = initials;
+      const avatarUrl = profile?.avatar_url || user.user_metadata?.avatar_url || user.user_metadata?.picture;
 
-      // Profile info
+      if (avatarUrl) {
+        avatarEl.innerHTML = `<img src="${avatarUrl}" alt="Profile" class="w-24 h-24 rounded-full object-cover" />`;
+        avatarEl.classList.remove('bg-gradient-to-br', 'from-indigo-500', 'to-purple-600');
+      } else {
+        const name = profile?.full_name || user.user_metadata?.full_name || user.email.split('@')[0];
+        avatarEl.textContent = name.charAt(0).toUpperCase();
+      }
+
+      // Avatar upload click
+      const avatarWrapper = document.getElementById('avatar-wrapper');
+      const avatarInput = document.getElementById('avatar-input');
+      avatarWrapper.addEventListener('click', () => avatarInput.click());
+
+      avatarInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Validate file size (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+          showToast('Image must be smaller than 2MB', 'error');
+          return;
+        }
+
+        showToast('Uploading...', 'info');
+
+        try {
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${user.id}/avatar.${fileExt}`;
+
+          // Upload to Supabase Storage
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('avatars')
+            .upload(fileName, file, { upsert: true });
+
+          if (uploadError) {
+            console.error('Upload error:', uploadError);
+            showToast('Upload failed: ' + uploadError.message, 'error');
+            return;
+          }
+
+          // Get public URL
+          const { data: urlData } = supabase.storage
+            .from('avatars')
+            .getPublicUrl(fileName);
+
+          const publicUrl = urlData.publicUrl + '?t=' + Date.now();
+
+          // Update profile
+          await supabase.from('profiles').update({ avatar_url: publicUrl }).eq('id', user.id);
+
+          // Update UI
+          avatarEl.innerHTML = `<img src="${publicUrl}" alt="Profile" class="w-24 h-24 rounded-full object-cover" />`;
+          avatarEl.classList.remove('bg-gradient-to-br', 'from-indigo-500', 'to-purple-600');
+          showToast('Profile picture updated!', 'success');
+        } catch (err) {
+          console.error('Avatar upload error:', err);
+          showToast('Something went wrong. Please try again.', 'error');
+        }
+      });
+
+      // ---- Profile Info ----
+      const name = profile?.full_name || user.user_metadata?.full_name || user.email.split('@')[0];
       document.getElementById('profile-name').textContent = name;
+      document.getElementById('profile-email').textContent = user.email;
       document.getElementById('profile-college-city').textContent =
-        [profile?.college_name, profile?.city].filter(Boolean).join(' • ') || 'Update your profile below.';
+        [profile?.college_name, profile?.city].filter(Boolean).join(' • ') || 'Update your profile in Settings';
 
       // Member since
       const since = profile?.created_at || user.created_at;
@@ -178,8 +287,15 @@
 
       tabs.forEach(btn => {
         btn.addEventListener('click', () => {
-          tabs.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+          // Update tab styles
+          tabs.forEach(b => {
+            b.classList.remove('bg-indigo-600', 'text-white');
+            b.classList.add('bg-white/5', 'text-slate-400');
+          });
+          btn.classList.remove('bg-white/5', 'text-slate-400');
+          btn.classList.add('bg-indigo-600', 'text-white');
+
+          // Show correct content
           contents.forEach(c => c.style.display = 'none');
           const target = document.getElementById('tab-' + btn.dataset.tab);
           if (target) target.style.display = 'block';
@@ -188,25 +304,34 @@
 
       // ---- Load Saved Deals ----
       const savedGrid = document.getElementById('saved-deals-grid');
-      savedGrid.innerHTML = '';
-      savedGrid.appendChild(renderSkeletonCards(3));
+      savedGrid.innerHTML = '<div class="col-span-full flex justify-center py-12"><div class="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div></div>';
 
       try {
         const savedDeals = await getSavedDeals(user.id);
         savedGrid.innerHTML = '';
-        if (savedDeals.length === 0) {
-          savedGrid.appendChild(renderEmptyState('📌', 'No saved deals yet', 'Start exploring deals and save your favorites!', { text: 'Explore Deals', href: 'deals.html' }));
+        if (!savedDeals || savedDeals.length === 0) {
+          savedGrid.innerHTML = `
+            <div class="col-span-full text-center py-16">
+              <div class="text-5xl mb-4">📌</div>
+              <h3 class="text-xl font-bold text-white mb-2">No saved deals yet</h3>
+              <p class="text-slate-400 mb-6">Start exploring deals and save your favorites!</p>
+              <a href="deals.html" class="inline-block px-6 py-3 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 transition-all">Explore Deals</a>
+            </div>`;
         } else {
           const savedIds = new Set(savedDeals.map(d => d.id));
           savedDeals.forEach(deal => {
             savedGrid.appendChild(renderDealCard(deal, { savedDeals: savedIds }));
           });
         }
-        document.getElementById('profile-stats-saved').textContent = savedDeals.length;
+        document.getElementById('profile-stats-saved').textContent = savedDeals?.length || 0;
       } catch (err) {
         console.error('Failed to load saved deals:', err);
-        savedGrid.innerHTML = '';
-        savedGrid.appendChild(renderEmptyState('⚠️', 'Failed to load', 'Please try refreshing the page.'));
+        savedGrid.innerHTML = `
+          <div class="col-span-full text-center py-16">
+            <div class="text-5xl mb-4">⚠️</div>
+            <h3 class="text-xl font-bold text-white mb-2">Failed to load</h3>
+            <p class="text-slate-400">Please try refreshing the page.</p>
+          </div>`;
       }
 
       // ---- Load Submissions ----
@@ -214,18 +339,35 @@
       try {
         const submissions = await getUserSubmissions(user.id);
         if (!submissions || submissions.length === 0) {
-          subContainer.innerHTML = '';
-          subContainer.appendChild(renderEmptyState('📝', 'No submissions yet', 'Found a great student deal? Share it with the community!', { text: 'Submit a Deal', href: 'submit.html' }));
+          subContainer.innerHTML = `
+            <div class="text-center py-16">
+              <div class="text-5xl mb-4">📝</div>
+              <h3 class="text-xl font-bold text-white mb-2">No submissions yet</h3>
+              <p class="text-slate-400 mb-6">Found a great student deal? Share it with the community!</p>
+              <a href="submit.html" class="inline-block px-6 py-3 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 transition-all">Submit a Deal</a>
+            </div>`;
         } else {
           document.getElementById('profile-stats-subs').textContent = submissions.length;
-          let html = '<div style="overflow-x:auto;"><table class="profile-table"><thead><tr><th>Title</th><th>Brand</th><th>Status</th><th>Date</th></tr></thead><tbody>';
+          let html = `<div class="overflow-x-auto"><table class="w-full text-sm">
+            <thead><tr class="border-b border-white/10">
+              <th class="text-left py-3 px-4 text-xs uppercase tracking-wider text-slate-500 font-bold">Title</th>
+              <th class="text-left py-3 px-4 text-xs uppercase tracking-wider text-slate-500 font-bold">Brand</th>
+              <th class="text-left py-3 px-4 text-xs uppercase tracking-wider text-slate-500 font-bold">Status</th>
+              <th class="text-left py-3 px-4 text-xs uppercase tracking-wider text-slate-500 font-bold">Date</th>
+            </tr></thead><tbody>`;
           submissions.forEach(sub => {
-            const statusClass = sub.status === 'approved' ? 'status-approved' : sub.status === 'rejected' ? 'status-rejected' : 'status-pending';
-            html += `<tr>
-              <td>${escapeHTML(sub.title || '')}</td>
-              <td>${escapeHTML(sub.brand_name || '—')}</td>
-              <td><span class="status-badge ${statusClass}">${escapeHTML(sub.status || 'pending')}</span></td>
-              <td style="color:var(--text-tertiary)">${formatDate(sub.created_at)}</td>
+            const statusColors = {
+              approved: 'bg-green-500/10 text-green-400 border-green-500/20',
+              rejected: 'bg-red-500/10 text-red-400 border-red-500/20',
+              pending: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20'
+            };
+            const status = sub.status || 'pending';
+            const statusClass = statusColors[status] || statusColors.pending;
+            html += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+              <td class="py-3 px-4 text-white font-medium">${escapeHTML(sub.title || '')}</td>
+              <td class="py-3 px-4 text-slate-400">${escapeHTML(sub.brand_name || '—')}</td>
+              <td class="py-3 px-4"><span class="px-3 py-1 rounded-full text-xs font-bold border ${statusClass}">${escapeHTML(status)}</span></td>
+              <td class="py-3 px-4 text-slate-500">${formatDate(sub.created_at)}</td>
             </tr>`;
           });
           html += '</tbody></table></div>';
@@ -233,8 +375,12 @@
         }
       } catch (err) {
         console.error('Failed to load submissions:', err);
-        subContainer.innerHTML = '';
-        subContainer.appendChild(renderEmptyState('⚠️', 'Failed to load', 'Please try refreshing.'));
+        subContainer.innerHTML = `
+          <div class="text-center py-16">
+            <div class="text-5xl mb-4">⚠️</div>
+            <h3 class="text-xl font-bold text-white mb-2">Failed to load</h3>
+            <p class="text-slate-400">Please try refreshing the page.</p>
+          </div>`;
       }
 
       // ---- Settings Forms ----
@@ -302,10 +448,17 @@
           document.getElementById('password-form').reset();
         }
       });
+
+      // ---- Sign Out ----
+      const handleSignOut = async () => {
+        await signOut();
+        window.location.href = 'login.html';
+      };
+      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+      document.getElementById('logout-btn-mobile').addEventListener('click', handleSignOut);
     })();
   </script>
   <!-- Cookie consent loaded via js/cookie-consent.js -->
 
 </body>
 </html>
-
