@@ -13,7 +13,7 @@ import time
 import requests
 
 sys.path.insert(0, os.path.dirname(__file__))
-from scraper_base import upsert_deal
+from scraper_base import get_supabase_client, get_existing_deals, upsert_deal
 
 HEADERS = {
     "User-Agent": "CampusLoot-Student-Deals-Bot/1.0 (educational project)"
@@ -41,7 +41,7 @@ def guess_category(title, text=""):
     return "other"
 
 
-def scrape_reddit_sub(subreddit, limit=25):
+def scrape_reddit_sub(subreddit, supabase, existing, limit=25):
     """Scrape a subreddit's hot posts using Reddit's free JSON API."""
     url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit={limit}"
     count = 0
@@ -80,23 +80,23 @@ def scrape_reddit_sub(subreddit, limit=25):
             if score < 3:
                 continue
 
-            result = upsert_deal(
-                title=title[:200],
-                description=description,
-                deal_url=deal_url,
-                brand=f"r/{subreddit}",
-                category=category,
-                discount_value="",
-                coupon_code=None,
-                source=f"reddit_{subreddit}",
-                is_verified=False,  # Needs admin review
-                is_active=False,    # Needs admin review
-            )
-            if result:
+            deal_data = {
+                "title": title[:200],
+                "description": description,
+                "deal_url": deal_url,
+                "source_url": deal_url,
+                "brand_name": f"r/{subreddit}",
+                "category": category,
+                "is_verified": False,   # Needs admin review
+                "is_active": False,     # Needs admin review
+            }
+
+            try:
+                upsert_deal(supabase, deal_data, existing)
                 count += 1
                 print(f"  ✓ [{category}] {title[:60]}...")
-            else:
-                print(f"  ✗ Skipped: {title[:60]}...")
+            except Exception as e:
+                print(f"  ✗ Error: {title[:60]}... — {e}")
 
     except requests.exceptions.RequestException as e:
         print(f"  ✗ Network error on r/{subreddit}: {e}")
@@ -108,26 +108,33 @@ def scrape_reddit_sub(subreddit, limit=25):
 
 def scrape():
     """Run all casual deal scrapers."""
+    print("═" * 60)
+    print("🔍 Running Casual Deals Scraper...")
+    print("═" * 60)
+
+    try:
+        supabase = get_supabase_client()
+    except Exception as e:
+        print(f"❌ Failed to connect to Supabase: {e}")
+        return 0
+
+    existing = get_existing_deals(supabase)
+    print(f"  Found {len(existing['urls'])} URLs and {len(existing['titles'])} titles in DB\n")
+
     total = 0
 
-    print("═" * 60)
     print("🔍 Scraping Reddit r/IndianDeals...")
-    print("═" * 60)
-    total += scrape_reddit_sub("IndianDeals", limit=30)
+    total += scrape_reddit_sub("IndianDeals", supabase, existing, limit=30)
     time.sleep(2)  # Rate limiting
 
-    print("\n" + "═" * 60)
-    print("🔍 Scraping Reddit r/dealsforstudents...")
-    print("═" * 60)
-    total += scrape_reddit_sub("dealsforstudents", limit=20)
+    print("\n🔍 Scraping Reddit r/dealsforstudents...")
+    total += scrape_reddit_sub("dealsforstudents", supabase, existing, limit=20)
     time.sleep(2)
 
-    print("\n" + "═" * 60)
-    print("🔍 Scraping Reddit r/IndianGaming (deals only)...")
-    print("═" * 60)
-    total += scrape_reddit_sub("IndianGaming", limit=20)
+    print("\n🔍 Scraping Reddit r/IndianGaming (deals only)...")
+    total += scrape_reddit_sub("IndianGaming", supabase, existing, limit=20)
 
-    print(f"\n✅ Casual scraper done: {total} new deals imported.")
+    print(f"\n✅ Casual scraper done: {total} new deals processed.")
     return total
 
 

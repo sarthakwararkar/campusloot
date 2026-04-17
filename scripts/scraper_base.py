@@ -7,14 +7,23 @@ from datetime import datetime, timezone
 import time
 
 # Load env from .env if it exists (for local testing)
-try:
-    with open(".env", "r") as f:
-        for line in f:
-            if "=" in line:
-                key, val = line.strip().split("=", 1)
-                os.environ[key] = val.replace('"', '').replace("'", "")
-except FileNotFoundError:
-    pass
+# Look for .env in the project root (parent of scripts/)
+_env_paths = [
+    os.path.join(os.path.dirname(__file__), "..", ".env"),  # ../. env (project root)
+    os.path.join(os.path.dirname(__file__), ".env"),        # scripts/.env
+    ".env",                                                  # CWD fallback
+]
+for _env_path in _env_paths:
+    try:
+        with open(_env_path, "r") as f:
+            for line in f:
+                line = line.strip()
+                if line and "=" in line and not line.startswith("#"):
+                    key, val = line.split("=", 1)
+                    os.environ.setdefault(key.strip(), val.strip().replace('"', '').replace("'", ""))
+        break  # Stop after first successful load
+    except FileNotFoundError:
+        continue
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_SERVICE_KEY")
