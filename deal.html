@@ -191,7 +191,14 @@
         try {
           const deal = await fetchDealById(dealId);
           if (!deal) {
-            window.location.href = "deals.html";
+            loader.innerHTML = `
+              <div class="text-center py-20">
+                <span class="material-symbols-outlined text-6xl text-slate-600 mb-4">error</span>
+                <h2 class="text-2xl font-bold mb-2">Deal Not Found</h2>
+                <p class="text-slate-400 mb-8">The deal you're looking for might have expired or been removed.</p>
+                <a href="deals.html" class="px-6 py-2 bg-indigo-600 text-white rounded-lg font-bold">Browse All Deals</a>
+              </div>
+            `;
             return;
           }
 

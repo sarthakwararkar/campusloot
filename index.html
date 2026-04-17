@@ -147,10 +147,12 @@
           </p>
           <div class="flex items-center gap-4">
             <button
+              onclick="window.location.href='deals.html'"
               class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-sm hover:bg-indigo-700 transition-colors">
               Start Exploring
             </button>
             <button
+              onclick="document.getElementById('brands').scrollIntoView({behavior: 'smooth'})"
               class="px-8 py-3 bg-white/5 backdrop-blur-sm text-white font-bold rounded-xl border border-white/10 shadow-lg hover:bg-white/10 transition-all active:scale-95">
               Partner Institutions
             </button>
@@ -191,7 +193,7 @@
     </section>
 
     <!-- Trending Brands -->
-    <section class="py-16 bg-white/5 border-y border-white/5">
+    <section id="brands" class="py-16 bg-white/5 border-y border-white/5">
       <div class="max-w-7xl mx-auto px-6">
         <p class="text-center text-[10px] font-extrabold uppercase tracking-[0.4em] text-slate-400 mb-8">
           Trusted by Global Icons

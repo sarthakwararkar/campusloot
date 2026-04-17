@@ -84,21 +84,11 @@ function renderDealCard(deal, options = {}) {
     const saveContainer = document.createElement('div');
     saveContainer.className = 'absolute top-6 right-6 z-10';
     const saveBtn = document.createElement('button');
-    saveBtn.className = `w-10 h-10 rounded-full bg-white/80 backdrop-blur shadow-sm flex items-center justify-center transition-colors save-btn ${isSaved ? 'text-error' : 'text-on-surface-variant hover:text-error'}`;
+    saveBtn.className = `w-10 h-10 rounded-full bg-white/80 backdrop-blur shadow-sm flex items-center justify-center transition-colors save-btn ${isSaved ? 'saved text-error' : 'text-on-surface-variant hover:text-error'}`;
     saveBtn.innerHTML = `<span class="material-symbols-outlined text-xl" style="${isSaved ? 'font-variation-settings: \\"FILL\\" 1;' : ''}">bookmark</span>`;
     saveBtn.onclick = (e) => {
       e.stopPropagation();
       handleSaveClick(deal.id, saveBtn);
-      const icon = saveBtn.querySelector('span');
-      if (saveBtn.classList.contains('saved')) {
-        icon.style = 'font-variation-settings: "FILL" 1;';
-        saveBtn.classList.remove('text-on-surface-variant');
-        saveBtn.classList.add('text-error');
-      } else {
-        icon.style = '';
-        saveBtn.classList.remove('text-error');
-        saveBtn.classList.add('text-on-surface-variant');
-      }
     };
     saveContainer.appendChild(saveBtn);
     card.appendChild(saveContainer);
@@ -204,21 +194,20 @@ function renderDealCard(deal, options = {}) {
     card.appendChild(badge);
   }
 
-  const claimBtn = document.createElement('button');
-  claimBtn.className = 'w-full py-3 mt-2 bg-white/5 text-indigo-400 font-bold rounded-xl group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2 text-sm border border-white/5 group-hover:border-indigo-400 shadow-inner';
+  const claimBtn = document.createElement('a');
+  claimBtn.className = 'w-full py-3 mt-2 bg-white/5 text-indigo-400 font-bold rounded-xl group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2 text-sm border border-white/5 group-hover:border-indigo-400 shadow-inner no-underline';
   claimBtn.innerHTML = `View Deal <span class="material-symbols-outlined text-lg">arrow_forward</span>`;
+  
+  if (deal.id) {
+    claimBtn.href = `deal.html?id=${encodeURIComponent(deal.id)}`;
+  } else {
+    claimBtn.href = '#';
+    console.warn('renderDealCard: Deal ID missing', deal);
+  }
+
   claimBtn.onclick = (e) => {
     e.stopPropagation();
-    if (deal.id) {
-      window.location.href = `deal.html?id=${encodeURIComponent(deal.id)}`;
-    } else {
-      console.error('renderDealCard: Deal ID missing on button click', deal);
-      // Fallback: try card dataset
-      const id = card.dataset.dealId;
-      if (id) {
-        window.location.href = `deal.html?id=${encodeURIComponent(id)}`;
-      }
-    }
+    // Standard link behavior will take over for navigation
   };
   card.appendChild(claimBtn);
 
@@ -238,16 +227,19 @@ async function handleSaveClick(dealId, btn) {
   }
   const isSaved = btn.classList.contains('saved');
   try {
+    const icon = btn.querySelector('.material-symbols-outlined');
     if (isSaved) {
       await unsaveDeal(dealId);
-      btn.classList.remove('saved');
-      btn.innerHTML = '🤍';
+      btn.classList.remove('saved', 'text-error');
+      btn.classList.add('text-on-surface-variant');
+      if (icon) icon.style.fontVariationSettings = '"FILL" 0';
       btn.title = 'Save deal';
       showToast('Deal removed from saves', 'info');
     } else {
       await saveDeal(dealId);
-      btn.classList.add('saved');
-      btn.innerHTML = '❤️';
+      btn.classList.add('saved', 'text-error');
+      btn.classList.remove('text-on-surface-variant');
+      if (icon) icon.style.fontVariationSettings = '"FILL" 1';
       btn.title = 'Unsave deal';
       showToast('Deal saved!', 'success');
     }
