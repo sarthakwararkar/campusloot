@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet"
+  />
+
+  <title>Settings | CampusLoot</title>
+
+  <style>
+    /* Dark Form Inputs */
+    .dark-form-input {
+      width: 100%; padding: 14px 18px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px; color: white; font-size: 0.95rem;
+      transition: all 0.2s; outline: none;
+    }
+    .dark-form-input:focus {
+      border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    }
+    .dark-form-input::placeholder { color: rgba(255,255,255,0.3); }
+
+    /* Avatar Wrapper */
+    .avatar-wrapper { position: relative; cursor: pointer; }
+    .avatar-wrapper:hover .avatar-overlay { opacity: 1; }
+    .avatar-overlay {
+      position: absolute; inset: 0; border-radius: 50%;
+      background: rgba(0,0,0,0.5); display: flex; align-items: center;
+      justify-content: center; opacity: 0; transition: opacity 0.2s;
+    }
+  </style>
+</head>
+<body class="bg-black text-white selection:bg-indigo-500/30 overflow-x-hidden">
+  <header id="site-header"></header>
+
+  <main class="max-w-4xl mx-auto px-6 pt-28 pb-20">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-slate-500 mb-8">
+      <a href="profile.html" class="hover:text-white transition-colors">Profile</a>
+      <span class="material-symbols-outlined text-xs">chevron_right</span>
+      <span class="text-indigo-400 font-semibold">Settings</span>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row gap-10">
+      <!-- Sidebar Navigation -->
+      <aside class="w-full lg:w-64 space-y-2">
+        <button class="w-full flex items-center gap-3 px-5 py-3 rounded-xl bg-indigo-600 text-white font-semibold text-left transition-all">
+          <span class="material-symbols-outlined">person</span>
+          Profile
+        </button>
+        <button class="w-full flex items-center gap-3 px-5 py-3 rounded-xl bg-white/5 text-slate-400 font-semibold text-left hover:bg-white/10 transition-all">
+          <span class="material-symbols-outlined">security</span>
+          Security
+        </button>
+        <button class="w-full flex items-center gap-3 px-5 py-3 rounded-xl bg-white/5 text-slate-400 font-semibold text-left hover:bg-white/10 transition-all">
+          <span class="material-symbols-outlined">notifications</span>
+          Notifications
+        </button>
+        <button class="w-full flex items-center gap-3 px-5 py-3 rounded-xl bg-white/5 text-slate-400 font-semibold text-left hover:bg-white/10 transition-all">
+          <span class="material-symbols-outlined">palette</span>
+          Appearance
+        </button>
+      </aside>
+
+      <!-- Main Content Area -->
+      <div class="flex-1 space-y-10">
+        <!-- Section: Profile Information -->
+        <section id="section-profile" class="bg-white/5 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-2xl">
+          <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl font-bold text-white tracking-tight">Public Profile</h2>
+          </div>
+
+          <div class="flex flex-col md:flex-row gap-8 mb-10">
+            <!-- Avatar Upload -->
+            <div class="flex flex-col items-center gap-3">
+              <div class="avatar-wrapper group" id="avatar-wrapper" title="Click to upload new picture">
+                <div id="profile-avatar" class="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-black text-white shadow-lg shadow-indigo-500/10 overflow-hidden">
+                  ?
+                </div>
+                <div class="avatar-overlay">
+                  <span class="material-symbols-outlined text-white text-2xl">photo_camera</span>
+                </div>
+                <input type="file" id="avatar-input" accept="image/*" class="hidden">
+              </div>
+              <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold text-center">Recommended: 400x400 JPG/PNG</p>
+            </div>
+
+            <!-- Basic Info Form -->
+            <form id="profile-form" class="flex-1 space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" for="edit-name">Display Name</label>
+                  <input class="dark-form-input" type="text" id="edit-name" placeholder="E.g., Alex Johnson">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" for="edit-email">Email Address</label>
+                  <input class="dark-form-input opacity-50 cursor-not-allowed" type="email" id="edit-email" disabled>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" for="edit-college">College / University</label>
+                  <input class="dark-form-input" type="text" id="edit-college" placeholder="E.g., MIT, Mumbai">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" for="edit-city">Current City</label>
+                  <input class="dark-form-input" type="text" id="edit-city" placeholder="E.g., Bengaluru">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" for="edit-bio">Short Bio</label>
+                <textarea class="dark-form-input min-h-[100px]" id="edit-bio" placeholder="Tell other students about yourself..."></textarea>
+              </div>
+
+              <button type="submit" id="save-profile-btn" class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 transition-all active:scale-95">
+                Save Changes
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- Section: Security -->
+        <section id="section-security" class="bg-white/5 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-2xl">
+          <h2 class="text-2xl font-bold text-white tracking-tight mb-8">Security</h2>
+          
+          <form id="password-form" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" for="new-password">New Password</label>
+                <input class="dark-form-input" type="password" id="new-password" placeholder="At least 8 characters">
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2" for="confirm-password">Confirm Password</label>
+                <input class="dark-form-input" type="password" id="confirm-password" placeholder="Repeat new password">
+              </div>
+            </div>
+            <div id="password-error" class="text-red-400 text-sm font-semibold" style="display:none;"></div>
+            <button type="submit" id="change-password-btn" class="px-8 py-3 bg-white/5 border border-white/10 text-white font-bold rounded-full hover:bg-white/10 transition-all active:scale-95">
+              Update Password
+            </button>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/star-background.js"></script>
+  <script>
+    (async function initSettings() {
+      renderHeader('settings');
+      renderFooter();
+
+      const user = await requireAuth();
+      if (!user) return;
+
+      const profile = await getCurrentProfile();
+
+      // ---- UI Initial State ----
+      const avatarEl = document.getElementById('profile-avatar');
+      const updateAvatarUI = (url) => {
+        if (url) {
+          avatarEl.innerHTML = `<img src="${url}" class="w-full h-full object-cover" alt="Profile" />`;
+          avatarEl.classList.remove('bg-gradient-to-br', 'from-indigo-500', 'to-purple-600');
+        } else {
+          const name = profile?.full_name || user.user_metadata?.full_name || user.email.split('@')[0];
+          avatarEl.textContent = name.charAt(0).toUpperCase();
+        }
+      };
+
+      updateAvatarUI(profile?.avatar_url || user.user_metadata?.avatar_url || user.user_metadata?.picture);
+
+      // Populate form
+      document.getElementById('edit-name').value = profile?.full_name || '';
+      document.getElementById('edit-email').value = user.email;
+      document.getElementById('edit-college').value = profile?.college_name || '';
+      document.getElementById('edit-city').value = profile?.city || '';
+      document.getElementById('edit-bio').value = profile?.bio || '';
+
+      // ---- Avatar Upload ----
+      const avatarWrapper = document.getElementById('avatar-wrapper');
+      const avatarInput = document.getElementById('avatar-input');
+      
+      avatarWrapper.onclick = () => avatarInput.click();
+      
+      avatarInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        showToast('Uploading profile picture...', 'info');
+        const { url, error } = await uploadAvatar(file, user.id);
+
+        if (error) {
+          showToast(error, 'error');
+        } else {
+          await updateProfile(user.id, { avatar_url: url });
+          updateAvatarUI(url);
+          showToast('Profile picture updated!', 'success');
+        }
+      };
+
+      // ---- Profile Form Submission ----
+      document.getElementById('profile-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('save-profile-btn');
+        const originalText = btn.textContent;
+        btn.textContent = 'Saving...';
+        btn.disabled = true;
+
+        const updates = {
+          full_name: sanitizeInput(document.getElementById('edit-name').value),
+          college_name: sanitizeInput(document.getElementById('edit-college').value),
+          city: sanitizeInput(document.getElementById('edit-city').value),
+          bio: sanitizeInput(document.getElementById('edit-bio').value)
+        };
+
+        const { error } = await updateProfile(user.id, updates);
+        
+        btn.textContent = originalText;
+        btn.disabled = false;
+
+        if (error) {
+          showToast('Update failed: ' + error, 'error');
+        } else {
+          showToast('Settings saved successfully!', 'success');
+        }
+      };
+
+      // ---- Password Form Submission ----
+      document.getElementById('password-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const newPw = document.getElementById('new-password').value;
+        const confirmPw = document.getElementById('confirm-password').value;
+        const errorEl = document.getElementById('password-error');
+        errorEl.style.display = 'none';
+
+        if (newPw !== confirmPw) {
+          errorEl.textContent = 'Passwords do not match.';
+          errorEl.style.display = 'block';
+          return;
+        }
+
+        const pwCheck = validatePassword(newPw);
+        if (!pwCheck.valid) {
+          errorEl.textContent = pwCheck.message;
+          errorEl.style.display = 'block';
+          return;
+        }
+
+        const btn = document.getElementById('change-password-btn');
+        btn.textContent = 'Updating...';
+        btn.disabled = true;
+
+        const { error } = await updatePassword(newPw);
+        btn.textContent = 'Update Password';
+        btn.disabled = false;
+
+        if (error) {
+          errorEl.textContent = error;
+          errorEl.style.display = 'block';
+        } else {
+          showToast('Password updated!', 'success');
+          document.getElementById('password-form').reset();
+        }
+      };
+    })();
+  </script>
+</body>
+</html>

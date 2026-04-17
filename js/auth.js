@@ -287,9 +287,9 @@ async function updatePassword(newPassword) {
 }
 
 /**
- * Update user profile
+ * Update user profile (includes Name, College, City, Avatar URL, etc.)
  * @param {string} userId
- * @param {Object} updates - { full_name, college_name, city }
+ * @param {Object} updates - { full_name, college_name, city, avatar_url, bio }
  * @returns {Promise<{error: string|null}>}
  */
 async function updateProfile(userId, updates) {
@@ -306,5 +306,40 @@ async function updateProfile(userId, updates) {
     return { error: null };
   } catch (err) {
     return { error: 'Something went wrong. Please try again.' };
+  }
+}
+
+/**
+ * Upload profile picture to Supabase Storage
+ * @param {File} file - The image file to upload
+ * @param {string} userId - Current user ID
+ * @returns {Promise<{url: string|null, error: string|null}>}
+ */
+async function uploadAvatar(file, userId) {
+  try {
+    // Basic validation
+    if (!file.type.startsWith('image/')) return { url: null, error: 'File must be an image.' };
+    if (file.size > 2 * 1024 * 1024) return { url: null, error: 'Maximum size is 2MB.' };
+
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${userId}/avatar-${Date.now()}.${fileExt}`;
+
+    const { data, error } = await supabase.storage
+      .from('avatar')
+      .upload(fileName, file, { 
+        upsert: true,
+        cacheControl: '3600'
+      });
+
+    if (error) return { url: null, error: error.message };
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('avatar')
+      .getPublicUrl(fileName);
+
+    return { url: publicUrl, error: null };
+  } catch (err) {
+    console.error('[Auth] Upload failure:', err);
+    return { url: null, error: 'Critical upload failure.' };
   }
 }

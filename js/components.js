@@ -477,7 +477,7 @@ async function updateAuthNav() {
     // Fetch user profile for role check
     const { data: profile } = await supabaseClient
       .from('profiles')
-      .select('role, full_name')
+      .select('role, full_name, avatar_url')
       .eq('id', user.id)
       .single();
 
@@ -496,9 +496,31 @@ async function updateAuthNav() {
 
     const profileLink = document.createElement('a');
     profileLink.href = 'profile.html';
-    profileLink.className = 'text-sm font-medium text-slate-400 hover:text-white transition-colors';
-    profileLink.textContent = name;
+    profileLink.className = 'flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors';
+    
+    if (profile?.avatar_url) {
+      const avatarImg = document.createElement('img');
+      avatarImg.src = profile.avatar_url;
+      avatarImg.className = 'w-7 h-7 rounded-full object-cover border border-white/10';
+      profileLink.appendChild(avatarImg);
+    } else {
+      const avatarIcon = document.createElement('span');
+      avatarIcon.className = 'material-symbols-outlined text-lg';
+      avatarIcon.textContent = 'account_circle';
+      profileLink.appendChild(avatarIcon);
+    }
+    
+    const nameSpan = document.createElement('span');
+    nameSpan.textContent = name;
+    profileLink.appendChild(nameSpan);
     navAuth.appendChild(profileLink);
+
+    const settingsHeaderLink = document.createElement('a');
+    settingsHeaderLink.href = 'settings.html';
+    settingsHeaderLink.className = 'text-sm font-medium text-slate-400 hover:text-white transition-colors ml-4';
+    settingsHeaderLink.innerHTML = '<span class="material-symbols-outlined text-lg align-bottom">settings</span>';
+    settingsHeaderLink.title = 'Settings';
+    navAuth.appendChild(settingsHeaderLink);
 
     const logoutBtn = document.createElement('button');
     logoutBtn.className = 'px-5 py-2 text-sm font-bold text-slate-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors';
@@ -522,6 +544,11 @@ async function updateAuthNav() {
       mProfileLink.href = 'profile.html';
       mProfileLink.textContent = `👤 ${name}`;
       mobileAuth.appendChild(mProfileLink);
+
+      const mSettingsLink = document.createElement('a');
+      mSettingsLink.href = 'settings.html';
+      mSettingsLink.textContent = `⚙️ Settings`;
+      mobileAuth.appendChild(mSettingsLink);
       const mLogoutLink = document.createElement('a');
       mLogoutLink.href = '#';
       mLogoutLink.textContent = 'Logout';
@@ -647,4 +674,33 @@ function renderPagination(containerId, currentPage, totalItems, itemsPerPage, on
   }
 
   container.appendChild(paginationNav);
+}
+
+/**
+ * Render a centralized floating navigation bar for mobile/dashboard
+ * @param {string} activeItem - currently active nav item
+ */
+function renderFloatingNav(activeItem = '') {
+  const navContainer = document.getElementById('floating-nav');
+  if (!navContainer) return;
+
+  const items = [
+    { id: 'home', icon: 'home', label: 'Home', href: 'index.html' },
+    { id: 'deals', icon: 'explore', label: 'Explore', href: 'deals.html' },
+    { id: 'post', icon: 'add_circle', label: 'Post', href: 'post-deal.html', primary: true },
+    { id: 'profile', icon: 'person', label: 'Profile', href: 'profile.html' },
+    { id: 'settings', icon: 'settings', label: 'Settings', href: 'settings.html' }
+  ];
+
+  navContainer.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center bg-black/80 backdrop-blur-2xl border border-white/10 rounded-3xl p-2 shadow-2xl z-[100] transition-transform duration-500';
+  
+  navContainer.innerHTML = items.map(item => `
+    <a href="${item.href}" 
+       class="flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-300 relative group
+              ${item.primary ? 'bg-indigo-600 text-white mx-1 shadow-lg shadow-indigo-600/40 hover:scale-110 active:scale-95' : 'text-slate-400 hover:text-white'}
+              ${activeItem === item.id && !item.primary ? 'text-indigo-400 bg-white/5' : ''}"
+       title="${item.label}">
+      <span class="material-symbols-outlined ${item.primary ? 'text-2xl' : 'text-xl'}">${item.icon}</span>
+    </a>
+  `).join('');
 }

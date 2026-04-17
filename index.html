@@ -460,8 +460,15 @@
         }
       }
       await loadStats();
+
+      // Initialize Floating Nav
+      if (typeof renderFloatingNav === 'function') {
+        renderFloatingNav('home');
+      }
     })();
   </script>
+
+  <div id="floating-nav"></div>
 
   <!-- Cookie consent loaded via js/cookie-consent.js -->
 
