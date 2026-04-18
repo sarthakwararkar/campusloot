@@ -470,15 +470,9 @@ function renderHeader(activePage = '') {
  * Update the auth section in the header based on login state
  */
 async function updateAuthNav() {
-    const navAuth = document.getElementById('nav-auth');
-    const mobileNavAuth = document.getElementById('mobile-nav-auth');
-    const userDropdown = document.getElementById('user-dropdown');
-    const mobileUserSection = document.getElementById('mobile-user-section');
-
-    if (!navAuth && !mobileNavAuth) {
-        // Elements not found, maybe header hasn't rendered yet
-        return;
-    }
+  const navAuth = document.getElementById('nav-auth');
+  const mobileAuth = document.getElementById('mobile-auth');
+  if (!navAuth) return;
 
   const user = await getCurrentUser();
 

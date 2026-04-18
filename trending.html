@@ -233,9 +233,12 @@
         let currentSearch = '';
         let totalDeals = 0;
         let dealsLoadedCount = 0;
-        let user = await getCurrentUser();
         let savedSet = new Set();
-        if (user) savedSet = await getSavedDealIds(user.id);
+        getCurrentUser().then(async user => {
+          if (user) {
+            try { savedSet = await getSavedDealIds(user.id); } catch(e) { console.error(e); }
+          }
+        });
 
         async function loadDeals(page = 1, append = false) {
           if (!append) { grid.innerHTML = ""; dealsLoadedCount = 0; }
