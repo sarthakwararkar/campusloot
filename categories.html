@@ -241,34 +241,45 @@
         });
 
         async function loadDeals(page = 1, append = false) {
-          if (!append) { grid.innerHTML = ""; dealsLoadedCount = 0; }
-          loader.classList.remove("hidden");
-          if (loadMoreBtn) loadMoreBtn.disabled = true;
+          try {
+            if (!append) { grid.innerHTML = ""; dealsLoadedCount = 0; }
+            if (loader) loader.classList.remove("hidden");
+            if (loadMoreBtn) loadMoreBtn.disabled = true;
 
-          const { deals, total } = await fetchDeals({
-            category: currentCategory, sort: currentSort,
-            search: currentSearch, page: page
-          });
-          loader.classList.add("hidden");
-          if (loadMoreBtn) loadMoreBtn.disabled = false;
+            const { deals, total } = await fetchDeals({
+              category: currentCategory, sort: currentSort,
+              search: currentSearch, page: page
+            });
+            if (loader) loader.classList.add("hidden");
+            if (loadMoreBtn) loadMoreBtn.disabled = false;
 
-          if (!deals) {
-            if (!append) grid.innerHTML = '<p class="text-error col-span-full text-center py-8">Failed to load deals.</p>';
-            return;
+            if (!deals) {
+              if (!append) grid.innerHTML = '<p class="text-error col-span-full text-center py-8">Failed to load deals.</p>';
+              return;
+            }
+
+            totalDeals = total;
+            dealsLoadedCount += deals.length;
+            currentPage = page;
+            if (countEl) countEl.textContent = `Showing ${dealsLoadedCount} of ${totalDeals} deals`;
+
+            if (deals.length === 0 && !append) {
+              grid.innerHTML = '<p class="col-span-full text-center py-8 text-on-surface-variant">No deals found matching your criteria.</p>';
+            } else {
+              deals.forEach((deal) => grid.appendChild(renderDealCard(deal, { savedDeals: savedSet })));
+            }
+            updatePagination();
+            updateLoadMoreVisibility();
+          } catch (err) {
+            console.error("loadDeals Error:", err);
+            if (loader) loader.classList.add("hidden");
+            if (!append) {
+              grid.innerHTML = `<div class="col-span-full py-12 text-center text-error">
+                <p class="font-bold">Something went wrong loading deals.</p>
+                <p class="text-sm opacity-70">Please try refreshing the page.</p>
+              </div>`;
+            }
           }
-
-          totalDeals = total;
-          dealsLoadedCount += deals.length;
-          currentPage = page;
-          if (countEl) countEl.textContent = `Showing ${dealsLoadedCount} of ${totalDeals} deals`;
-
-          if (deals.length === 0 && !append) {
-            grid.innerHTML = '<p class="col-span-full text-center py-8 text-on-surface-variant">No deals found matching your criteria.</p>';
-          } else {
-            deals.forEach((deal) => grid.appendChild(renderDealCard(deal, { savedDeals: savedSet })));
-          }
-          updatePagination();
-          updateLoadMoreVisibility();
         }
 
         function updatePagination() {
