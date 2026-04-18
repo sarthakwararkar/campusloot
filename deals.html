@@ -321,11 +321,30 @@
         let currentSearch = '';
         let totalDeals = 0;
         let dealsLoadedCount = 0;
-        let user = await getCurrentUser();
         let savedSet = new Set();
-        if (user) {
-          try { savedSet = await getSavedDealIds(user.id); } catch(e) { console.error(e); }
-        }
+
+        // Load session and saved deals in background
+        getCurrentUser().then(async user => {
+          if (user) {
+            try { 
+              savedSet = await getSavedDealIds(user.id); 
+              // Re-render visible cards with saved state if already loaded
+              const cards = document.querySelectorAll('.deal-card');
+              cards.forEach(card => {
+                const dealId = card.dataset.dealId;
+                if (savedSet.has(dealId)) {
+                  const saveBtn = card.querySelector('.save-btn');
+                  if (saveBtn) {
+                    saveBtn.classList.add('saved', 'text-error');
+                    saveBtn.classList.remove('text-on-surface-variant');
+                    const icon = saveBtn.querySelector('.material-symbols-outlined');
+                    if (icon) icon.style.fontVariationSettings = '"FILL" 1';
+                  }
+                }
+              });
+            } catch(e) { console.error(e); }
+          }
+        });
 
         async function loadDeals(page = 1, append = false) {
           try {

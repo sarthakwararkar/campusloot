@@ -417,9 +417,12 @@ function renderSkeletonCards(count = 6) {
  * Render the site header
  * @param {string} activePage - current page identifier
  */
-function renderHeader(activePage = '') {
+export function renderHeader(activePage = '') {
   const header = document.getElementById('site-header');
-  if (!header) return;
+  if (!header) {
+    console.warn('Site header container not found');
+    return;
+  }
 
   header.className = 'header w-full z-50';
   header.innerHTML = `
@@ -431,7 +434,7 @@ function renderHeader(activePage = '') {
         <span class="text-xl font-bold tracking-tight text-white group-hover:text-indigo-400 transition-colors">Campus<span class="text-indigo-400">Loot</span></span>
       </a>
       <nav class="nav-links hidden md:flex" id="nav-links">
-        <a href="deals.html" class="text-sm font-medium ${activePage === 'deals' || activePage === 'home' ? 'active' : ''} transition-colors">Explore</a>
+        <a href="deals.html" class="text-sm font-medium ${activePage === 'deals' ? 'active' : ''} transition-colors">Explore</a>
         <a href="categories.html" class="text-sm font-medium ${activePage === 'categories' ? 'active' : ''} transition-colors">Categories</a>
         <a href="trending.html" class="text-sm font-medium ${activePage === 'trending' ? 'active' : ''} transition-colors">Trending</a>
       </nav>
@@ -467,9 +470,15 @@ function renderHeader(activePage = '') {
  * Update the auth section in the header based on login state
  */
 async function updateAuthNav() {
-  const navAuth = document.getElementById('nav-auth');
-  const mobileAuth = document.getElementById('mobile-auth');
-  if (!navAuth) return;
+    const navAuth = document.getElementById('nav-auth');
+    const mobileNavAuth = document.getElementById('mobile-nav-auth');
+    const userDropdown = document.getElementById('user-dropdown');
+    const mobileUserSection = document.getElementById('mobile-user-section');
+
+    if (!navAuth && !mobileNavAuth) {
+        // Elements not found, maybe header hasn't rendered yet
+        return;
+    }
 
   const user = await getCurrentUser();
 

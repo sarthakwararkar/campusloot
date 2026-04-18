@@ -430,8 +430,7 @@
       // Load Top Deals (diverse casual deals from new algorithm)
       const featuredGrid = document.getElementById("featured-deals-grid");
       if (featuredGrid) {
-        try {
-          const topDeals = await fetchCasualDeals(6);
+        fetchCasualDeals(6).then(topDeals => {
           if (topDeals && topDeals.length > 0) {
             featuredGrid.innerHTML = "";
             topDeals.forEach((deal) => {
@@ -440,14 +439,14 @@
           } else {
             featuredGrid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500"><p>No deals available at the moment. Check back soon!</p></div>`;
           }
-        } catch (err) {
+        }).catch(err => {
           console.error("Failed to load top deals:", err);
           featuredGrid.innerHTML = `<div class="col-span-full py-12 text-center text-error"><p>Unable to load deals at this time.</p></div>`;
-        }
+        });
       }
 
-      // Load Stats (FIX 5)
-      async function loadStats() {
+      // Load Stats
+      (async function loadStats() {
         try {
           const stats = await fetchStats();
           const dealsEl = document.getElementById('stat-deals');
@@ -456,10 +455,8 @@
           if (usersEl) usersEl.textContent = (stats.usersCount || 0).toLocaleString();
         } catch (err) {
           console.error("Failed to load public stats:", err);
-          // Fallback to static numbers is already in HTML
         }
-      }
-      await loadStats();
+      })();
 
       // Initialize Floating Nav
       if (typeof renderFloatingNav === 'function') {

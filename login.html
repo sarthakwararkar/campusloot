@@ -528,10 +528,9 @@
           btn.disabled = true;
           btn.textContent = "Logging in...";
           const { user, error } = await signIn(email, password);
-          btn.disabled = false;
-          btn.textContent = "Login to Campus Loot";
-
           if (error) {
+            btn.disabled = false;
+            btn.textContent = "Login to Campus Loot";
             errorEl.textContent = error;
             errorEl.classList.remove("hidden");
             return;
@@ -550,18 +549,18 @@
           const hasNumber = /\d/.test(val);
 
           if (hasLength) {
-            vLength.classList.replace("text-on-surface-variant/50", "text-tertiary");
+            vLength.classList.replace("text-slate-500", "text-indigo-400");
             vLength.querySelector('span').textContent = 'check_circle';
           } else {
-            vLength.classList.replace("text-tertiary", "text-on-surface-variant/50");
+            vLength.classList.replace("text-indigo-400", "text-slate-500");
             vLength.querySelector('span').textContent = 'circle';
           }
 
           if (hasNumber) {
-            vNumber.classList.replace("text-on-surface-variant/50", "text-tertiary");
+            vNumber.classList.replace("text-slate-500", "text-indigo-400");
             vNumber.querySelector('span').textContent = 'check_circle';
           } else {
-            vNumber.classList.replace("text-tertiary", "text-on-surface-variant/50");
+            vNumber.classList.replace("text-indigo-400", "text-slate-500");
             vNumber.querySelector('span').textContent = 'circle';
           }
         });
