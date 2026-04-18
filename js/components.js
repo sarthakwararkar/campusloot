@@ -417,7 +417,7 @@ function renderSkeletonCards(count = 6) {
  * Render the site header
  * @param {string} activePage - current page identifier
  */
-export function renderHeader(activePage = '') {
+function renderHeader(activePage = '') {
   const header = document.getElementById('site-header');
   if (!header) {
     console.warn('Site header container not found');
