@@ -12,67 +12,26 @@ const DEALS_PER_PAGE = 12;
  */
 async function fetchDeals(filters = {}) {
   const { category, search, sort = 'newest', page = 1 } = filters;
-  const from = (page - 1) * DEALS_PER_PAGE;
-  const to = from + DEALS_PER_PAGE - 1;
-
-  let query = supabase
-    .from('deals')
-    .select('*')
-    .eq('is_active', true);
-
-  // Category filter
-  if (category && category !== 'all') {
-    query = query.eq('category', category);
-  }
-
-  // Search filter
-  if (search && search.trim().length > 0) {
-    const s = search.trim();
-    query = query.or(`title.ilike.%${s}%,brand_name.ilike.%${s}%,description.ilike.%${s}%`);
-  }
-
-  // Sort
-  switch (sort) {
-    case 'most-saved':
-      query = query.order('saves_count', { ascending: false });
-      break;
-    case 'expiring':
-      query = query.not('expires_at', 'is', null).order('expires_at', { ascending: true });
-      break;
-    case 'best-deals':
-      // Simplified: use saves_count first
-      query = query.order('saves_count', { ascending: false });
-      break;
-    case 'newest':
-    default:
-      query = query.order('created_at', { ascending: false });
-      break;
-  }
-
-  // Pagination
-  query = query.range(from, to);
-
+  
   try {
-    console.log('[Deals] Fetching:', filters);
-    
-    // Create a timeout promise
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Request timed out after 15s')), 15000)
-    );
+    const params = new URLSearchParams({
+      category: category || 'all',
+      search: search || '',
+      sort: sort,
+      page: page,
+      limit: DEALS_PER_PAGE
+    });
 
-    const { data, error, count } = await Promise.race([query, timeoutPromise]);
+    const res = await fetch(`/api/deals?${params.toString()}`);
+    if (!res.ok) throw new Error(`API Error: ${res.statusText}`);
     
-    if (error) {
-      console.error('[Supabase] Error:', error);
-      return { deals: [], total: 0 };
-    }
-    
-    // Since we removed 'count: exact', we'll estimate or just use length for now
-    const total = count !== null && count !== undefined ? count : (data?.length || 0);
-    console.log(`[Deals] Success: ${data?.length || 0} items fetched.`);
-    return { deals: data || [], total: total };
+    const data = await res.json();
+    return { 
+      deals: data.deals || [], 
+      total: data.total || 0 
+    };
   } catch (err) {
-    console.error('[Deals] Error:', err.message || err);
+    console.error('[API Proxy] fetchDeals failed:', err);
     return { deals: [], total: 0 };
   }
 }
@@ -82,20 +41,15 @@ async function fetchDeals(filters = {}) {
  * @returns {Promise<Array>}
  */
 async function fetchFeaturedDeals() {
-  const { data, error } = await supabase
-    .from('deals')
-    .select('*')
-    .eq('is_active', true)
-    .eq('is_featured', true)
-    .order('created_at', { ascending: false })
-    .limit(3);
-
-  if (error) {
-    console.error('Error fetching featured deals:', error);
+  try {
+    const params = new URLSearchParams({ sort: 'newest', limit: 3 });
+    const res = await fetch(`/api/deals?${params.toString()}`);
+    const data = await res.json();
+    return data.deals || [];
+  } catch (err) {
+    console.error('fetchFeaturedDeals error:', err);
     return [];
   }
-
-  return data || [];
 }
 
 /**
@@ -113,17 +67,13 @@ const CASUAL_CATEGORIES = ['food', 'clothing', 'ott', 'electronics', 'services',
  */
 async function fetchCasualDeals(limit = 6) {
   try {
-    // Fetch a larger pool sorted by engagement
-    const { data, error } = await supabase
-      .from('deals')
-      .select('*')
-      .eq('is_active', true)
-      .order('saves_count', { ascending: false })
-      .order('views_count', { ascending: false })
-      .order('created_at', { ascending: false })
-      .limit(80);
+    // Fetch a larger pool via proxy
+    const params = new URLSearchParams({ sort: 'best-deals', limit: 80 });
+    const res = await fetch(`/api/deals?${params.toString()}`);
+    const { deals: data } = await res.json();
 
-    if (error || !data || data.length === 0) {
+
+    if (!data || data.length === 0) {
       console.warn('fetchCasualDeals: falling back to featured deals');
       return await fetchFeaturedDeals();
     }
@@ -182,20 +132,12 @@ async function fetchCasualDeals(limit = 6) {
  */
 async function fetchDealById(id) {
   try {
-    const { data, error } = await supabase
-      .from('deals')
-      .select('*')
-      .eq('id', id)
-      .maybeSingle(); // Use maybeSingle to avoid 406 errors if not found
-
-    if (error) {
-      console.error('Error fetching deal:', error);
-      return null;
-    }
-
-    return data;
+    const res = await fetch(`/api/deals?id=${id}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.deal || null;
   } catch (err) {
-    console.error('CRASH in fetchDealById:', err);
+    console.error('fetchDealById error:', err);
     return null;
   }
 }
@@ -330,17 +272,17 @@ async function incrementView(dealId) {
  * @returns {Promise<{dealsCount: number, usersCount: number}>}
  */
 async function fetchStats() {
-  const { count: dealsCount } = await supabase
-    .from('deals')
-    .select('*', { count: 'exact', head: true })
-    .eq('is_active', true)
-    .eq('is_verified', true);
-
-  const { count: usersCount } = await supabase
-    .from('profiles')
-    .select('*', { count: 'exact', head: true });
-
-  return { dealsCount: dealsCount || 0, usersCount: usersCount || 0 };
+  try {
+    const res = await fetch('/api/deals?type=stats');
+    const data = await res.json();
+    return {
+      dealsCount: data.dealsCount || 0,
+      usersCount: data.usersCount || 0
+    };
+  } catch (err) {
+    console.error('fetchStats error:', err);
+    return { dealsCount: 0, usersCount: 0 };
+  }
 }
 
 /**

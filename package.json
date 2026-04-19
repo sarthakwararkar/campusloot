@@ -11,7 +11,13 @@
     "type": "git",
     "url": "git+https://github.com/sarthakwararkar/campusloot.git"
   },
-  "keywords": ["student", "deals", "discounts", "india", "campus"],
+  "keywords": [
+    "student",
+    "deals",
+    "discounts",
+    "india",
+    "campus"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
@@ -19,6 +25,7 @@
     "url": "https://github.com/sarthakwararkar/campusloot/issues"
   },
   "homepage": "https://campusloot.com",
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@supabase/supabase-js": "^2.103.3"
+  }
 }
