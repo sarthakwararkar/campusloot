@@ -88,7 +88,7 @@ def scrape_reddit_sub(subreddit, supabase, existing, limit=25):
                 "brand_name": f"r/{subreddit}",
                 "category": category,
                 "is_verified": False,   # Needs admin review
-                "is_active": False,     # Needs admin review
+                "is_active": True,      # Show immediately
             }
 
             try:

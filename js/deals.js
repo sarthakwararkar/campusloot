@@ -18,8 +18,7 @@ async function fetchDeals(filters = {}) {
   let query = supabase
     .from('deals')
     .select('*', { count: 'exact' })
-    .eq('is_active', true)
-    .eq('is_verified', true);
+    .eq('is_active', true);
 
   // Category filter
   if (category && category !== 'all') {
@@ -76,7 +75,6 @@ async function fetchFeaturedDeals() {
     .from('deals')
     .select('*')
     .eq('is_active', true)
-    .eq('is_verified', true)
     .eq('is_featured', true)
     .order('created_at', { ascending: false })
     .limit(3);
@@ -109,7 +107,6 @@ async function fetchCasualDeals(limit = 6) {
       .from('deals')
       .select('*')
       .eq('is_active', true)
-      .eq('is_verified', true)
       .order('saves_count', { ascending: false })
       .order('views_count', { ascending: false })
       .order('created_at', { ascending: false })
@@ -128,9 +125,9 @@ async function fetchCasualDeals(limit = 6) {
       const casualBonus = catIdx >= 0 ? (CASUAL_CATEGORIES.length - catIdx) * 5 : 0;
       const saves = (deal.saves_count || 0) * 3;
       const views = (deal.views_count || 0) * 0.5;
-      const ageMs = now - new Date(deal.created_at).getTime();
+      const ageMs = now - (deal.created_at ? new Date(deal.created_at).getTime() : now);
       const ageDays = ageMs / (1000 * 60 * 60 * 24);
-      const recencyBonus = ageDays < 7 ? 15 : ageDays < 30 ? 5 : 0;
+      const recencyBonus = isNaN(ageDays) ? 0 : (ageDays < 7 ? 15 : ageDays < 30 ? 5 : 0);
       const featuredBonus = deal.is_featured ? 10 : 0;
       return { ...deal, _score: casualBonus + saves + views + recencyBonus + featuredBonus };
     });
