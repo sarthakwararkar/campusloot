@@ -17,7 +17,7 @@ async function fetchDeals(filters = {}) {
 
   let query = supabase
     .from('deals')
-    .select('*', { count: 'exact' })
+    .select('*')
     .eq('is_active', true);
 
   // Category filter
@@ -26,8 +26,9 @@ async function fetchDeals(filters = {}) {
   }
 
   // Search filter
-  if (search) {
-    query = query.or(`title.ilike.%${search}%,brand_name.ilike.%${search}%,description.ilike.%${search}%`);
+  if (search && search.trim().length > 0) {
+    const s = search.trim();
+    query = query.or(`title.ilike.%${s}%,brand_name.ilike.%${s}%,description.ilike.%${s}%`);
   }
 
   // Sort
@@ -39,10 +40,8 @@ async function fetchDeals(filters = {}) {
       query = query.not('expires_at', 'is', null).order('expires_at', { ascending: true });
       break;
     case 'best-deals':
-      // Composite: high saves + high views + recent first
-      query = query.order('saves_count', { ascending: false })
-                   .order('views_count', { ascending: false })
-                   .order('created_at', { ascending: false });
+      // Simplified: use saves_count first
+      query = query.order('saves_count', { ascending: false });
       break;
     case 'newest':
     default:
@@ -55,15 +54,25 @@ async function fetchDeals(filters = {}) {
 
   try {
     console.log('[Deals] Fetching:', filters);
-    const { data, error, count } = await query;
+    
+    // Create a timeout promise
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Request timed out after 15s')), 15000)
+    );
+
+    const { data, error, count } = await Promise.race([query, timeoutPromise]);
+    
     if (error) {
       console.error('[Supabase] Error:', error);
       return { deals: [], total: 0 };
     }
-    console.log(`[Deals] Success: ${data?.length || 0} items fetched, ${count} total.`);
-    return { deals: data || [], total: count || 0 };
+    
+    // Since we removed 'count: exact', we'll estimate or just use length for now
+    const total = count !== null && count !== undefined ? count : (data?.length || 0);
+    console.log(`[Deals] Success: ${data?.length || 0} items fetched.`);
+    return { deals: data || [], total: total };
   } catch (err) {
-    console.error('[Deals] CRASH:', err);
+    console.error('[Deals] Error:', err.message || err);
     return { deals: [], total: 0 };
   }
 }
