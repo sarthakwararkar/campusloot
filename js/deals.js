@@ -54,14 +54,16 @@ async function fetchDeals(filters = {}) {
   query = query.range(from, to);
 
   try {
+    console.log('[Deals] Fetching:', filters);
     const { data, error, count } = await query;
     if (error) {
-      console.error('Supabase query error:', error);
+      console.error('[Supabase] Error:', error);
       return { deals: [], total: 0 };
     }
+    console.log(`[Deals] Success: ${data?.length || 0} items fetched, ${count} total.`);
     return { deals: data || [], total: count || 0 };
   } catch (err) {
-    console.error('CRASH in fetchDeals query execution:', err);
+    console.error('[Deals] CRASH:', err);
     return { deals: [], total: 0 };
   }
 }
