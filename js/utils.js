@@ -181,7 +181,12 @@ async function getUserCurrency() {
 /**
  * Global currency state (initialized on page load)
  */
-let USER_CURRENCY = localStorage.getItem('cl_currency') || 'INR';
+let USER_CURRENCY = 'INR';
+try {
+  USER_CURRENCY = localStorage.getItem('cl_currency') || 'INR';
+} catch(e) {
+  console.warn('localStorage blocked, defaulting to INR');
+}
 getUserCurrency().then(c => { 
   if (c !== USER_CURRENCY) {
     USER_CURRENCY = c;

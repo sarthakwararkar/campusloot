@@ -81,9 +81,9 @@ def upsert_deal(supabase: Client, deal: dict, existing: dict):
         return
 
     # Truly new deal
-    deal["source"] = "scraped"
-    deal["needs_review"] = True
-    deal["is_active"] = False
+    deal.setdefault("source", "scraped")
+    deal.setdefault("needs_review", True)
+    deal.setdefault("is_active", False)
     deal["last_scraped_at"] = datetime.now(timezone.utc).isoformat()
     
     try:
