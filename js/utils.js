@@ -162,18 +162,38 @@ function formatDate(timestamp) {
  * @returns {Promise<string>} 'INR' or 'USD'
  */
 async function getUserCurrency() {
-  const cached = localStorage.getItem('cl_currency');
-  if (cached) return cached;
-
+  // 1. Check TZ first (Instant, no network)
   try {
-    const res = await fetch('https://ipapi.co/json/');
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (tz === 'Asia/Kolkata' || tz === 'Asia/Calcutta') {
+       return 'INR';
+    }
+  } catch(e) {}
+
+  // 2. Check localStorage
+  try {
+    const cached = localStorage.getItem('cl_currency');
+    if (cached) return cached;
+  } catch (e) {}
+
+  // 3. Network fallback
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000); // reduced to 2s
+    
+    const res = await fetch('https://ipapi.co/json/', { signal: controller.signal });
+    clearTimeout(timeoutId);
+    
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
     const currency = data.country_code === 'IN' ? 'INR' : 'USD';
-    localStorage.setItem('cl_currency', currency);
+    
+    try {
+      localStorage.setItem('cl_currency', currency);
+    } catch (e) {}
+    
     return currency;
   } catch (err) {
-    // Silent fallback to INR for local/CORS issues to keep console clean
     return 'INR';
   }
 }
