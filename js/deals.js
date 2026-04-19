@@ -187,13 +187,14 @@ async function unsaveDeal(dealId) {
  * @returns {Promise<Set<string>>}
  */
 async function getSavedDealIds(userId) {
-  const { data, error } = await supabase
-    .from('saved_deals')
-    .select('deal_id')
-    .eq('user_id', userId);
-
-  if (error) return new Set();
-  return new Set((data || []).map(d => d.deal_id));
+  try {
+    const res = await fetch(`/api/deals?type=saved_deals&id=${userId}`);
+    const { deals } = await res.json();
+    return new Set((deals || []).map(d => d.id));
+  } catch (err) {
+    console.error('getSavedDealIds error:', err);
+    return new Set();
+  }
 }
 
 /**
@@ -202,18 +203,14 @@ async function getSavedDealIds(userId) {
  * @returns {Promise<Array>}
  */
 async function getSavedDeals(userId) {
-  const { data, error } = await supabase
-    .from('saved_deals')
-    .select('deal_id, deals(*)')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching saved deals:', error);
+  try {
+    const res = await fetch(`/api/deals?type=saved_deals&id=${userId}`);
+    const { deals } = await res.json();
+    return deals || [];
+  } catch (err) {
+    console.error('getSavedDeals error:', err);
     return [];
   }
-
-  return (data || []).map(d => d.deals).filter(Boolean);
 }
 
 /**
@@ -322,17 +319,14 @@ async function deleteDeal(id) {
  * @returns {Promise<Array>}
  */
 async function getUserSubmissions(userId) {
-  const { data, error } = await supabase
-    .from('deal_submissions')
-    .select('*')
-    .eq('submitted_by', userId)
-    .order('created_at', { ascending: false });
-    
-  if (error) {
-    console.error('Error fetching user submissions:', error);
+  try {
+    const res = await fetch(`/api/deals?type=user_submissions&id=${userId}`);
+    const { submissions } = await res.json();
+    return submissions || [];
+  } catch (err) {
+    console.error('getUserSubmissions error:', err);
     return [];
   }
-  return data || [];
 }
 
 /**

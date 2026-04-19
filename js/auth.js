@@ -151,13 +151,15 @@ async function getCurrentProfile() {
   const user = await getCurrentUser();
   if (!user) return null;
 
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single();
-
-  return data;
+  try {
+    const res = await fetch(`/api/deals?type=profile&id=${user.id}`);
+    if (!res.ok) return null;
+    const { profile } = await res.json();
+    return profile;
+  } catch (err) {
+    console.error('Error fetching profile via proxy:', err);
+    return null;
+  }
 }
 
 /**
