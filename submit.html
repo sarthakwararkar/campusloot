@@ -412,6 +412,7 @@
       (async function initSubmitPage() {
         // Initialize header/footer
         renderHeader('submit');
+        if (typeof renderFloatingNav === 'function') renderFloatingNav('post');
         renderFooter();
 
         const user = await requireAuth();
@@ -460,26 +461,30 @@
               btn.innerHTML =
                 'Uploading... <span class="material-symbols-outlined" style="animation: spin 1s linear infinite;">cloud_upload</span>';
               
-              const blob = base64ToBlob(base64Image);
               const fileName = `${Date.now()}-${brand.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}.png`;
               
-              // 2. Upload to Supabase Storage
-              const { data, error } = await supabase.storage
-                .from('deal-images')
-                .upload(fileName, blob, {
-                  cacheControl: '3600',
-                  upsert: false
+              // 2. Upload via Proxy
+              try {
+                const headers = await getAuthHeaders();
+                const res = await fetch('/api/deals', {
+                  method: 'POST',
+                  headers,
+                  body: JSON.stringify({
+                    action: 'upload_file',
+                    bucket: 'deal-images',
+                    fileName,
+                    fileContent: base64Image,
+                    contentType: 'image/png'
+                  })
                 });
-                
-              if (error) {
-                console.error("Storage upload error:", error);
-              } else {
-                // 3. Get Public URL
-                const { data: publicUrlData } = supabase.storage
-                  .from('deal-images')
-                  .getPublicUrl(fileName);
-                  
-                uploadedImageUrl = publicUrlData.publicUrl;
+                const result = await res.json();
+                if (result.url) {
+                  uploadedImageUrl = result.url;
+                } else {
+                  console.error("Upload failed:", result.error);
+                }
+              } catch (uploadErr) {
+                console.error("Storage upload error:", uploadErr);
               }
             }
 
@@ -519,6 +524,7 @@
         }
       }
     </style>
+    <div id="floating-nav"></div>
   <!-- Cookie consent loaded via js/cookie-consent.js -->
 
 </body>

@@ -166,6 +166,7 @@
         // Initialize header/footer
         renderHeader('explore');
         renderFooter();
+        if (typeof renderFloatingNav === 'function') renderFloatingNav('explore');
 
         console.log("initDealPage: Starting initialization...", window.location.href);
 
@@ -312,8 +313,8 @@
       })();
     </script>
   
-  <!-- Cookie consent loaded via js/cookie-consent.js -->
-
-</body>
+    <div id="floating-nav"></div>
+    <!-- Cookie consent loaded via js/cookie-consent.js -->
+  </body>
 </html>
 

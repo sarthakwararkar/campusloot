@@ -91,6 +91,32 @@
   --max-width: 1280px;
 }
 
+/* ---- Light Mode Overrides ---- */
+.light-mode {
+  --black: #ffffff;
+  --white: #000000;
+  --gray-900: #f8fafc;
+  --gray-800: #f1f5f9;
+  --gray-700: #e2e8f0;
+  --gray-200: #1e293b;
+  --gray-100: #f1f5f9;
+
+  --bg: #f8fafc;
+  --surface: rgba(0, 0, 0, 0.05);
+  --surface-dark: #ffffff;
+
+  --text-primary: #0f172a;
+  --text-inverse: #ffffff;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+
+  --border-heavy: 1px solid rgba(0, 0, 0, 0.15);
+  --border-light: 1px solid rgba(0, 0, 0, 0.1);
+  
+  --gradient-hero: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent 60%), radial-gradient(circle at bottom left, rgba(99, 102, 241, 0.05), transparent 60%);
+  --gradient-surface: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+
 
 /* ---- Reset & Base ---- */
 *,
@@ -146,8 +172,9 @@ select {
   font-family: var(--font-family);
   font-size: var(--fs-base);
   outline: none;
-  background-color: #0a0a0a;
-  color: #ffffff;
+  background-color: var(--gray-900);
+  color: var(--text-primary);
+  border: var(--border-light);
 }
 
 /* Global Autofill Fix */

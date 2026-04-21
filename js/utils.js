@@ -345,3 +345,23 @@ function setButtonLoading(btn, loading) {
     btn.textContent = btn.dataset.originalText || 'Submit';
   }
 }
+/**
+ * Convert a file/blob to base64 string (without the data: prefix)
+ * @param {File|Blob} file
+ * @returns {Promise<string>}
+ */
+async function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        const base64 = reader.result.split(',')[1];
+        resolve(base64);
+      } else {
+        reject(new Error('Failed to read file as string'));
+      }
+    };
+    reader.onerror = (e) => reject(e);
+    reader.readAsDataURL(file);
+  });
+}

@@ -8,18 +8,14 @@
  * @returns {Promise<Array>}
  */
 async function fetchPendingSubmissions() {
-  const { data, error } = await supabase
-    .from('deal_submissions')
-    .select('*, users!submitted_by(full_name, email)')
-    .eq('status', 'pending')
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching submissions:', error);
+  try {
+    const res = await fetch('/api/deals?type=pending_submissions');
+    const data = await res.json();
+    return data.submissions || [];
+  } catch (err) {
+    console.error('Error fetching submissions:', err);
     return [];
   }
-
-  return data || [];
 }
 
 /**
@@ -28,40 +24,23 @@ async function fetchPendingSubmissions() {
  * @returns {Promise<{success: boolean, error: string|null}>}
  */
 async function approveDeal(submission) {
-  const user = await getCurrentUser();
-  if (!user) return { success: false, error: 'Not authenticated' };
-
-  // Create the deal
-  const { error: dealError } = await supabase
-    .from('deals')
-    .insert({
-      title: submission.title,
-      description: submission.description || 'No description provided.',
-      category: submission.category || 'other',
-      brand_name: submission.brand_name || 'Unknown',
-      discount_text: 'Student Deal',
-      deal_url: submission.deal_url || '#',
-      is_verified: true,
-      is_active: true,
-      submitted_by: submission.submitted_by,
-      approved_by: user.id
+  try {
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        action: 'approve_submission',
+        id: submission.id,
+        submission: submission
+      })
     });
-
-  if (dealError) {
-    return { success: false, error: 'Failed to create deal' };
+    const result = await res.json();
+    return { success: !result.error, error: result.error || null };
+  } catch (err) {
+    console.error('Error approving deal:', err);
+    return { success: false, error: err.message };
   }
-
-  // Update submission status
-  const { error: updateError } = await supabase
-    .from('deal_submissions')
-    .update({ status: 'approved' })
-    .eq('id', submission.id);
-
-  if (updateError) {
-    return { success: false, error: 'Deal created but failed to update submission status' };
-  }
-
-  return { success: true, error: null };
 }
 
 /**
@@ -71,19 +50,23 @@ async function approveDeal(submission) {
  * @returns {Promise<{success: boolean, error: string|null}>}
  */
 async function rejectDeal(submissionId, reason) {
-  const { error } = await supabase
-    .from('deal_submissions')
-    .update({
-      status: 'rejected',
-      rejection_reason: sanitizeInput(reason)
-    })
-    .eq('id', submissionId);
-
-  if (error) {
-    return { success: false, error: 'Failed to reject submission' };
+  try {
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        action: 'reject_submission',
+        id: submissionId,
+        reason: sanitizeInput(reason)
+      })
+    });
+    const result = await res.json();
+    return { success: !result.error, error: result.error || null };
+  } catch (err) {
+    console.error('Error rejecting deal:', err);
+    return { success: false, error: err.message };
   }
-
-  return { success: true, error: null };
 }
 
 /**
@@ -94,12 +77,24 @@ async function rejectDeal(submissionId, reason) {
  * @returns {Promise<{success: boolean}>}
  */
 async function toggleDealStatus(dealId, field, value) {
-  const { error } = await supabase
-    .from('deals')
-    .update({ [field]: value })
-    .eq('id', dealId);
-
-  return { success: !error };
+  try {
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        action: 'toggle_deal_status',
+        id: dealId,
+        field: field,
+        value: value
+      })
+    });
+    const result = await res.json();
+    return { success: !result.error };
+  } catch (err) {
+    console.error('Error toggling deal status:', err);
+    return { success: false };
+  }
 }
 
 /**
@@ -107,17 +102,14 @@ async function toggleDealStatus(dealId, field, value) {
  * @returns {Promise<Array>}
  */
 async function fetchAllDealsAdmin() {
-  const { data, error } = await supabase
-    .from('deals')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching admin deals:', error);
+  try {
+    const res = await fetch('/api/deals?type=all_deals_admin');
+    const data = await res.json();
+    return data.deals || [];
+  } catch (err) {
+    console.error('Error fetching admin deals:', err);
     return [];
   }
-
-  return data || [];
 }
 
 /**
@@ -125,17 +117,17 @@ async function fetchAllDealsAdmin() {
  * @returns {Promise<Object>}
  */
 async function fetchAdminStats() {
-  const [dealsResult, usersResult, savesResult, pendingResult] = await Promise.all([
-    supabase.from('deals').select('*', { count: 'exact', head: true }),
-    supabase.from('profiles').select('*', { count: 'exact', head: true }),
-    supabase.from('saved_deals').select('*', { count: 'exact', head: true }),
-    supabase.from('deal_submissions').select('*', { count: 'exact', head: true }).eq('status', 'pending')
-  ]);
-
-  return {
-    totalDeals: dealsResult.count || 0,
-    totalUsers: usersResult.count || 0,
-    totalSaves: savesResult.count || 0,
-    pendingSubmissions: pendingResult.count || 0
-  };
+  try {
+    const res = await fetch('/api/deals?type=admin_stats');
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error('Error fetching admin stats:', err);
+    return {
+      totalDeals: 0,
+      totalUsers: 0,
+      totalSaves: 0,
+      pendingSubmissions: 0
+    };
+  }
 }

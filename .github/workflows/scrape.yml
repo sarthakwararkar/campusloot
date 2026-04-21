@@ -43,3 +43,9 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+      - name: Sync Coupomated Deals
+        run: python scripts/sync_coupomated.py
+        env:
+          COUPOMATED_API_TOKEN: ${{ secrets.COUPOMATED_API_TOKEN }}
+          ADMIN_JWT: ${{ secrets.ADMIN_JWT }}

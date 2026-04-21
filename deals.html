@@ -481,6 +481,11 @@
         
         loadDeals(1, false);
 
+        // Render standard components
+        if (typeof renderHeader === 'function') renderHeader();
+        if (typeof renderFloatingNav === 'function') renderFloatingNav('deals');
+        if (typeof renderFooter === 'function') renderFooter();
+
         // Header Search
         if (navSearch) {
           navSearch.onkeypress = (e) => {
@@ -493,8 +498,9 @@
       })();
     </script>
   
-  <!-- Cookie consent loaded via js/cookie-consent.js -->
+    <div id="floating-nav"></div>
+    <!-- Cookie consent loaded via js/cookie-consent.js -->
 
-</body>
+  </body>
 </html>
 

@@ -31,20 +31,28 @@ async function signUp(email, password, name, college, city) {
       return { user: null, error: error.message };
     }
 
-    // Create user profile in profiles table
+    // Create user profile in profiles table via proxy
     if (data.user) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
+      try {
+        const headers = await getAuthHeaders();
+        const profileData = {
           id: data.user.id,
           email: email,
           full_name: name,
           college_name: college,
           city: city
+        };
+        
+        await fetch('/api/deals', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            action: 'create_profile',
+            data: profileData
+          })
         });
-
-      if (profileError) {
-        console.error('Profile creation error:', profileError);
+      } catch (profileErr) {
+        console.error('Profile creation error via proxy:', profileErr);
       }
     }
 
@@ -131,6 +139,24 @@ async function signOut() {
 }
 
 /**
+ * Get headers including Authorization JWT for proxy calls
+ */
+async function getAuthHeaders() {
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session && session.access_token) {
+      return { 
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json'
+      };
+    }
+  } catch (err) {
+    console.warn('Could not get session for headers:', err);
+  }
+  return { 'Content-Type': 'application/json' };
+}
+
+/**
  * Get the currently logged-in user
  * @returns {Promise<Object|null>}
  */
@@ -181,11 +207,7 @@ async function requireAdmin() {
   const user = await requireAuth();
   if (!user) return null;
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single();
+  const profile = await getCurrentProfile();
 
   if (!profile || profile.role !== 'admin') {
     window.location.href = 'index.html';
@@ -214,25 +236,30 @@ supabaseClient.auth.onAuthStateChange(async (event, session) => {
       const provider = user.app_metadata?.provider;
 
       if (provider === 'google') {
-        // Check if profile already exists
-        const { data: existingProfile } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('id', user.id)
-          .single();
-
-        if (!existingProfile) {
-          // Create profile from Google metadata
+        // Check if profile exists using proxy logic
+        const profile = await getCurrentProfile();
+        
+        if (!profile) {
+          // Create profile from Google metadata via proxy
           const meta = user.user_metadata || {};
-          await supabase.from('profiles').insert({
-            id: user.id,
-            email: user.email,
-            full_name: meta.full_name || meta.name || '',
-            avatar_url: meta.avatar_url || meta.picture || '',
-            college_name: '',
-            city: ''
+          const headers = await getAuthHeaders();
+          
+          await fetch('/api/deals', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+              action: 'create_profile',
+              data: {
+                id: user.id,
+                email: user.email,
+                full_name: meta.full_name || meta.name || '',
+                avatar_url: meta.avatar_url || meta.picture || '',
+                college_name: '',
+                city: ''
+              }
+            })
           });
-          console.log('[Auth] Created profile for Google user:', user.email);
+          console.log('[Auth] Created profile for Google user via proxy:', user.email);
         }
       }
     } catch (profileErr) {
@@ -296,18 +323,21 @@ async function updatePassword(newPassword) {
  */
 async function updateProfile(userId, updates) {
   try {
-    const { error } = await supabase
-      .from('profiles')
-      .update(updates)
-      .eq('id', userId);
-
-    if (error) {
-      return { error: error.message };
-    }
-
-    return { error: null };
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        action: 'update_profile',
+        id: userId,
+        data: updates
+      })
+    });
+    const result = await res.json();
+    return { error: result.error || null };
   } catch (err) {
-    return { error: 'Something went wrong. Please try again.' };
+    console.error('Update profile error:', err);
+    return { error: 'Failed to update profile via proxy.' };
   }
 }
 
@@ -325,21 +355,25 @@ async function uploadAvatar(file, userId) {
 
     const fileExt = file.name.split('.').pop();
     const fileName = `${userId}/avatar-${Date.now()}.${fileExt}`;
+    const base64 = await fileToBase64(file);
 
-    const { data, error } = await supabase.storage
-      .from('avatar')
-      .upload(fileName, file, { 
-        upsert: true,
-        cacheControl: '3600'
-      });
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        action: 'upload_file',
+        bucket: 'avatar',
+        fileName,
+        fileContent: base64,
+        contentType: file.type
+      })
+    });
 
-    if (error) return { url: null, error: error.message };
+    const result = await res.json();
+    if (result.error) return { url: null, error: result.error };
 
-    const { data: { publicUrl } } = supabase.storage
-      .from('avatar')
-      .getPublicUrl(fileName);
-
-    return { url: publicUrl, error: null };
+    return { url: result.url, error: null };
   } catch (err) {
     console.error('[Auth] Upload failure:', err);
     return { url: null, error: 'Critical upload failure.' };

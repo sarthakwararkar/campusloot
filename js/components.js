@@ -477,14 +477,15 @@ async function updateAuthNav() {
   const user = await getCurrentUser();
 
   if (user) {
-    // Fetch user profile for role check
-    const { data: profile } = await supabaseClient
-      .from('profiles')
-      .select('role, full_name, avatar_url')
-      .eq('id', user.id)
-      .single();
+    let profile = null;
+    try {
+      // Use the proxy-powered function from auth.js
+      profile = await getCurrentProfile();
+    } catch (err) {
+      console.error('Failed to fetch profile in nav, falling back to email', err);
+    }
 
-    const name = profile?.full_name || user.email.split('@')[0];
+    const name = profile?.full_name || user.user_metadata?.full_name || user.email.split('@')[0];
     const isAdmin = profile?.role === 'admin';
 
     navAuth.innerHTML = '';
@@ -690,7 +691,7 @@ function renderFloatingNav(activeItem = '') {
   const items = [
     { id: 'home', icon: 'home', label: 'Home', href: 'index.html' },
     { id: 'deals', icon: 'explore', label: 'Explore', href: 'deals.html' },
-    { id: 'post', icon: 'add_circle', label: 'Post', href: 'post-deal.html', primary: true },
+    { id: 'post', icon: 'add_circle', label: 'Post', href: 'submit.html', primary: true },
     { id: 'profile', icon: 'person', label: 'Profile', href: 'profile.html' },
     { id: 'settings', icon: 'settings', label: 'Settings', href: 'settings.html' }
   ];

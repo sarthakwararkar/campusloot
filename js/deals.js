@@ -147,18 +147,23 @@ async function fetchDealById(id) {
  * @param {string} dealId
  */
 async function saveDeal(dealId) {
-  const user = await getCurrentUser();
-  if (!user) throw new Error('Not logged in');
-
-  const { error } = await supabase
-    .from('saved_deals')
-    .insert({ user_id: user.id, deal_id: dealId });
-
-  if (error) throw error;
-
-  // Increment saves_count via RPC
-  const { error: rpcError } = await supabase.rpc('increment_saves', { deal_id_input: dealId });
-  if (rpcError) console.error('Error incrementing saves_count:', rpcError);
+  try {
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        action: 'save_deal',
+        id: dealId
+      })
+    });
+    const result = await res.json();
+    if (result.error) throw new Error(result.error);
+    return { success: true };
+  } catch (err) {
+    console.error('Error saving deal via proxy:', err);
+    throw err;
+  }
 }
 
 /**
@@ -166,19 +171,23 @@ async function saveDeal(dealId) {
  * @param {string} dealId
  */
 async function unsaveDeal(dealId) {
-  const user = await getCurrentUser();
-  if (!user) throw new Error('Not logged in');
-
-  const { error } = await supabase
-    .from('saved_deals')
-    .delete()
-    .eq('user_id', user.id)
-    .eq('deal_id', dealId);
-
-  if (error) throw error;
-
-  // Decrement saves_count via RPC
-  await supabase.rpc('decrement_saves', { deal_id_input: dealId });
+  try {
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        action: 'unsave_deal',
+        id: dealId
+      })
+    });
+    const result = await res.json();
+    if (result.error) throw new Error(result.error);
+    return { success: true };
+  } catch (err) {
+    console.error('Error unsaving deal via proxy:', err);
+    throw err;
+  }
 }
 
 /**
@@ -219,32 +228,29 @@ async function getSavedDeals(userId) {
  * @returns {Promise<{success: boolean, error: string|null}>}
  */
 async function submitDeal(formData) {
-  const user = await getCurrentUser();
-  if (!user) return { success: false, error: 'You must be logged in' };
-
-  // Check submission limit
-  const canSubmit = await checkSubmissionLimit(user.id);
-  if (!canSubmit) {
-    return { success: false, error: 'You have reached the daily submission limit (3 per day). Try again tomorrow!' };
-  }
-
-  const { error } = await supabase
-    .from('deal_submissions')
-    .insert({
-      submitted_by: user.id,
-      title: sanitizeInput(formData.title),
-      description: sanitizeInput(formData.description, 1000),
-      brand_name: sanitizeInput(formData.brand_name),
-      deal_url: sanitizeInput(formData.deal_url, 2000),
-      category: formData.category,
-      image_url: formData.image_url ? formData.image_url : null
+  try {
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        action: 'submit_deal',
+        data: {
+          title: sanitizeInput(formData.title),
+          description: sanitizeInput(formData.description, 1000),
+          brand_name: sanitizeInput(formData.brand_name),
+          deal_url: sanitizeInput(formData.deal_url, 2000),
+          category: formData.category,
+          image_url: formData.image_url ? formData.image_url : null
+        }
+      })
     });
-
-  if (error) {
-    return { success: false, error: 'Failed to submit deal. Please try again.' };
+    const result = await res.json();
+    return { success: !result.error, error: result.error || null };
+  } catch (err) {
+    console.error('Error submitting deal via proxy:', err);
+    return { success: false, error: 'Failed to submit deal via proxy.' };
   }
-
-  return { success: true, error: null };
 }
 
 /**
@@ -253,12 +259,12 @@ async function submitDeal(formData) {
  */
 async function incrementView(dealId) {
   try {
-    // Use RPC for atomic increment
-    const { error } = await supabase.rpc('increment_view', { deal_id_input: dealId });
-    if (error) {
-      console.warn('Error incrementing view count (RPC may be missing):', error);
-      // Fallback: manual increment if RPC fails (optional, but let's just log for now)
-    }
+    const headers = await getAuthHeaders();
+    await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ action: 'increment_view', id: dealId })
+    });
   } catch (err) {
     console.error('CRASH in incrementView:', err);
   }
@@ -290,9 +296,14 @@ async function fetchStats() {
  */
 async function updateDeal(id, fields) {
   try {
-    const { error } = await supabase.from('deals').update(fields).eq('id', id);
-    if (error) throw error;
-    return { success: true };
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ action: 'update_deal', id, data: fields })
+    });
+    const result = await res.json();
+    return { success: !result.error, error: result.error || null };
   } catch (err) {
     return { success: false, error: err.message };
   }
@@ -305,9 +316,14 @@ async function updateDeal(id, fields) {
  */
 async function deleteDeal(id) {
   try {
-    const { error } = await supabase.from('deals').delete().eq('id', id);
-    if (error) throw error;
-    return { success: true };
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ action: 'delete_deal', id })
+    });
+    const result = await res.json();
+    return { success: !result.error, error: result.error || null };
   } catch (err) {
     return { success: false, error: err.message };
   }
@@ -334,18 +350,14 @@ async function getUserSubmissions(userId) {
  * @returns {Promise<Array>}
  */
 async function fetchScrapedPendingDeals() {
-  const { data, error } = await supabase
-    .from('deals')
-    .select('*')
-    .eq('source', 'scraped')
-    .eq('needs_review', true)
-    .eq('is_active', false)
-    .order('created_at', { ascending: false });
-  if (error) {
-    console.error('Error fetching scraped deals:', error);
+  try {
+    const res = await fetch('/api/deals?type=scraped_pending');
+    const data = await res.json();
+    return data.deals || [];
+  } catch (err) {
+    console.error('Error fetching scraped deals:', err);
     return [];
   }
-  return data || [];
 }
 
 /**
@@ -354,11 +366,18 @@ async function fetchScrapedPendingDeals() {
  * @returns {Promise<{success: boolean, error: string|null}>}
  */
 async function approveScrapedDeal(id) {
-  const { error } = await supabase
-    .from('deals')
-    .update({ is_active: true, is_verified: true, needs_review: false })
-    .eq('id', id);
-  return { success: !error, error: error?.message || null };
+  try {
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ action: 'approve_scraped', id })
+    });
+    const result = await res.json();
+    return { success: !result.error, error: result.error || null };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
 }
 
 /**
@@ -367,11 +386,18 @@ async function approveScrapedDeal(id) {
  * @returns {Promise<{success: boolean, error: string|null}>}
  */
 async function skipScrapedDeal(id) {
-  const { error } = await supabase
-    .from('deals')
-    .update({ needs_review: false })
-    .eq('id', id);
-  return { success: !error, error: error?.message || null };
+  try {
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ action: 'skip_scraped', id })
+    });
+    const result = await res.json();
+    return { success: !result.error, error: result.error || null };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
 }
 
 /**
@@ -382,9 +408,14 @@ async function skipScrapedDeal(id) {
  */
 async function updateDealImage(id, imageUrl) {
   try {
-    const { error } = await supabase.from('deals').update({ image_url: imageUrl }).eq('id', id);
-    if (error) throw error;
-    return { success: true, error: null };
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ action: 'update_deal', id, data: { image_url: imageUrl } })
+    });
+    const result = await res.json();
+    return { success: !result.error, error: result.error || null };
   } catch (err) {
     return { success: false, error: err.message };
   }

@@ -253,9 +253,14 @@
       // ---- Sign Out ----
       const handleSignOut = async () => { await signOut(); window.location.href = 'login.html'; };
       document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+
+      // Render standard components
+      if (typeof renderHeader === 'function') renderHeader();
+      if (typeof renderFloatingNav === 'function') renderFloatingNav('profile');
+      if (typeof renderFooter === 'function') renderFooter();
     })();
   </script>
-  <!-- Cookie consent loaded via js/cookie-consent.js -->
-
+    <div id="floating-nav"></div>
+    <!-- Cookie consent loaded via js/cookie-consent.js -->
 </body>
 </html>

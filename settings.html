@@ -54,20 +54,20 @@
 
     <div class="flex flex-col lg:flex-row gap-10">
       <!-- Sidebar Navigation -->
-      <aside class="w-full lg:w-64 space-y-2">
-        <button class="w-full flex items-center gap-3 px-5 py-3 rounded-xl bg-indigo-600 text-white font-semibold text-left transition-all">
+      <aside class="w-full lg:w-64 space-y-2" id="settings-sidebar">
+        <button data-tab="profile" class="tab-btn active w-full flex items-center gap-3 px-5 py-3 rounded-xl bg-indigo-600 text-white font-semibold text-left transition-all">
           <span class="material-symbols-outlined">person</span>
           Profile
         </button>
-        <button class="w-full flex items-center gap-3 px-5 py-3 rounded-xl bg-white/5 text-slate-400 font-semibold text-left hover:bg-white/10 transition-all">
+        <button data-tab="security" class="tab-btn w-full flex items-center gap-3 px-5 py-3 rounded-xl bg-white/5 text-slate-400 font-semibold text-left hover:bg-white/10 transition-all">
           <span class="material-symbols-outlined">security</span>
           Security
         </button>
-        <button class="w-full flex items-center gap-3 px-5 py-3 rounded-xl bg-white/5 text-slate-400 font-semibold text-left hover:bg-white/10 transition-all">
+        <button data-tab="notifications" class="tab-btn w-full flex items-center gap-3 px-5 py-3 rounded-xl bg-white/5 text-slate-400 font-semibold text-left hover:bg-white/10 transition-all">
           <span class="material-symbols-outlined">notifications</span>
           Notifications
         </button>
-        <button class="w-full flex items-center gap-3 px-5 py-3 rounded-xl bg-white/5 text-slate-400 font-semibold text-left hover:bg-white/10 transition-all">
+        <button data-tab="appearance" class="tab-btn w-full flex items-center gap-3 px-5 py-3 rounded-xl bg-white/5 text-slate-400 font-semibold text-left hover:bg-white/10 transition-all">
           <span class="material-symbols-outlined">palette</span>
           Appearance
         </button>
@@ -133,7 +133,7 @@
         </section>
 
         <!-- Section: Security -->
-        <section id="section-security" class="bg-white/5 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-2xl">
+        <section id="section-security" class="hidden bg-white/5 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-2xl">
           <h2 class="text-2xl font-bold text-white tracking-tight mb-8">Security</h2>
           
           <form id="password-form" class="space-y-6">
@@ -152,6 +152,104 @@
               Update Password
             </button>
           </form>
+
+          <div class="mt-12 pt-8 border-t border-white/10">
+            <h3 class="text-lg font-bold text-white mb-4">Login Sessions</h3>
+            <div class="space-y-4">
+              <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
+                <div class="flex items-center gap-4">
+                  <span class="material-symbols-outlined text-indigo-400 p-2 bg-indigo-400/10 rounded-lg">desktop_windows</span>
+                  <div>
+                    <p class="text-sm font-bold text-white">Windows • Chrome Browser</p>
+                    <p class="text-xs text-slate-500">Active now • Mumbai, India</p>
+                  </div>
+                </div>
+                <span class="px-3 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-widest rounded-full">Current</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section: Notifications -->
+        <section id="section-notifications" class="hidden bg-white/5 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-2xl">
+          <h2 class="text-2xl font-bold text-white tracking-tight mb-8">Notifications</h2>
+          
+          <div class="space-y-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-bold text-white">Email Alerts</h3>
+                <p class="text-sm text-slate-500">Get notified about the hottest deals via email.</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="notify-email" class="sr-only peer" checked>
+                <div class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+              </label>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-bold text-white">Browser Notifications</h3>
+                <p class="text-sm text-slate-500">Receive real-time push notifications for price drops.</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="notify-browser" class="sr-only peer">
+                <div class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+              </label>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-bold text-white">Weekly Newsletter</h3>
+                <p class="text-sm text-slate-500">A curated summary of the best student deals.</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="notify-newsletter" class="sr-only peer" checked>
+                <div class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+              </label>
+            </div>
+          </div>
+
+          <button id="save-notifications-btn" class="mt-8 px-8 py-3 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 transition-all active:scale-95">
+            Save Preferences
+          </button>
+        </section>
+
+        <!-- Section: Appearance -->
+        <section id="section-appearance" class="hidden bg-white/5 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-2xl">
+          <h2 class="text-2xl font-bold text-white tracking-tight mb-8">Appearance</h2>
+          
+          <div class="space-y-10">
+            <!-- Theme Selection -->
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Color Theme</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <button data-theme="dark" class="theme-option active p-4 rounded-2xl bg-black border-2 border-indigo-500 flex flex-col gap-3 transition-all">
+                  <div class="w-full h-12 bg-white/5 rounded-lg border border-white/10"></div>
+                  <span class="text-sm font-bold">Obsidian Dark</span>
+                </button>
+                <button data-theme="light" class="theme-option p-4 rounded-2xl bg-slate-100 border-2 border-transparent flex flex-col gap-3 transition-all hover:bg-slate-200">
+                  <div class="w-full h-12 bg-white rounded-lg border border-slate-200"></div>
+                  <span class="text-sm font-bold text-slate-900">Crystal Light</span>
+                </button>
+                <button data-theme="system" class="theme-option p-4 rounded-2xl bg-gradient-to-br from-black to-slate-100 border-2 border-transparent flex flex-col gap-3 transition-all">
+                  <div class="w-full h-12 bg-white/30 rounded-lg border border-white/20 backdrop-blur"></div>
+                  <span class="text-sm font-bold">System Default</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Accent Color -->
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Accent Color</h3>
+              <div class="flex flex-wrap gap-4">
+                <button data-accent="indigo" class="accent-option w-10 h-10 rounded-full bg-indigo-500 ring-4 ring-indigo-500/30 ring-offset-2 ring-offset-black transition-all"></button>
+                <button data-accent="purple" class="accent-option w-10 h-10 rounded-full bg-purple-500 hover:scale-110 transition-all"></button>
+                <button data-accent="rose" class="accent-option w-10 h-10 rounded-full bg-rose-500 hover:scale-110 transition-all"></button>
+                <button data-accent="emerald" class="accent-option w-10 h-10 rounded-full bg-emerald-500 hover:scale-110 transition-all"></button>
+                <button data-accent="amber" class="accent-option w-10 h-10 rounded-full bg-amber-500 hover:scale-110 transition-all"></button>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
     </div>
@@ -171,8 +269,14 @@
       renderHeader('settings');
       renderFooter();
 
-      const user = await requireAuth();
-      if (!user) return;
+      const isPreview = new URLSearchParams(window.location.search).get('preview') === 'true';
+      let user = null;
+      if (isPreview) {
+        user = { id: 'test-user', email: 'test@example.com', user_metadata: { full_name: 'Test User' } };
+      } else {
+        user = await requireAuth();
+        if (!user) return;
+      }
 
       const profile = await getCurrentProfile();
 
@@ -283,7 +387,127 @@
           document.getElementById('password-form').reset();
         }
       };
+
+      // ---- Tab Switching Logic ----
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const sections = ['profile', 'security', 'notifications', 'appearance'];
+
+      tabBtns.forEach(btn => {
+        btn.onclick = () => {
+          const targetTab = btn.getAttribute('data-tab');
+          
+          // Update Buttons
+          tabBtns.forEach(b => {
+             b.classList.remove('bg-indigo-600', 'text-white', 'tab-btn-active');
+             b.classList.add('bg-white/5', 'text-slate-400');
+          });
+          btn.classList.add('bg-indigo-600', 'text-white', 'tab-btn-active');
+          btn.classList.remove('bg-white/5', 'text-slate-400');
+
+          // Update Sections
+          sections.forEach(s => {
+            const el = document.getElementById(`section-${s}`);
+            if (s === targetTab) el.classList.remove('hidden');
+            else el.classList.add('hidden');
+          });
+        };
+      });
+
+      // ---- Notifications Logic ----
+      const loadNotifications = () => {
+        const settings = JSON.parse(localStorage.getItem('notification_settings') || '{}');
+        if (settings.email !== undefined) document.getElementById('notify-email').checked = settings.email;
+        if (settings.browser !== undefined) document.getElementById('notify-browser').checked = settings.browser;
+        if (settings.newsletter !== undefined) document.getElementById('notify-newsletter').checked = settings.newsletter;
+      };
+
+      document.getElementById('save-notifications-btn').onclick = () => {
+        const settings = {
+          email: document.getElementById('notify-email').checked,
+          browser: document.getElementById('notify-browser').checked,
+          newsletter: document.getElementById('notify-newsletter').checked
+        };
+        localStorage.setItem('notification_settings', JSON.stringify(settings));
+        showToast('Notification preferences saved!', 'success');
+      };
+
+      loadNotifications();
+
+      // ---- Appearance Logic ----
+      const themeOptions = document.querySelectorAll('.theme-option');
+      const accentOptions = document.querySelectorAll('.accent-option');
+
+      const applyTheme = (theme) => {
+        if (theme === 'light') {
+          document.documentElement.classList.add('light-mode');
+        } else if (theme === 'dark') {
+          document.documentElement.classList.remove('light-mode');
+        } else {
+          // System
+          if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+            document.documentElement.classList.add('light-mode');
+          } else {
+            document.documentElement.classList.remove('light-mode');
+          }
+        }
+        
+        themeOptions.forEach(opt => {
+          if (opt.getAttribute('data-theme') === theme) {
+            opt.classList.add('border-indigo-500', 'active');
+            opt.classList.remove('border-transparent');
+          } else {
+            opt.classList.remove('border-indigo-500', 'active');
+            opt.classList.add('border-transparent');
+          }
+        });
+      };
+
+      const applyAccent = (accent) => {
+        const colors = {
+          indigo: '#6366f1',
+          purple: '#a855f7',
+          rose: '#f43f5e',
+          emerald: '#10b981',
+          amber: '#f59e0b'
+        };
+        document.documentElement.style.setProperty('--primary', colors[accent] || colors.indigo);
+        
+        accentOptions.forEach(opt => {
+          if (opt.getAttribute('data-accent') === accent) {
+            opt.classList.add('ring-4', 'ring-offset-2');
+            opt.classList.add(`ring-${accent}-500/30`);
+          } else {
+            opt.classList.remove('ring-4', 'ring-offset-2');
+          }
+        });
+      };
+
+      themeOptions.forEach(opt => {
+        opt.onclick = () => {
+          const t = opt.getAttribute('data-theme');
+          localStorage.setItem('theme_preference', t);
+          applyTheme(t);
+        };
+      });
+
+      accentOptions.forEach(opt => {
+        opt.onclick = () => {
+          const a = opt.getAttribute('data-accent');
+          localStorage.setItem('accent_preference', a);
+          applyAccent(a);
+        };
+      });
+
+      // Initial Load
+      applyTheme(localStorage.getItem('theme_preference') || 'dark');
+      applyAccent(localStorage.getItem('accent_preference') || 'indigo');
+
+      // Render standard components
+      if (typeof renderHeader === 'function') renderHeader();
+      if (typeof renderFloatingNav === 'function') renderFloatingNav('settings');
+      if (typeof renderFooter === 'function') renderFooter();
     })();
   </script>
+<div id="floating-nav"></div>
 </body>
 </html>
