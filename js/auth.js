@@ -169,6 +169,11 @@ async function getCurrentUser() {
   }
 }
 
+// Simple session-based cache for profiles to avoid redundant API calls
+let _profileCache = null;
+let _profileCacheTime = 0;
+const PROFILE_CACHE_TTL = 30000; // 30 seconds
+
 /**
  * Get the current user's profile from the users table
  * @returns {Promise<Object|null>}
@@ -177,10 +182,20 @@ async function getCurrentProfile() {
   const user = await getCurrentUser();
   if (!user) return null;
 
+  // Return cached profile if valid
+  if (_profileCache && (Date.now() - _profileCacheTime < PROFILE_CACHE_TTL)) {
+    return _profileCache;
+  }
+
   try {
     const res = await fetch(`/api/deals?type=profile&id=${user.id}`);
     if (!res.ok) return null;
     const { profile } = await res.json();
+    
+    // Cache the result
+    _profileCache = profile;
+    _profileCacheTime = Date.now();
+    
     return profile;
   } catch (err) {
     console.error('Error fetching profile via proxy:', err);

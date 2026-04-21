@@ -502,17 +502,23 @@ async function updateAuthNav() {
     profileLink.href = 'profile.html';
     profileLink.className = 'flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors';
     
+    // Create avatar element
+    const avatarContainer = document.createElement('div');
+    avatarContainer.className = 'w-7 h-7 flex items-center justify-center';
+    
     if (profile?.avatar_url) {
       const avatarImg = document.createElement('img');
       avatarImg.src = profile.avatar_url;
       avatarImg.className = 'w-7 h-7 rounded-full object-cover border border-white/10';
-      profileLink.appendChild(avatarImg);
+      avatarImg.loading = 'eager'; // Prioritize profile image
+      avatarContainer.appendChild(avatarImg);
     } else {
       const avatarIcon = document.createElement('span');
       avatarIcon.className = 'material-symbols-outlined text-lg';
       avatarIcon.textContent = 'account_circle';
-      profileLink.appendChild(avatarIcon);
+      avatarContainer.appendChild(avatarIcon);
     }
+    profileLink.appendChild(avatarContainer);
     
     const nameSpan = document.createElement('span');
     nameSpan.textContent = name;
