@@ -163,9 +163,29 @@ async function getAuthHeaders() {
  * Get the currently logged-in user
  * @returns {Promise<Object|null>}
  */
+let _cachedUser = null;
+
+/**
+ * Get current authenticated user
+ * Uses in-memory cache and getSession for maximum performance
+ */
 async function getCurrentUser() {
+  if (_cachedUser) return _cachedUser;
   try {
+    // getSession is much faster as it checks local storage
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session?.user) {
+      _cachedUser = session.user;
+      // Refresh in background
+      supabaseClient.auth.getUser().then(({ data }) => {
+        if (data?.user) _cachedUser = data.user;
+      });
+      return _cachedUser;
+    }
+    
+    // Fallback to getUser if no session (more thorough)
     const { data: { user } } = await supabaseClient.auth.getUser();
+    _cachedUser = user;
     return user;
   } catch {
     return null;
@@ -189,8 +209,10 @@ async function getCurrentProfile() {
     const cached = sessionStorage.getItem(PROFILE_CACHE_KEY);
     if (cached) {
       const { profile, userId, timestamp } = JSON.parse(cached);
-      // Ensure cache is for the same user and hasn't expired
+      // Ensure cache is for the same user and hasn't expired (5 min)
       if (userId === user.id && (Date.now() - timestamp < PROFILE_CACHE_TTL)) {
+        // Trigger background refresh to keep cache fresh, but return cached data immediately
+        refreshProfileCache(user.id);
         return profile;
       }
     }
@@ -198,23 +220,26 @@ async function getCurrentProfile() {
     console.warn('Profile cache read error:', e);
   }
 
+  return refreshProfileCache(user.id);
+}
+
+/**
+ * Internal helper to fetch profile and update cache
+ */
+async function refreshProfileCache(userId) {
   try {
-    const res = await fetch(`/api/deals?type=profile&id=${user.id}`);
+    const res = await fetch(`/api/deals?type=profile&id=${userId}`);
     if (!res.ok) return null;
     const { profile } = await res.json();
     
-    // Persist in session cache
-    try {
-      sessionStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify({
-        profile,
-        userId: user.id,
-        timestamp: Date.now()
-      }));
-    } catch (e) {}
-    
+    sessionStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify({
+      profile,
+      userId: userId,
+      timestamp: Date.now()
+    }));
     return profile;
   } catch (err) {
-    console.error('Error fetching profile via proxy:', err);
+    console.error('refreshProfileCache error:', err);
     return null;
   }
 }

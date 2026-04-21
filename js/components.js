@@ -474,25 +474,39 @@ async function updateAuthNav() {
   const mobileAuth = document.getElementById('mobile-auth');
   if (!navAuth) return;
 
-  const user = await getCurrentUser();
+  // 1. Check session (Synchronous-ish/Fastest)
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  const user = session?.user;
   
-  // Re-check if element is still in DOM after async user fetch
-  if (!document.getElementById('nav-auth')) return;
-
-  if (user) {
-    let profile = null;
-    try {
-      // Use the proxy-powered function from auth.js
-      profile = await getCurrentProfile();
-    } catch (err) {
-      console.error('Failed to fetch profile in nav, falling back to email', err);
-    }
-
-    const name = profile?.full_name || user.user_metadata?.full_name || user.email.split('@')[0];
-    const isAdmin = profile?.role === 'admin';
-
+  if (!user) {
+    // Show login/join buttons immediately
     navAuth.innerHTML = '';
+    const loginBtn = document.createElement('a');
+    loginBtn.href = 'login.html';
+    loginBtn.className = 'text-sm font-medium text-slate-400 hover:text-white transition-colors';
+    loginBtn.textContent = 'Login';
+    navAuth.appendChild(loginBtn);
 
+    const joinBtn = document.createElement('a');
+    joinBtn.href = 'login.html'; joinBtn.className = 'px-5 py-2 text-sm font-bold text-white bg-indigo-600 rounded-full hover:bg-indigo-700 transition-all active:scale-95 shadow-lg shadow-indigo-600/20';
+    joinBtn.textContent = 'Join';
+    navAuth.appendChild(joinBtn);
+
+    if (mobileAuth) {
+      mobileAuth.innerHTML = '<a href="login.html">🔑 Login / Sign Up</a>';
+    }
+    return;
+  }
+
+  // 2. IMMEDIATE HYDRATION: Use Auth Metadata
+  const meta = user.user_metadata || {};
+  const initialName = meta.full_name || meta.name || user.email.split('@')[0];
+  const initialAvatar = meta.avatar_url || meta.picture;
+
+  const renderNavUI = (name, avatarUrl, isAdmin = false) => {
+    if (!document.getElementById('nav-auth')) return;
+    
+    navAuth.innerHTML = '';
     if (isAdmin) {
       const adminLink = document.createElement('a');
       adminLink.href = 'admin.html';
@@ -505,21 +519,13 @@ async function updateAuthNav() {
     profileLink.href = 'profile.html';
     profileLink.className = 'flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors';
     
-    // Create avatar element
     const avatarContainer = document.createElement('div');
     avatarContainer.className = 'w-7 h-7 flex items-center justify-center';
     
-    if (profile?.avatar_url) {
-      const avatarImg = document.createElement('img');
-      avatarImg.src = profile.avatar_url;
-      avatarImg.className = 'w-7 h-7 rounded-full object-cover border border-white/10';
-      avatarImg.loading = 'eager'; // Prioritize profile image
-      avatarContainer.appendChild(avatarImg);
+    if (avatarUrl) {
+      avatarContainer.innerHTML = `<img src="${avatarUrl}" class="w-7 h-7 rounded-full object-cover border border-white/10" loading="eager" />`;
     } else {
-      const avatarIcon = document.createElement('span');
-      avatarIcon.className = 'material-symbols-outlined text-lg';
-      avatarIcon.textContent = 'account_circle';
-      avatarContainer.appendChild(avatarIcon);
+      avatarContainer.innerHTML = `<span class="material-symbols-outlined text-lg">account_circle</span>`;
     }
     profileLink.appendChild(avatarContainer);
     
@@ -528,71 +534,44 @@ async function updateAuthNav() {
     profileLink.appendChild(nameSpan);
     navAuth.appendChild(profileLink);
 
-    const settingsHeaderLink = document.createElement('a');
-    settingsHeaderLink.href = 'settings.html';
-    settingsHeaderLink.className = 'text-sm font-medium text-slate-400 hover:text-white transition-colors ml-4';
-    settingsHeaderLink.innerHTML = '<span class="material-symbols-outlined text-lg align-bottom">settings</span>';
-    settingsHeaderLink.title = 'Settings';
-    navAuth.appendChild(settingsHeaderLink);
+    const settingsLink = document.createElement('a');
+    settingsLink.href = 'settings.html';
+    settingsLink.className = 'text-sm font-medium text-slate-400 hover:text-white transition-colors ml-4';
+    settingsLink.innerHTML = '<span class="material-symbols-outlined text-lg align-bottom">settings</span>';
+    navAuth.appendChild(settingsLink);
 
     const logoutBtn = document.createElement('button');
-    logoutBtn.className = 'px-5 py-2 text-sm font-bold text-slate-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors';
+    logoutBtn.className = 'px-5 py-2 text-sm font-bold text-slate-300 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors ml-2';
     logoutBtn.textContent = 'Logout';
-    logoutBtn.addEventListener('click', async () => {
-      await signOut();
-      window.location.href = 'index.html';
-    });
+    logoutBtn.onclick = async () => { await signOut(); window.location.href = 'index.html'; };
     navAuth.appendChild(logoutBtn);
 
-    // Mobile auth
     if (mobileAuth) {
-      mobileAuth.innerHTML = '';
-      if (isAdmin) {
-        const mAdminLink = document.createElement('a');
-        mAdminLink.href = 'admin.html';
-        mAdminLink.textContent = '⚙️ Admin Dashboard';
-        mobileAuth.appendChild(mAdminLink);
-      }
-      const mProfileLink = document.createElement('a');
-      mProfileLink.href = 'profile.html';
-      mProfileLink.textContent = `👤 ${name}`;
-      mobileAuth.appendChild(mProfileLink);
-
-      const mSettingsLink = document.createElement('a');
-      mSettingsLink.href = 'settings.html';
-      mSettingsLink.textContent = `⚙️ Settings`;
-      mobileAuth.appendChild(mSettingsLink);
-      const mLogoutLink = document.createElement('a');
-      mLogoutLink.href = '#';
-      mLogoutLink.textContent = 'Logout';
-      mLogoutLink.addEventListener('click', async (e) => {
-        e.preventDefault();
-        await signOut();
-        window.location.href = 'index.html';
-      });
-      mobileAuth.appendChild(mLogoutLink);
+      mobileAuth.innerHTML = `
+        ${isAdmin ? '<a href="admin.html">⚙️ Admin Dashboard</a>' : ''}
+        <a href="profile.html">👤 ${name}</a>
+        <a href="settings.html">⚙️ Settings</a>
+        <a href="#" id="mobile-logout">Logout</a>
+      `;
+      const mLogout = mobileAuth.querySelector('#mobile-logout');
+      if (mLogout) mLogout.onclick = async (e) => { e.preventDefault(); await signOut(); window.location.href = 'index.html'; };
     }
-  } else {
-    navAuth.innerHTML = '';
-    const loginBtn = document.createElement('a');
-    loginBtn.href = 'login.html';
-    loginBtn.className = 'text-sm font-medium text-slate-400 hover:text-white transition-colors';
-    loginBtn.textContent = 'Login';
-    navAuth.appendChild(loginBtn);
+  };
 
-    const joinBtn = document.createElement('a');
-    joinBtn.href = 'login.html';
-    joinBtn.className = 'px-5 py-2 text-sm font-bold text-white bg-indigo-600 rounded-full hover:bg-indigo-700 transition-all active:scale-95 shadow-lg shadow-indigo-600/20';
-    joinBtn.textContent = 'Join';
-    navAuth.appendChild(joinBtn);
+  // Render immediately with metadata
+  renderNavUI(initialName, initialAvatar);
 
-    if (mobileAuth) {
-      mobileAuth.innerHTML = '';
-      const mLoginLink = document.createElement('a');
-      mLoginLink.href = 'login.html';
-      mLoginLink.textContent = '🔑 Login / Sign Up';
-      mobileAuth.appendChild(mLoginLink);
+  // 3. BACKGROUND REFRESH: Get full profile (will return cached if available)
+  try {
+    const profile = await getCurrentProfile();
+    if (profile) {
+      const finalName = profile.full_name || initialName;
+      const finalAvatar = profile.avatar_url || initialAvatar;
+      const isAdmin = profile.role === 'admin';
+      renderNavUI(finalName, finalAvatar, isAdmin);
     }
+  } catch (err) {
+    console.error('Nav profile fetch error:', err);
   }
 }
 

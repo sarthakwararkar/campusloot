@@ -143,99 +143,67 @@
   <script>
     (async function initProfilePage() {
       renderHeader('profile');
-      renderFooter();
+        renderFooter();
 
-      const user = await requireAuth();
-      if (!user) return;
+        // 1. Get Auth User (Fastest)
+        const user = await requireAuth();
+        if (!user) return;
 
-      const profile = await getCurrentProfile();
+        // 2. IMMEDIATE HYDRATION: Show basic info from Auth metadata right away
+        const meta = user.user_metadata || {};
+        const initialName = meta.full_name || meta.name || user.email.split('@')[0];
+        const initialAvatar = meta.avatar_url || meta.picture;
 
-      // ---- Avatar ----
-      const avatarEl = document.getElementById('profile-avatar');
-      const updateAvatarUI = (url) => {
-        if (url) {
-          avatarEl.innerHTML = `<img src="${url}" alt="Profile" class="w-24 h-24 rounded-full object-cover" />`;
+        document.getElementById('profile-name').textContent = initialName;
+        document.getElementById('profile-email').textContent = user.email;
+        
+        const avatarEl = document.getElementById('profile-avatar');
+        if (initialAvatar) {
+          avatarEl.innerHTML = `<img src="${initialAvatar}" alt="Profile" class="w-24 h-24 rounded-full object-cover" />`;
           avatarEl.classList.remove('bg-gradient-to-br', 'from-indigo-500', 'to-purple-600');
         } else {
-          const name = profile?.full_name || user.user_metadata?.full_name || user.email.split('@')[0];
-          avatarEl.textContent = name.charAt(0).toUpperCase();
+          avatarEl.textContent = initialName.charAt(0).toUpperCase();
         }
-      };
 
-      updateAvatarUI(profile?.avatar_url || user.user_metadata?.avatar_url || user.user_metadata?.picture);
+        // 3. PARALLEL FETCH: Load everything else simultaneously
+        const [profile, savedDeals, submissions] = await Promise.all([
+          getCurrentProfile(),
+          getSavedDeals(user.id).catch(e => { console.error(e); return []; }),
+          getUserSubmissions(user.id).catch(e => { console.error(e); return []; })
+        ]);
 
-      // Avatar upload
-      const avatarInput = document.getElementById('avatar-input');
-      document.getElementById('avatar-wrapper').onclick = () => avatarInput.click();
-
-      avatarInput.onchange = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        showToast('Uploading...', 'info');
-        const { url, error } = await uploadAvatar(file, user.id);
-
-        if (error) {
-          showToast(error, 'error');
-        } else {
-          await updateProfile(user.id, { avatar_url: url });
-          updateAvatarUI(url);
-          showToast('Updated!', 'success');
+        // 4. SECONDARY HYDRATION: Update with detailed database info
+        if (profile) {
+          if (profile.full_name) document.getElementById('profile-name').textContent = profile.full_name;
+          if (profile.avatar_url) {
+             avatarEl.innerHTML = `<img src="${profile.avatar_url}" alt="Profile" class="w-24 h-24 rounded-full object-cover" />`;
+             avatarEl.classList.remove('bg-gradient-to-br', 'from-indigo-500', 'to-purple-600');
+          }
+          document.getElementById('profile-college-city').textContent =
+            [profile.college_name, profile.city].filter(Boolean).join(' • ') || 'Welcome to CampusLoot';
         }
-      };
 
-      // ---- Profile Header Info ----
-      const nameTxt = profile?.full_name || user.user_metadata?.full_name || user.email.split('@')[0];
-      document.getElementById('profile-name').textContent = nameTxt;
-      document.getElementById('profile-email').textContent = user.email;
-      document.getElementById('profile-college-city').textContent =
-        [profile?.college_name, profile?.city].filter(Boolean).join(' • ') || 'Welcome to CampusLoot';
+        const since = profile?.created_at || user.created_at;
+        if (since) {
+          const d = new Date(since);
+          document.getElementById('profile-stats-since').textContent = d.toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
+        }
 
-      const since = profile?.created_at || user.created_at;
-      if (since) {
-        const d = new Date(since);
-        document.getElementById('profile-stats-since').textContent = d.toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
-      }
-
-      // ---- Tab Switching ----
-      const tabs = document.querySelectorAll('.profile-tab');
-      const contents = document.querySelectorAll('.tab-content');
-
-      tabs.forEach(btn => {
-        btn.addEventListener('click', () => {
-          tabs.forEach(b => b.classList.replace('bg-indigo-600', 'bg-white/5'));
-          tabs.forEach(b => b.classList.replace('text-white', 'text-slate-400'));
-          btn.classList.replace('bg-white/5', 'bg-indigo-600');
-          btn.classList.replace('text-slate-400', 'text-white');
-
-          contents.forEach(c => c.style.display = 'none');
-          const target = document.getElementById('tab-' + btn.dataset.tab);
-          if (target) target.style.display = 'block';
-        });
-      });
-
-      // ---- Load Saved Deals ----
-      const savedGrid = document.getElementById('saved-deals-grid');
-      try {
-        const savedDeals = await getSavedDeals(user.id);
+        // 5. RENDER LISTS
+        // Saved Deals
+        const savedGrid = document.getElementById('saved-deals-grid');
         savedGrid.innerHTML = '';
-        if (!savedDeals || savedDeals.length === 0) {
+        if (savedDeals.length === 0) {
           savedGrid.innerHTML = `<div class="col-span-full text-center py-16"><div class="text-5xl mb-4">📌</div><h3 class="text-xl font-bold text-white mb-2">No saved deals yet</h3><a href="deals.html" class="inline-block px-6 py-3 bg-indigo-600 text-white font-bold rounded-full mt-4">Explore Deals</a></div>`;
         } else {
           const savedIds = new Set(savedDeals.map(d => d.id));
           savedDeals.forEach(deal => savedGrid.appendChild(renderDealCard(deal, { savedDeals: savedIds })));
         }
-        document.getElementById('profile-stats-saved').textContent = savedDeals?.length || 0;
-      } catch (err) {
-        console.error(err);
-        savedGrid.innerHTML = '<div class="col-span-full text-center py-12 text-slate-500">Failed to load saved deals.</div>';
-      }
+        document.getElementById('profile-stats-saved').textContent = savedDeals.length;
 
-      // ---- Load Submissions ----
-      const subContainer = document.getElementById('submissions-container');
-      try {
-        const submissions = await getUserSubmissions(user.id);
-        if (!submissions || submissions.length === 0) {
+        // Submissions
+        const subContainer = document.getElementById('submissions-container');
+        if (submissions.length === 0) {
           subContainer.innerHTML = `<div class="text-center py-16"><div class="text-5xl mb-4">📝</div><h3 class="text-xl font-bold text-white mb-2">No submissions yet</h3></div>`;
         } else {
           document.getElementById('profile-stats-subs').textContent = submissions.length;
@@ -246,16 +214,41 @@
           html += '</tbody></table></div>';
           subContainer.innerHTML = html;
         }
-      } catch (err) {
-        console.error(err);
-      }
 
-      // ---- Sign Out ----
-      const handleSignOut = async () => { await signOut(); window.location.href = 'login.html'; };
-      document.getElementById('logout-btn').addEventListener('click', handleSignOut);
+        // 6. EVENT LISTENERS
+        const avatarInput = document.getElementById('avatar-input');
+        document.getElementById('avatar-wrapper').onclick = () => avatarInput.click();
+        avatarInput.onchange = async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          showToast('Uploading...', 'info');
+          const { url, error } = await uploadAvatar(file, user.id);
+          if (error) {
+            showToast(error, 'error');
+          } else {
+            await updateProfile(user.id, { avatar_url: url });
+            avatarEl.innerHTML = `<img src="${url}" alt="Profile" class="w-24 h-24 rounded-full object-cover" />`;
+            avatarEl.classList.remove('bg-gradient-to-br', 'from-indigo-500', 'to-purple-600');
+            showToast('Updated!', 'success');
+          }
+        };
 
-      // Render standard components (handled at top of init)
-    })();
+        const tabs = document.querySelectorAll('.profile-tab');
+        const contents = document.querySelectorAll('.tab-content');
+        tabs.forEach(btn => {
+          btn.addEventListener('click', () => {
+            tabs.forEach(b => b.classList.replace('bg-indigo-600', 'bg-white/5'));
+            tabs.forEach(b => b.classList.replace('text-white', 'text-slate-400'));
+            btn.classList.replace('bg-white/5', 'bg-indigo-600');
+            btn.classList.replace('text-slate-400', 'text-white');
+            contents.forEach(c => c.style.display = 'none');
+            const target = document.getElementById('tab-' + btn.dataset.tab);
+            if (target) target.style.display = 'block';
+          });
+        });
+
+        document.getElementById('logout-btn').onclick = async () => { await signOut(); window.location.href = 'login.html'; };
+      })();
   </script>
     <div id="floating-nav"></div>
     <!-- Cookie consent loaded via js/cookie-consent.js -->
