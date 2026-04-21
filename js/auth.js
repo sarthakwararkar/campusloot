@@ -5,60 +5,69 @@
 
 /**
  * Sign up a new user with email and password
- * Also creates a profile entry in the users table
+ * Also creates a profile entry in the users table via the proxy
  * @param {string} email
  * @param {string} password
  * @param {string} name
  * @param {string} college
  * @param {string} city
- * @returns {Promise<{user: Object|null, error: string|null}>}
+ * @returns {Promise<{data: Object|null, error: string|null}>}
  */
 async function signUp(email, password, name, college, city) {
   try {
-    const { data, error } = await supabaseClient.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: name,
-          college_name: college,
-          city: city
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'sign_up',
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+            college_name: college,
+            city: city
+          }
         }
-      }
+      })
     });
 
-    if (error) {
-      return { user: null, error: error.message };
-    }
+    const result = await res.json();
+    if (result.error) return { data: null, error: result.error };
 
-    // Create user profile in profiles table via proxy
-    if (data.user) {
+    // Set the session on the client side so local storage is updated
+    if (result.session) {
+      await supabaseClient.auth.setSession(result.session);
+      
+      // Create user profile in profiles table via proxy as well (redundant but safe)
       try {
-        const headers = await getAuthHeaders();
-        const profileData = {
-          id: data.user.id,
-          email: email,
-          full_name: name,
-          college_name: college,
-          city: city
+        const headers = { 
+          'Authorization': `Bearer ${result.session.access_token}`,
+          'Content-Type': 'application/json' 
         };
-        
         await fetch('/api/deals', {
           method: 'POST',
           headers,
           body: JSON.stringify({
             action: 'create_profile',
-            data: profileData
+            data: {
+              id: result.session.user.id,
+              email: email,
+              full_name: name,
+              college_name: college,
+              city: city
+            }
           })
         });
       } catch (profileErr) {
-        console.error('Profile creation error via proxy:', profileErr);
+        console.warn('Profile creation sync warning:', profileErr);
       }
     }
-
-    return { user: data.user, error: null };
+    
+    return { data: result, error: null };
   } catch (err) {
-    return { user: null, error: 'Something went wrong. Please try again.' };
+    console.error('signUp error:', err);
+    return { data: null, error: err.message || 'Something went wrong during sign up' };
   }
 }
 
@@ -66,78 +75,75 @@ async function signUp(email, password, name, college, city) {
  * Sign in with email and password
  * @param {string} email
  * @param {string} password
- * @returns {Promise<{user: Object|null, error: string|null}>}
+ * @returns {Promise<{data: Object|null, error: string|null}>}
  */
 async function signIn(email, password) {
   try {
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'sign_in',
+        email,
+        password
+      })
     });
 
-    if (error) {
-      return { user: null, error: error.message };
-    }
+    const result = await res.json();
+    if (result.error) return { data: null, error: result.error };
 
-    return { user: data.user, error: null };
+    // Set the session on the client side
+    if (result.session) {
+      await supabaseClient.auth.setSession(result.session);
+    }
+    
+    return { data: result, error: null };
   } catch (err) {
-    return { user: null, error: 'Something went wrong. Please try again.' };
+    console.error('signIn error:', err);
+    return { data: null, error: err.message || 'Something went wrong during sign in' };
   }
 }
 
 /**
- * Sign in with Google OAuth
+ * Sign in with Google (OAuth)
  */
 async function signInWithGoogle() {
   try {
-    // Show loading state on the Google button
-    const googleBtn = document.getElementById('google-btn');
-    if (googleBtn) {
-      googleBtn.disabled = true;
-      googleBtn.querySelector('span').textContent = 'Redirecting to Google...';
-    }
-
+    // OAuth still needs to be handled by Supabase redirect directly for browser support
     const { data, error } = await supabaseClient.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin + '/index.html',
-        queryParams: {
-          access_type: 'offline',
-          prompt: 'consent'
-        }
+        redirectTo: window.location.origin + '/index.html'
       }
     });
-
-    if (error) {
-      console.error('[Auth] Google OAuth error:', error.message);
-      if (typeof showToast === 'function') {
-        showToast('Google sign-in failed: ' + error.message, 'error');
-      }
-      // Reset button
-      if (googleBtn) {
-        googleBtn.disabled = false;
-        googleBtn.querySelector('span').textContent = 'Continue with Google';
-      }
-    }
-    // If successful, Supabase redirects the browser — no further action needed here
+    if (error) throw error;
   } catch (err) {
-    console.error('[Auth] Google OAuth exception:', err);
-    if (typeof showToast === 'function') {
-      showToast('Something went wrong with Google sign-in. Please try again.', 'error');
-    }
+    console.error('Google Sign In Error:', err);
+    if (typeof showToast === 'function') showToast('Google login failed', 'error');
   }
 }
 
 /**
- * Sign out the current user
+ * Sign out current user
  */
 async function signOut() {
-  // Clear profile cache on sign out
-  sessionStorage.removeItem(PROFILE_CACHE_KEY);
-  
-  const { error } = await supabaseClient.auth.signOut();
-  if (error) {
-    showToast('Error signing out', 'error');
+  try {
+    const headers = await getAuthHeaders();
+    // 1. Tell the server to invalidate session via proxy
+    fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ action: 'sign_out' })
+    }).catch(err => console.warn('Signout proxy call failed:', err));
+
+    // 2. Clear client-side session
+    await supabaseClient.auth.signOut();
+    _cachedUser = null;
+    sessionStorage.removeItem(PROFILE_CACHE_KEY);
+    window.location.href = 'index.html';
+  } catch (err) {
+    console.error('Sign Out Error:', err);
+    if (typeof showToast === 'function') showToast('Error signing out', 'error');
   }
 }
 
@@ -171,23 +177,32 @@ let _cachedUser = null;
  */
 async function getCurrentUser() {
   if (_cachedUser) return _cachedUser;
+  
   try {
-    // getSession is much faster as it checks local storage
+    // getSession is near-instant as it reads from local storage/cookies
     const { data: { session } } = await supabaseClient.auth.getSession();
+    
     if (session?.user) {
+      // If we have a local session, we're likely logged in.
+      // We'll return this immediately to keep the UI responsive,
+      // but we'll verify it via our PROXY in the background (or foreground if requested)
       _cachedUser = session.user;
-      // Refresh in background
-      supabaseClient.auth.getUser().then(({ data }) => {
+      
+      // Use proxy to verify the user instead of direct Supabase auth.getUser() 
+      // This bypasses potential ISP blocks on the Supabase domain.
+      fetch(`/api/deals?type=get_user`, {
+        headers: { 'Authorization': `Bearer ${session.access_token}` }
+      }).then(res => res.json()).then(data => {
         if (data?.user) _cachedUser = data.user;
-      });
+      }).catch(err => console.warn('User verification via proxy failed:', err));
+
       return _cachedUser;
     }
     
-    // Fallback to getUser if no session (more thorough)
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    _cachedUser = user;
-    return user;
-  } catch {
+    // Fallback if no local session
+    return null;
+  } catch (err) {
+    console.error('getCurrentUser error:', err);
     return null;
   }
 }
@@ -336,16 +351,21 @@ supabaseClient.auth.onAuthStateChange(async (event, session) => {
  */
 async function resetPassword(email) {
   try {
-    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/login.html'
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'reset_password',
+        email,
+        redirectTo: window.location.origin + '/login.html'
+      })
     });
 
-    if (error) {
-      return { error: error.message };
-    }
-
+    const result = await res.json();
+    if (result.error) return { error: result.error };
     return { error: null };
   } catch (err) {
+    console.error('resetPassword error:', err);
     return { error: 'Something went wrong. Please try again.' };
   }
 }
@@ -357,16 +377,21 @@ async function resetPassword(email) {
  */
 async function updatePassword(newPassword) {
   try {
-    const { error } = await supabaseClient.auth.updateUser({
-      password: newPassword
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/deals', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        action: 'update_password',
+        password: newPassword
+      })
     });
 
-    if (error) {
-      return { error: error.message };
-    }
-
+    const result = await res.json();
+    if (result.error) return { error: result.error };
     return { error: null };
   } catch (err) {
+    console.error('updatePassword error:', err);
     return { error: 'Something went wrong. Please try again.' };
   }
 }

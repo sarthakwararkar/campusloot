@@ -64,6 +64,13 @@ module.exports = async (req, res) => {
         return res.status(200).json({ profile: data });
       }
 
+      if (type === 'get_user') {
+        // This verifies the JWT in the Authorization header and returns the user
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) throw error;
+        return res.status(200).json({ user });
+      }
+
       if (type === 'saved_deals' && id) {
         const { data, error } = await supabase.from('saved_deals').select('deal_id, deals(*)').eq('user_id', id).order('created_at', { ascending: false });
         if (error) throw error;
@@ -256,14 +263,53 @@ module.exports = async (req, res) => {
         return res.status(200).json({ success: true });
       }
 
-      // 13. ACTION: UPDATE DEAL (Generic)
+      // 13. ACTION: SIGN IN
+      if (action === 'sign_in') {
+        const { email, password } = req.body;
+        const { data: authData, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        return res.status(200).json({ session: authData.session, user: authData.user });
+      }
+
+      // 14. ACTION: SIGN UP
+      if (action === 'sign_up') {
+        const { email, password, options } = req.body;
+        const { data: authData, error } = await supabase.auth.signUp({ email, password, options });
+        if (error) throw error;
+        return res.status(200).json({ session: authData.session, user: authData.user });
+      }
+
+      // 15. ACTION: SIGN OUT
+      if (action === 'sign_out') {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+        return res.status(200).json({ success: true });
+      }
+
+      // 16. ACTION: UPDATE PASSWORD
+      if (action === 'update_password') {
+        const { password } = req.body;
+        const { error } = await supabase.auth.updateUser({ password });
+        if (error) throw error;
+        return res.status(200).json({ success: true });
+      }
+
+      // 17. ACTION: RESET PASSWORD
+      if (action === 'reset_password') {
+        const { email, redirectTo } = req.body;
+        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+        if (error) throw error;
+        return res.status(200).json({ success: true });
+      }
+
+      // 18. ACTION: UPDATE DEAL (Generic)
       if (action === 'update_deal') {
         const { error } = await supabase.from('deals').update(data).eq('id', id);
         if (error) throw error;
         return res.status(200).json({ success: true });
       }
 
-      // 14. ACTION: UPLOAD FILE
+      // 19. ACTION: UPLOAD FILE
       if (action === 'upload_file') {
         const { bucket, fileName, fileContent, contentType } = req.body;
         if (!bucket || !fileName || !fileContent) {
