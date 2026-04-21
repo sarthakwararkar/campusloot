@@ -254,10 +254,7 @@
       const handleSignOut = async () => { await signOut(); window.location.href = 'login.html'; };
       document.getElementById('logout-btn').addEventListener('click', handleSignOut);
 
-      // Render standard components
-      if (typeof renderHeader === 'function') renderHeader();
-      if (typeof renderFloatingNav === 'function') renderFloatingNav('profile');
-      if (typeof renderFooter === 'function') renderFooter();
+      // Render standard components (handled at top of init)
     })();
   </script>
     <div id="floating-nav"></div>

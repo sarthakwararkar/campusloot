@@ -353,10 +353,7 @@
           };
         }
 
-        // Render standard components
-        if (typeof renderHeader === 'function') renderHeader();
-        if (typeof renderFloatingNav === 'function') renderFloatingNav('categories');
-        if (typeof renderFooter === 'function') renderFooter();
+        // Render standard components (handled at top of init)
       })();
     </script>
     <div id="floating-nav"></div>

@@ -132,6 +132,9 @@ async function signInWithGoogle() {
  * Sign out the current user
  */
 async function signOut() {
+  // Clear profile cache on sign out
+  sessionStorage.removeItem(PROFILE_CACHE_KEY);
+  
   const { error } = await supabaseClient.auth.signOut();
   if (error) {
     showToast('Error signing out', 'error');
@@ -169,10 +172,9 @@ async function getCurrentUser() {
   }
 }
 
-// Simple session-based cache for profiles to avoid redundant API calls
-let _profileCache = null;
-let _profileCacheTime = 0;
-const PROFILE_CACHE_TTL = 30000; // 30 seconds
+// Persistent session-based cache for profiles to avoid redundant API calls across page navigations
+const PROFILE_CACHE_KEY = 'cl_profile_cache';
+const PROFILE_CACHE_TTL = 300000; // 5 minutes cache for better cross-page experience
 
 /**
  * Get the current user's profile from the users table
@@ -182,9 +184,18 @@ async function getCurrentProfile() {
   const user = await getCurrentUser();
   if (!user) return null;
 
-  // Return cached profile if valid
-  if (_profileCache && (Date.now() - _profileCacheTime < PROFILE_CACHE_TTL)) {
-    return _profileCache;
+  // Check persistent session cache
+  try {
+    const cached = sessionStorage.getItem(PROFILE_CACHE_KEY);
+    if (cached) {
+      const { profile, userId, timestamp } = JSON.parse(cached);
+      // Ensure cache is for the same user and hasn't expired
+      if (userId === user.id && (Date.now() - timestamp < PROFILE_CACHE_TTL)) {
+        return profile;
+      }
+    }
+  } catch (e) {
+    console.warn('Profile cache read error:', e);
   }
 
   try {
@@ -192,9 +203,14 @@ async function getCurrentProfile() {
     if (!res.ok) return null;
     const { profile } = await res.json();
     
-    // Cache the result
-    _profileCache = profile;
-    _profileCacheTime = Date.now();
+    // Persist in session cache
+    try {
+      sessionStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify({
+        profile,
+        userId: user.id,
+        timestamp: Date.now()
+      }));
+    } catch (e) {}
     
     return profile;
   } catch (err) {

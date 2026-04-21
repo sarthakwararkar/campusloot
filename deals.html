@@ -310,7 +310,7 @@
     <script>
       (async function initDealsPage() {
         // Initialize header/footer
-        renderHeader('explore');
+        renderHeader('deals');
         renderFooter();
 
         const grid = document.getElementById("deals-grid");
@@ -482,9 +482,9 @@
         loadDeals(1, false);
 
         // Render standard components
-        if (typeof renderHeader === 'function') renderHeader();
+
         if (typeof renderFloatingNav === 'function') renderFloatingNav('deals');
-        if (typeof renderFooter === 'function') renderFooter();
+
 
         // Header Search
         if (navSearch) {

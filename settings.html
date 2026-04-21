@@ -502,10 +502,7 @@
       applyTheme(localStorage.getItem('theme_preference') || 'dark');
       applyAccent(localStorage.getItem('accent_preference') || 'indigo');
 
-      // Render standard components
-      if (typeof renderHeader === 'function') renderHeader();
-      if (typeof renderFloatingNav === 'function') renderFloatingNav('settings');
-      if (typeof renderFooter === 'function') renderFooter();
+      // Render standard components (handled at top of init)
     })();
   </script>
 <div id="floating-nav"></div>

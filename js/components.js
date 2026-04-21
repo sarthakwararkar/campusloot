@@ -424,7 +424,7 @@ function renderHeader(activePage = '') {
     return;
   }
 
-  header.className = 'header w-full z-50';
+  header.className = 'header w-full';
   header.innerHTML = `
     <div class="header-inner">
       <a href="index.html" class="logo group">
@@ -475,6 +475,9 @@ async function updateAuthNav() {
   if (!navAuth) return;
 
   const user = await getCurrentUser();
+  
+  // Re-check if element is still in DOM after async user fetch
+  if (!document.getElementById('nav-auth')) return;
 
   if (user) {
     let profile = null;
