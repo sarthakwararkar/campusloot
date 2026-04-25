@@ -101,7 +101,8 @@ module.exports = async (req, res) => {
           .eq('source', 'scraped')
           .eq('needs_review', true)
           .eq('is_active', false)
-          .order('created_at', { ascending: false });
+          .order('created_at', { ascending: false })
+          .limit(100);
         if (error) throw error;
         return res.status(200).json({ deals: data });
       }
@@ -110,7 +111,8 @@ module.exports = async (req, res) => {
         const { data, error } = await supabase
           .from('deals')
           .select('*')
-          .order('created_at', { ascending: false });
+          .order('created_at', { ascending: false })
+          .limit(100);
         if (error) throw error;
         return res.status(200).json({ deals: data });
       }
