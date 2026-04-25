@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     
-    <script defer src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
       rel="stylesheet"
@@ -16,7 +16,7 @@
       rel="stylesheet"
     />
     <script id="tailwind-config">
-      tailwind.config = {
+      if (window.tailwind) { tailwind.config = {
         darkMode: "class",
         theme: {
           extend: {
@@ -39,7 +39,7 @@
             },
           },
         },
-      };
+      }; }
     </script>
     <style>
       .material-symbols-outlined {
@@ -155,16 +155,16 @@
     <footer id="site-footer"></footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script defer src="js/supabase.js"></script>
-    <script defer src="js/utils.js"></script>
-    <script defer src="js/auth.js"></script>
-    <script defer src="js/components.js"></script>
-    <script defer src="js/deals.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/deals.js"></script>
     <script defer src="js/analytics.js"></script>
     <script defer src="js/star-background.js"></script>
     <script defer src="js/cookie-consent.js"></script>
     <script>
-      (async function initDealPage() {
+      window.addEventListener('DOMContentLoaded', async () => {
         // Initialize header/footer
         renderHeader('explore');
         renderFooter();
@@ -312,7 +312,7 @@
           console.error("initDealPage Error:", err);
           window.location.href = "deals.html";
         }
-      })();
+      });
     </script>
   
     <div id="floating-nav"></div>
