@@ -170,6 +170,7 @@ async function getAuthHeaders() {
  * @returns {Promise<Object|null>}
  */
 let _cachedUser = null;
+let _userPromise = null;
 
 /**
  * Get current authenticated user
@@ -177,34 +178,41 @@ let _cachedUser = null;
  */
 async function getCurrentUser() {
   if (_cachedUser) return _cachedUser;
+  if (_userPromise) return _userPromise;
   
-  try {
-    // getSession is near-instant as it reads from local storage/cookies
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    
-    if (session?.user) {
-      // If we have a local session, we're likely logged in.
-      // We'll return this immediately to keep the UI responsive,
-      // but we'll verify it via our PROXY in the background (or foreground if requested)
-      _cachedUser = session.user;
+  _userPromise = (async () => {
+    try {
+      // getSession is near-instant as it reads from local storage/cookies
+      const { data: { session } } = await supabaseClient.auth.getSession();
       
-      // Use proxy to verify the user instead of direct Supabase auth.getUser() 
-      // This bypasses potential ISP blocks on the Supabase domain.
-      fetch(`/api/deals?type=get_user`, {
-        headers: { 'Authorization': `Bearer ${session.access_token}` }
-      }).then(res => res.json()).then(data => {
-        if (data?.user) _cachedUser = data.user;
-      }).catch(err => console.warn('User verification via proxy failed:', err));
+      if (session?.user) {
+        // If we have a local session, we're likely logged in.
+        // We'll return this immediately to keep the UI responsive,
+        // but we'll verify it via our PROXY in the background (or foreground if requested)
+        _cachedUser = session.user;
+        
+        // Use proxy to verify the user instead of direct Supabase auth.getUser() 
+        // This bypasses potential ISP blocks on the Supabase domain.
+        fetch(`/api/deals?type=get_user`, {
+          headers: { 'Authorization': `Bearer ${session.access_token}` }
+        }).then(res => res.json()).then(data => {
+          if (data?.user) _cachedUser = data.user;
+        }).catch(err => console.warn('User verification via proxy failed:', err));
 
-      return _cachedUser;
+        return _cachedUser;
+      }
+      
+      // Fallback if no local session
+      return null;
+    } catch (err) {
+      console.error('getCurrentUser error:', err);
+      return null;
+    } finally {
+      _userPromise = null;
     }
-    
-    // Fallback if no local session
-    return null;
-  } catch (err) {
-    console.error('getCurrentUser error:', err);
-    return null;
-  }
+  })();
+  
+  return _userPromise;
 }
 
 // Persistent session-based cache for profiles to avoid redundant API calls across page navigations

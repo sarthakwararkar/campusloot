@@ -172,13 +172,6 @@
 
         console.log("initDealPage: Starting initialization...", window.location.href);
 
-        const user = await getCurrentUser();
-        const loginBtn = document.getElementById("nav-login-btn");
-        if (user && loginBtn) {
-          loginBtn.textContent = "Dashboard";
-          loginBtn.onclick = () => (window.location.href = "profile.html");
-        }
-
         const dealId = getQueryParam("id");
         console.log("initDealPage: dealId from URL:", dealId);
 
