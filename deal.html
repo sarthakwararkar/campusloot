@@ -248,16 +248,19 @@
           });
 
           const claimBtn = document.getElementById('claim-btn');
-          claimBtn.onclick = async () => {
+          claimBtn.onclick = () => {
               const url = deal.affiliate_url || deal.deal_url;
               if (url && url !== '#') {
-                  // Track the click for affiliate revenue analytics
+                  // Open window immediately to avoid popup blockers
+                  window.open(url, '_blank', 'noopener,noreferrer');
+                  
+                  // Track and increment in background
                   if (typeof trackDealClick === 'function') {
                     trackDealClick(deal.id, url, 'detail');
                   }
-                  // Increment click counter via RPC
-                  try { await supabase.rpc('increment_clicks', { deal_id: deal.id }); } catch(e) {}
-                  window.open(url, '_blank', 'noopener,noreferrer');
+                  if (window.supabase) {
+                    window.supabase.rpc('increment_clicks', { deal_id: deal.id }).catch(() => {});
+                  }
               } else {
                   showToast('This deal is currently offline', 'error');
               }
